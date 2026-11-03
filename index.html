@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal Document Cover Page Generator</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans Gujarati', sans-serif;
+    }
+    .font-cinzel {
+      font-family: 'Cinzel', 'Noto Sans Gujarati', serif;
+    }
+    .font-serif-title {
+      font-family: 'Playfair Display', 'Noto Sans Gujarati', serif;
+    }
+    .font-gujarati {
+      font-family: 'Noto Sans Gujarati', 'Inter', sans-serif;
+    }
+
+    /* Print & A4 Page Dimensions */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 18mm 16mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Custom A4 Canvas Preview */
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      padding: 16mm 14mm;
+      box-sizing: border-box;
+      background: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Diagonal Two-Corner Rounded Border (Top-Right & Bottom-Left) */
+    .two-corner-outer {
+      border: 4px solid #0f172a;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 38px;
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 38px;
+    }
+
+    .two-corner-inner {
+      border: 1.5px solid #0f172a;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 28px;
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 28px;
+    }
+
+    /* Rounded Description & Table Box */
+    .rounded-desc-box {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid #0f172a;
+    }
+
+    @media (max-width: 1024px) {
+      .a4-sheet {
+        width: 100%;
+        min-height: auto;
+        max-height: none;
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top App Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">
+          <i data-lucide="file-signature" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Legal Document Cover Generator</h1>
+          <p class="text-xs text-slate-500">Gujarati & English Dual Mode • Partnership Deed & Multi-Party Support</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="resetDefaults()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>Reset</span>
+        </button>
+        <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span>Print / Save as PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- LEFT PANEL: CONTROLS & INPUTS -->
+    <section class="lg:col-span-5 flex flex-col gap-5 no-print">
+      
+      <!-- Input Card -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+        
+        <!-- Language Switcher Bar -->
+        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center justify-between">
+          <div>
+            <span class="block text-xs font-bold text-indigo-950 uppercase tracking-wide">Document Language / ભાષા</span>
+            <span class="text-[11px] text-indigo-700">Auto translates labels or write custom</span>
+          </div>
+          <div class="inline-flex rounded-lg p-1 bg-white border border-indigo-200">
+            <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs">English</button>
+            <button type="button" id="btnLangGu" onclick="setLanguage('gu')" class="px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600">ગુજરાતી</button>
+          </div>
+        </div>
+
+        <!-- Document Type Selector -->
+        <div class="space-y-3 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Document Type / Title</label>
+          <select id="docPresetSelect" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="handlePresetChange(this.value)">
+            <option value="SALE DEED">SALE DEED (વેચાણ દસ્તાવેજ)</option>
+            <option value="PARTNERSHIP DEED">PARTNERSHIP DEED (ભાગીદારી કરાર)</option>
+            <option value="RENT AGREEMENT">RENT AGREEMENT (ભાડા કરાર)</option>
+            <option value="AGREEMENT TO SALE">AGREEMENT TO SALE (બાનાખત)</option>
+            <option value="POSSESSION LETTER">POSSESSION LETTER (કબજા પત્ર)</option>
+            <option value="KABJA PAVTI">KABJA PAVTI (કબજા પાવતી)</option>
+            <option value="SAMJUTI KARAR">SAMJUTI KARAR (સમજુતી કરાર)</option>
+            <option value="MEMORANDUM OF UNDERSTANDING (MOU)">MEMORANDUM OF UNDERSTANDING (MOU)</option>
+            <option value="POWER OF ATTORNEY">POWER OF ATTORNEY (મુખત્યારનામું)</option>
+            <option value="GIFT DEED">GIFT DEED (બક્ષિસ દસ્તાવેજ)</option>
+            <option value="CUSTOM">-- Custom Title / અન્ય શીર્ષક --</option>
+          </select>
+
+          <div>
+            <label for="docTitleInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Header Title (Editable)</label>
+            <input type="text" id="docTitleInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 font-bold text-slate-900 tracking-wide focus:outline-none focus:ring-2 focus:ring-indigo-500" value="SALE DEED" oninput="updatePreview()">
+          </div>
+        </div>
+
+        <!-- 1. Firm Details -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Firm Header Information</h3>
+          
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Firm Logo</label>
+            <div class="flex items-center gap-3">
+              <div id="logoThumbnailWrapper" class="w-14 h-14 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
+                <img id="logoThumb" src="" alt="Firm Logo" class="w-full h-full object-contain hidden" />
+                <i id="logoPlaceholderIcon" data-lucide="image" class="w-6 h-6 text-slate-400"></i>
+              </div>
+              <div class="flex-1 space-y-1">
+                <input type="file" id="logoInput" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" onchange="handleLogoUpload(event)">
+                <button type="button" onclick="removeLogo()" class="text-[11px] text-red-600 hover:underline">Remove logo</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="firmNameInput" class="block text-xs font-semibold text-slate-700 mb-1">Firm Name</label>
+            <input type="text" id="firmNameInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" value="VIHAL BUILDCON" oninput="updatePreview()">
+          </div>
+
+          <div>
+            <label for="firmAddressInput" class="block text-xs font-semibold text-slate-700 mb-1">Office Address</label>
+            <textarea id="firmAddressInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" oninput="updatePreview()">SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat</textarea>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- 2. Registration & Execution Details -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">2. Document Numbers & Execution Date</h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="deedNoLabelInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Document No. Label</label>
+              <input type="text" id="deedNoLabelInput" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="DOCUMENT NO." oninput="updatePreview()">
+              <input type="text" id="deedNoInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-900" placeholder="e.g., SD/2026/8941" oninput="updatePreview()">
+            </div>
+            <div>
+              <label for="dateLabelInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Date Label</label>
+              <input type="text" id="dateLabelInput" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="Date of Execution" oninput="updatePreview()">
+              <input type="date" id="dateInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800" oninput="updatePreview()">
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- 3. Property Description -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <label for="propertyDescLabelInput" class="text-xs font-bold uppercase tracking-wider text-slate-400">3. Property Description</label>
+            <input type="text" id="propertyDescLabelInput" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-44 text-right" value="Property Description" oninput="updatePreview()">
+          </div>
+          <div>
+            <textarea id="propertyDescInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter property details" oninput="updatePreview()">SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat</textarea>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- 4. Parties to Deed OR Partnership Deed Mode -->
+        <div id="standardPartiesSection" class="space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">4. Parties Involved</h3>
+
+          <!-- First Party Group -->
+          <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="flex items-center justify-between gap-2">
+              <input type="text" id="firstPartyLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Seller / Vendor" oninput="updatePreview()">
+              <button type="button" onclick="addSeller()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Name
+              </button>
+            </div>
+            <div id="sellersContainer" class="space-y-2 pt-1"></div>
+          </div>
+
+          <!-- Second Party Group -->
+          <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="flex items-center justify-between gap-2">
+              <input type="text" id="secondPartyLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Purchaser / Vendee" oninput="updatePreview()">
+              <button type="button" onclick="addPurchaser()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Name
+              </button>
+            </div>
+            <div id="purchasersContainer" class="space-y-2 pt-1"></div>
+          </div>
+        </div>
+
+        <!-- Partnership Deed Only Controls -->
+        <div id="partnershipSection" class="space-y-4 hidden">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded">Partnership Details Mode</h3>
+
+          <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="flex items-center justify-between gap-2">
+              <input type="text" id="partnersLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Partners Name(s)" oninput="updatePreview()">
+              <button type="button" onclick="addPartner()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Partner
+              </button>
+            </div>
+            <div id="partnersContainer" class="space-y-2 pt-1"></div>
+          </div>
+
+          <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="flex items-center justify-between gap-2">
+              <input type="text" id="signingAuthorityLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Authorized Signing Partner / Authority" oninput="updatePreview()">
+              <button type="button" onclick="addSignAuth()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
+                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Authority
+              </button>
+            </div>
+            <div id="signAuthContainer" class="space-y-2 pt-1"></div>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- 5. Remarks, Mobile, Email or Custom Notes -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-400">5. Remarks / Contact / Extra Notes</label>
+            <input type="text" id="remarksLabelInput" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-32 text-right" value="Remarks / Note" oninput="updatePreview()">
+          </div>
+          <textarea id="remarksInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Phone: +91 98765 43210 | Email: contact@domain.com | Note: Stamp Duty Paid as per Gujarat Stamp Act" oninput="updatePreview()"></textarea>
+        </div>
+
+        <div class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-900 flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-indigo-600 shrink-0 mt-0.5"></i>
+          <span>Click <strong>"Print / Save as PDF"</strong> to export. In your printer options, choose <strong>"Save as PDF"</strong> with <strong>A4</strong> paper and zero margins.</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT PANEL: ACCURATE A4 LIVE PREVIEW -->
+    <section class="lg:col-span-7 flex flex-col items-center">
+      
+      <div class="mb-2 text-xs font-medium text-slate-500 flex items-center justify-between w-full max-w-[210mm] no-print">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+          <span>A4 Cover Preview with 2-Corner Diagonal Round Borders</span>
+        </div>
+        <span id="currentLangIndicator" class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded">Mode: English</span>
+      </div>
+
+      <!-- Printable A4 Document Sheet -->
+      <div id="printArea" class="a4-sheet rounded-md relative flex flex-col border border-slate-300 transition-all">
+        
+        <!-- Outer Frame: Two Rounded Corners (Top-Right & Bottom-Left) -->
+        <div class="two-corner-outer p-2.5 h-full flex flex-col">
+          
+          <!-- Inner Frame: Two Rounded Corners (Top-Right & Bottom-Left) -->
+          <div class="two-corner-inner p-6 sm:p-8 h-full flex flex-col justify-start bg-white">
+            
+            <!-- HEADER: FIRM INFO & LOGO -->
+            <div>
+              <div class="flex items-center justify-between border-b-2 border-slate-900 pb-5 mb-5 gap-4">
+                
+                <!-- Firm Logo Container -->
+                <div class="w-20 h-20 flex items-center justify-center shrink-0">
+                  <img id="previewLogo" src="" alt="Firm Logo" class="max-h-20 max-w-20 object-contain hidden" />
+                  <div id="defaultLogoSvg" class="w-16 h-16 rounded-full border-2 border-slate-800 flex items-center justify-center p-1 bg-slate-50">
+                    <div class="w-full h-full rounded-full border border-slate-700 flex flex-col items-center justify-center text-center">
+                      <span class="font-cinzel text-[11px] font-bold text-slate-900 leading-none">VB</span>
+                      <span class="text-[7px] text-slate-600 uppercase tracking-widest mt-0.5">ESTD</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Firm Name & Address -->
+                <div class="flex-1 text-right">
+                  <h2 id="previewFirmName" class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 uppercase font-serif-title leading-snug">
+                    VIHAL BUILDCON
+                  </h2>
+                  <p id="previewFirmAddress" class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed font-normal max-w-md ml-auto whitespace-pre-line">
+                    SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat
+                  </p>
+                </div>
+              </div>
+
+              <!-- DYNAMIC DOCUMENT TITLE -->
+              <div class="text-center my-5">
+                <h1 id="previewDocTitle" class="font-cinzel text-2xl sm:text-3xl font-extrabold text-slate-900 uppercase tracking-widest pb-2 border-b-2 border-slate-900 inline-block min-w-[280px]">
+                  SALE DEED
+                </h1>
+              </div>
+
+              <!-- ROUNDED DESCRIPTION & DETAILS BOX -->
+              <div class="rounded-desc-box bg-white shadow-xs">
+                
+                <!-- Document / Deed No. Row -->
+                <div class="grid grid-cols-12 border-b border-slate-300 bg-slate-50/60">
+                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-center" id="previewDeedNoLabel">
+                    DOCUMENT NO.
+                  </div>
+                  <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 tracking-wide" id="previewDeedNo">
+                    SD/2026/8941
+                  </div>
+                </div>
+
+                <!-- Date Row -->
+                <div class="grid grid-cols-12 border-b border-slate-300">
+                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-center" id="previewDateLabel">
+                    Date of Execution
+                  </div>
+                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900" id="previewDate">
+                    November 1, 2026
+                  </div>
+                </div>
+
+                <!-- Property Description Row -->
+                <div class="grid grid-cols-12 border-b border-slate-300 bg-slate-50/60">
+                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPropertyDescLabel">
+                    Property Description
+                  </div>
+                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900 leading-relaxed whitespace-pre-line" id="previewPropertyDesc">
+                    SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat
+                  </div>
+                </div>
+
+                <!-- DYNAMIC PARTY SECTION: Standard (First/Second Party) vs Partnership Deed Mode -->
+                <div id="previewStandardParties">
+                  <!-- First Party Row -->
+                  <div class="grid grid-cols-12 border-b border-slate-300">
+                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSellerHeaderLabel">
+                      Seller / Vendor
+                    </div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1" id="previewSellerContainer"></div>
+                  </div>
+
+                  <!-- Second Party Row -->
+                  <div class="grid grid-cols-12" id="previewPurchaserRow">
+                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPurchaserHeaderLabel">
+                      Purchaser / Vendee
+                    </div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1" id="previewPurchaserContainer"></div>
+                  </div>
+                </div>
+
+                <!-- Partnership Mode Preview (Replaces First/Second Party) -->
+                <div id="previewPartnershipSection" class="hidden">
+                  <!-- Partners Name(s) Row -->
+                  <div class="grid grid-cols-12 border-b border-slate-300">
+                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPartnersHeaderLabel">
+                      Partners Name(s)
+                    </div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1.5" id="previewPartnersContainer"></div>
+                  </div>
+
+                  <!-- Signing Authority Row -->
+                  <div class="grid grid-cols-12" id="previewSigningAuthorityRow">
+                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSignAuthHeaderLabel">
+                      Authorized Signing Partner
+                    </div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1.5" id="previewSignAuthContainer"></div>
+                  </div>
+                </div>
+
+                <!-- Remarks / Notes / Contact Row (Conditionally shown if remarks exist) -->
+                <div class="grid grid-cols-12 border-t border-slate-300 bg-slate-50/50" id="previewRemarksRow">
+                  <div class="col-span-4 p-3 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs uppercase tracking-wide text-slate-700 flex items-start" id="previewRemarksLabel">
+                    Remarks / Note
+                  </div>
+                  <div class="col-span-8 p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line leading-relaxed font-medium" id="previewRemarksText">
+                    <!-- Remarks inserted dynamically -->
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Gujarati Dictionary & Preset Translations
+    const i18n = {
+      en: {
+        docTitle: "SALE DEED",
+        deedNoLabel: "DOCUMENT NO.",
+        dateLabel: "Date of Execution",
+        propertyDescLabel: "Property Description",
+        firstPartyLabel: "Seller / Vendor",
+        secondPartyLabel: "Purchaser / Vendee",
+        partnersLabel: "Partners Name(s)",
+        signingAuthorityLabel: "Authorized Signing Partner",
+        remarksLabel: "Remarks / Note",
+        modeIndicator: "Mode: English"
+      },
+      gu: {
+        docTitle: "વેચાણ દસ્તાવેજ",
+        deedNoLabel: "દસ્તાવેજ નંબર",
+        dateLabel: "તારીખ",
+        propertyDescLabel: "મિલકતની વિગત",
+        firstPartyLabel: "લખી આપનાર (વેચનાર)",
+        secondPartyLabel: "લખાવી લેનાર (ખરીદનાર)",
+        partnersLabel: "ભાગીદારોના નામ",
+        signingAuthorityLabel: "સહી કરવાની સત્તા ધરાવનાર ભાગીદાર",
+        remarksLabel: "વિશેષ નોંધ / વિગત",
+        modeIndicator: "મોડ: ગુજરાતી"
+      }
+    };
+
+    // Dictionary of titles for auto-translation
+    const titleTranslations = {
+      "SALE DEED": "વેચાણ દસ્તાવેજ",
+      "PARTNERSHIP DEED": "ભાગીદારી કરાર",
+      "RENT AGREEMENT": "ભાડા કરાર",
+      "AGREEMENT TO SALE": "બાનાખત (વેચાણ કરાર)",
+      "POSSESSION LETTER": "કબજા પત્ર",
+      "KABJA PAVTI": "કબજા પાવતી",
+      "SAMJUTI KARAR": "સમજુતી કરાર",
+      "MEMORANDUM OF UNDERSTANDING (MOU)": "સમજુતી કરાર (MOU)",
+      "POWER OF ATTORNEY": "પાવર ઓફ એટર્ની (મુખત્યારનામું)",
+      "GIFT DEED": "બક્ષિસ દસ્તાવેજ"
+    };
+
+    // Reverse lookup
+    const reverseTitleTranslations = Object.fromEntries(
+      Object.entries(titleTranslations).map(([k, v]) => [v, k])
+    );
+
+    let state = {
+      lang: "en", // 'en' | 'gu'
+      docPreset: "SALE DEED",
+      docTitle: "SALE DEED",
+      firmName: "VIHAL BUILDCON",
+      firmAddress: "SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat",
+      deedNoLabel: "DOCUMENT NO.",
+      deedNo: "SD/2026/8941",
+      dateLabel: "Date of Execution",
+      date: new Date().toISOString().split('T')[0],
+      propertyDescLabel: "Property Description",
+      propertyDesc: "SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat",
+      firstPartyLabel: "Seller / Vendor",
+      secondPartyLabel: "Purchaser / Vendee",
+      sellers: ["Rajeshbhai Ramanlal Patel"],
+      purchasers: ["Amitkumar Shantilal Shah"],
+      partnersLabel: "Partners Name(s)",
+      signingAuthorityLabel: "Authorized Signing Partner",
+      partners: ["Kirtikumar J. Ranpara", "Priya K. Ranpara"],
+      signingAuthorities: ["Kirtikumar J. Ranpara"],
+      remarksLabel: "Remarks / Note",
+      remarks: "",
+      logoDataUrl: null
+    };
+
+    function setLanguage(lang) {
+      state.lang = lang;
+      
+      const btnEn = document.getElementById('btnLangEn');
+      const btnGu = document.getElementById('btnLangGu');
+      const indicator = document.getElementById('currentLangIndicator');
+
+      if (lang === 'gu') {
+        btnGu.className = "px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs";
+        btnEn.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
+        indicator.textContent = i18n.gu.modeIndicator;
+
+        // Auto-translate labels to Gujarati
+        document.getElementById('deedNoLabelInput').value = i18n.gu.deedNoLabel;
+        document.getElementById('dateLabelInput').value = i18n.gu.dateLabel;
+        document.getElementById('propertyDescLabelInput').value = i18n.gu.propertyDescLabel;
+        document.getElementById('firstPartyLabelInput').value = i18n.gu.firstPartyLabel;
+        document.getElementById('secondPartyLabelInput').value = i18n.gu.secondPartyLabel;
+        document.getElementById('partnersLabelInput').value = i18n.gu.partnersLabel;
+        document.getElementById('signingAuthorityLabelInput').value = i18n.gu.signingAuthorityLabel;
+        document.getElementById('remarksLabelInput').value = i18n.gu.remarksLabel;
+
+        const currentTitle = document.getElementById('docTitleInput').value.trim();
+        if (titleTranslations[currentTitle]) {
+          document.getElementById('docTitleInput').value = titleTranslations[currentTitle];
+        }
+      } else {
+        btnEn.className = "px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs";
+        btnGu.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
+        indicator.textContent = i18n.en.modeIndicator;
+
+        // Auto-translate labels back to English
+        document.getElementById('deedNoLabelInput').value = i18n.en.deedNoLabel;
+        document.getElementById('dateLabelInput').value = i18n.en.dateLabel;
+        document.getElementById('propertyDescLabelInput').value = i18n.en.propertyDescLabel;
+        document.getElementById('firstPartyLabelInput').value = i18n.en.firstPartyLabel;
+        document.getElementById('secondPartyLabelInput').value = i18n.en.secondPartyLabel;
+        document.getElementById('partnersLabelInput').value = i18n.en.partnersLabel;
+        document.getElementById('signingAuthorityLabelInput').value = i18n.en.signingAuthorityLabel;
+        document.getElementById('remarksLabelInput').value = i18n.en.remarksLabel;
+
+        const currentTitle = document.getElementById('docTitleInput').value.trim();
+        if (reverseTitleTranslations[currentTitle]) {
+          document.getElementById('docTitleInput').value = reverseTitleTranslations[currentTitle];
+        }
+      }
+
+      updatePreview();
+    }
+
+    function handlePresetChange(val) {
+      state.docPreset = val;
+      const isGujarati = state.lang === 'gu';
+
+      if (val !== "CUSTOM") {
+        const titleText = isGujarati && titleTranslations[val] ? titleTranslations[val] : val;
+        document.getElementById('docTitleInput').value = titleText;
+      }
+
+      // Check if Partnership Deed mode is triggered
+      toggleModeViews(val === "PARTNERSHIP DEED");
+      updatePreview();
+    }
+
+    function toggleModeViews(isPartnership) {
+      const standardSection = document.getElementById('standardPartiesSection');
+      const partnershipSection = document.getElementById('partnershipSection');
+      const previewStandard = document.getElementById('previewStandardParties');
+      const previewPartnership = document.getElementById('previewPartnershipSection');
+
+      if (isPartnership) {
+        standardSection.classList.add('hidden');
+        partnershipSection.classList.remove('hidden');
+        previewStandard.classList.add('hidden');
+        previewPartnership.classList.remove('hidden');
+      } else {
+        standardSection.classList.remove('hidden');
+        partnershipSection.classList.add('hidden');
+        previewStandard.classList.remove('hidden');
+        previewPartnership.classList.add('hidden');
+      }
+    }
+
+    function formatDateString(dateStr) {
+      if (!dateStr) return "—";
+      try {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+          const date = new Date(parts[0], parts[1] - 1, parts[2]);
+          return date.toLocaleDateString(state.lang === 'gu' ? 'gu-IN' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        }
+        return dateStr;
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    // Dynamic Lists Rendering
+    function renderDynamicInputs() {
+      renderSellerInputs();
+      renderPurchaserInputs();
+      renderPartnerInputs();
+      renderSignAuthInputs();
+    }
+
+    function renderSellerInputs() {
+      const container = document.getElementById('sellersContainer');
+      container.innerHTML = '';
+      state.sellers.forEach((seller, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+        div.innerHTML = `
+          <input type="text" value="${seller.replace(/"/g, '&quot;')}" placeholder="Name ${index + 1}"
+            class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            oninput="state.sellers[${index}] = this.value; updatePreview()">
+          ${state.sellers.length > 1 ? `
+            <button type="button" onclick="state.sellers.splice(${index}, 1); renderSellerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          ` : ''}
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addSeller() {
+      state.sellers.push('');
+      renderSellerInputs();
+      updatePreview();
+    }
+
+    function renderPurchaserInputs() {
+      const container = document.getElementById('purchasersContainer');
+      container.innerHTML = '';
+      state.purchasers.forEach((purchaser, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+        div.innerHTML = `
+          <input type="text" value="${purchaser.replace(/"/g, '&quot;')}" placeholder="Name ${index + 1}"
+            class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            oninput="state.purchasers[${index}] = this.value; updatePreview()">
+          ${state.purchasers.length > 1 ? `
+            <button type="button" onclick="state.purchasers.splice(${index}, 1); renderPurchaserInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          ` : ''}
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addPurchaser() {
+      state.purchasers.push('');
+      renderPurchaserInputs();
+      updatePreview();
+    }
+
+    function renderPartnerInputs() {
+      const container = document.getElementById('partnersContainer');
+      container.innerHTML = '';
+      state.partners.forEach((partner, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+        div.innerHTML = `
+          <input type="text" value="${partner.replace(/"/g, '&quot;')}" placeholder="Partner ${index + 1} Name"
+            class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            oninput="state.partners[${index}] = this.value; updatePreview()">
+          ${state.partners.length > 1 ? `
+            <button type="button" onclick="state.partners.splice(${index}, 1); renderPartnerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          ` : ''}
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addPartner() {
+      state.partners.push('');
+      renderPartnerInputs();
+      updatePreview();
+    }
+
+    function renderSignAuthInputs() {
+      const container = document.getElementById('signAuthContainer');
+      container.innerHTML = '';
+      state.signingAuthorities.forEach((auth, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+        div.innerHTML = `
+          <input type="text" value="${auth.replace(/"/g, '&quot;')}" placeholder="Signing Authority ${index + 1}"
+            class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            oninput="state.signingAuthorities[${index}] = this.value; updatePreview()">
+          ${state.signingAuthorities.length > 1 ? `
+            <button type="button" onclick="state.signingAuthorities.splice(${index}, 1); renderSignAuthInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          ` : ''}
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addSignAuth() {
+      state.signingAuthorities.push('');
+      renderSignAuthInputs();
+      updatePreview();
+    }
+
+    // Update Live Preview
+    function updatePreview() {
+      const docTitle = document.getElementById('docTitleInput').value.trim() || "DOCUMENT TITLE";
+      const firmName = document.getElementById('firmNameInput').value.trim() || "VIHAL BUILDCON";
+      const firmAddress = document.getElementById('firmAddressInput').value.trim() || "Office Address Line";
+      const deedNoLabel = document.getElementById('deedNoLabelInput').value.trim() || "DOCUMENT NO.";
+      const deedNo = document.getElementById('deedNoInput').value.trim() || "—";
+      const dateLabel = document.getElementById('dateLabelInput').value.trim() || "Date";
+      const rawDate = document.getElementById('dateInput').value;
+      const formattedDate = formatDateString(rawDate);
+      const propertyDescLabel = document.getElementById('propertyDescLabelInput').value.trim() || "Property Description";
+      const propertyDesc = document.getElementById('propertyDescInput').value.trim() || "—";
+
+      // Render Header Details
+      document.getElementById('previewDocTitle').textContent = docTitle;
+      document.getElementById('previewFirmName').textContent = firmName;
+      document.getElementById('previewFirmAddress').textContent = firmAddress;
+      
+      // Render Deed No, Date, Property Description
+      document.getElementById('previewDeedNoLabel').textContent = deedNoLabel;
+      document.getElementById('previewDeedNo').textContent = deedNo;
+      document.getElementById('previewDateLabel').textContent = dateLabel;
+      document.getElementById('previewDate').textContent = formattedDate;
+      document.getElementById('previewPropertyDescLabel').textContent = propertyDescLabel;
+      document.getElementById('previewPropertyDesc').textContent = propertyDesc;
+
+      const isPartnership = state.docPreset === "PARTNERSHIP DEED";
+
+      if (isPartnership) {
+        // Partnership Mode Render
+        const partnersLabel = document.getElementById('partnersLabelInput').value.trim() || "Partners Name(s)";
+        const signAuthLabel = document.getElementById('signingAuthorityLabelInput').value.trim() || "Authorized Signing Partner";
+
+        document.getElementById('previewPartnersHeaderLabel').textContent = partnersLabel;
+        document.getElementById('previewSignAuthHeaderLabel').textContent = signAuthLabel;
+
+        const partnersList = state.partners.filter(p => p.trim() !== '');
+        const partnersContainer = document.getElementById('previewPartnersContainer');
+        if (partnersList.length === 0) {
+          partnersContainer.innerHTML = '<div>—</div>';
+        } else {
+          partnersContainer.innerHTML = partnersList.map((p, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${p}</div>`).join('');
+        }
+
+        const authList = state.signingAuthorities.filter(a => a.trim() !== '');
+        const authContainer = document.getElementById('previewSignAuthContainer');
+        if (authList.length === 0) {
+          authContainer.innerHTML = '<div>—</div>';
+        } else {
+          authContainer.innerHTML = authList.map((a, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">•</span>${a}</div>`).join('');
+        }
+      } else {
+        // Standard First / Second Party Render
+        const firstPartyLabel = document.getElementById('firstPartyLabelInput').value.trim() || "Seller / Vendor";
+        const secondPartyLabel = document.getElementById('secondPartyLabelInput').value.trim() || "Purchaser / Vendee";
+
+        document.getElementById('previewSellerHeaderLabel').textContent = firstPartyLabel;
+        document.getElementById('previewPurchaserHeaderLabel').textContent = secondPartyLabel;
+
+        const sellerContainer = document.getElementById('previewSellerContainer');
+        const filteredSellers = state.sellers.filter(s => s.trim() !== '');
+        if (filteredSellers.length === 0) {
+          sellerContainer.innerHTML = '<div>—</div>';
+        } else if (filteredSellers.length === 1) {
+          sellerContainer.innerHTML = `<div>${filteredSellers[0]}</div>`;
+        } else {
+          sellerContainer.innerHTML = filteredSellers.map((s, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${s}</div>`).join('');
+        }
+
+        const purchaserContainer = document.getElementById('previewPurchaserContainer');
+        const filteredPurchasers = state.purchasers.filter(p => p.trim() !== '');
+        if (filteredPurchasers.length === 0) {
+          purchaserContainer.innerHTML = '<div>—</div>';
+        } else if (filteredPurchasers.length === 1) {
+          purchaserContainer.innerHTML = `<div>${filteredPurchasers[0]}</div>`;
+        } else {
+          purchaserContainer.innerHTML = filteredPurchasers.map((p, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${p}</div>`).join('');
+        }
+      }
+
+      // Remarks / Mobile / Extra Notes Render
+      const remarksText = document.getElementById('remarksInput').value.trim();
+      const remarksLabel = document.getElementById('remarksLabelInput').value.trim() || "Remarks";
+      const remarksRow = document.getElementById('previewRemarksRow');
+      const remarksDisplay = document.getElementById('previewRemarksText');
+      document.getElementById('previewRemarksLabel').textContent = remarksLabel;
+
+      if (remarksText) {
+        remarksRow.classList.remove('hidden');
+        remarksDisplay.textContent = remarksText;
+      } else {
+        remarksRow.classList.add('hidden');
+      }
+    }
+
+    // Logo Handling
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const resultUrl = e.target.result;
+        state.logoDataUrl = resultUrl;
+
+        const previewLogo = document.getElementById('previewLogo');
+        const defaultLogo = document.getElementById('defaultLogoSvg');
+        const thumb = document.getElementById('logoThumb');
+        const thumbIcon = document.getElementById('logoPlaceholderIcon');
+
+        previewLogo.src = resultUrl;
+        previewLogo.classList.remove('hidden');
+        defaultLogo.classList.add('hidden');
+
+        thumb.src = resultUrl;
+        thumb.classList.remove('hidden');
+        thumbIcon.classList.add('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogo() {
+      state.logoDataUrl = null;
+      document.getElementById('logoInput').value = '';
+      
+      const previewLogo = document.getElementById('previewLogo');
+      const defaultLogo = document.getElementById('defaultLogoSvg');
+      const thumb = document.getElementById('logoThumb');
+      const thumbIcon = document.getElementById('logoPlaceholderIcon');
+
+      previewLogo.src = '';
+      previewLogo.classList.add('hidden');
+      defaultLogo.classList.remove('hidden');
+
+      thumb.src = '';
+      thumb.classList.add('hidden');
+      thumbIcon.classList.remove('hidden');
+    }
+
+    function resetDefaults() {
+      state = {
+        lang: "en",
+        docPreset: "SALE DEED",
+        docTitle: "SALE DEED",
+        firmName: "VIHAL BUILDCON",
+        firmAddress: "SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat",
+        deedNoLabel: "DOCUMENT NO.",
+        deedNo: "SD/2026/8941",
+        dateLabel: "Date of Execution",
+        date: new Date().toISOString().split('T')[0],
+        propertyDescLabel: "Property Description",
+        propertyDesc: "SF - 68, Earth Eon, Karelibaug to Sama Main Road, Vadodara, Gujarat",
+        firstPartyLabel: "Seller / Vendor",
+        secondPartyLabel: "Purchaser / Vendee",
+        sellers: ["Rajeshbhai Ramanlal Patel"],
+        purchasers: ["Amitkumar Shantilal Shah"],
+        partnersLabel: "Partners Name(s)",
+        signingAuthorityLabel: "Authorized Signing Partner",
+        partners: ["Kirtikumar J. Ranpara", "Priya K. Ranpara"],
+        signingAuthorities: ["Kirtikumar J. Ranpara"],
+        remarksLabel: "Remarks / Note",
+        remarks: "",
+        logoDataUrl: null
+      };
+
+      removeLogo();
+      initForm();
+    }
+
+    function initForm() {
+      document.getElementById('docPresetSelect').value = state.docPreset;
+      document.getElementById('docTitleInput').value = state.docTitle;
+      document.getElementById('firmNameInput').value = state.firmName;
+      document.getElementById('firmAddressInput').value = state.firmAddress;
+      document.getElementById('deedNoLabelInput').value = state.deedNoLabel;
+      document.getElementById('deedNoInput').value = state.deedNo;
+      document.getElementById('dateLabelInput').value = state.dateLabel;
+      document.getElementById('dateInput').value = state.date;
+      document.getElementById('propertyDescLabelInput').value = state.propertyDescLabel;
+      document.getElementById('propertyDescInput').value = state.propertyDesc;
+      document.getElementById('firstPartyLabelInput').value = state.firstPartyLabel;
+      document.getElementById('secondPartyLabelInput').value = state.secondPartyLabel;
+      document.getElementById('partnersLabelInput').value = state.partnersLabel;
+      document.getElementById('signingAuthorityLabelInput').value = state.signingAuthorityLabel;
+      document.getElementById('remarksLabelInput').value = state.remarksLabel;
+      document.getElementById('remarksInput').value = state.remarks;
+
+      renderDynamicInputs();
+      toggleModeViews(state.docPreset === "PARTNERSHIP DEED");
+      updatePreview();
+    }
+
+    window.onload = function() {
+      initForm();
+    };
+  </script>
+</body>
+</html>
