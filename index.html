@@ -109,21 +109,37 @@
 
   <!-- Top App Navigation -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">
           <i data-lucide="file-signature" class="w-6 h-6"></i>
         </div>
         <div>
           <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Legal Document Cover Generator</h1>
-          <p class="text-xs text-slate-500">Gujarati & English Dual Mode • Partnership Deed & Multi-Party Support</p>
+          <p class="text-xs text-slate-500">Gujarati & English Dual Mode • Backup / Export / Import Templates</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Export / Save Template Button -->
+        <button onclick="exportData()" title="Save current form values to JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Export Template</span>
+        </button>
+
+        <!-- Import Template Button -->
+        <label title="Load saved values from JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors cursor-pointer">
+          <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+          <span>Import Template</span>
+          <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
+        </label>
+
+        <!-- Reset Button -->
         <button onclick="resetDefaults()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
           <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
           <span>Reset</span>
         </button>
+
+        <!-- Print Button -->
         <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150">
           <i data-lucide="printer" class="w-4 h-4"></i>
           <span>Print / Save as PDF</span>
@@ -172,7 +188,7 @@
 
           <div>
             <label for="docTitleInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Header Title (Editable)</label>
-            <input type="text" id="docTitleInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 font-bold text-slate-900 tracking-wide focus:outline-none focus:ring-2 focus:ring-indigo-500" value="SALE DEED" oninput="updatePreview()">
+            <input type="text" id="docTitleInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 font-bold text-slate-900 tracking-wide focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. SALE DEED" oninput="updatePreview()">
           </div>
         </div>
 
@@ -196,12 +212,12 @@
 
           <div>
             <label for="firmNameInput" class="block text-xs font-semibold text-slate-700 mb-1">Firm Name</label>
-            <input type="text" id="firmNameInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" value="VIHAL BUILDCON" oninput="updatePreview()">
+            <input type="text" id="firmNameInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Firm / Organization Name..." oninput="updatePreview()">
           </div>
 
           <div>
             <label for="firmAddressInput" class="block text-xs font-semibold text-slate-700 mb-1">Office Address</label>
-            <textarea id="firmAddressInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" oninput="updatePreview()">OFFICE ADDRESS</textarea>
+            <textarea id="firmAddressInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Office Address..." oninput="updatePreview()"></textarea>
           </div>
         </div>
 
@@ -214,12 +230,12 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label for="deedNoLabelInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Document No. Label</label>
-              <input type="text" id="deedNoLabelInput" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="DOCUMENT NO." oninput="updatePreview()">
-              <input type="text" id="deedNoInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-900" placeholder="e.g., SD/2026/8941" oninput="updatePreview()">
+              <input type="text" id="deedNoLabelInput" onfocus="this.select()" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="DOCUMENT NO." oninput="updatePreview()">
+              <input type="text" id="deedNoInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-slate-900" placeholder="e.g., SD/2026/8941 (optional)" oninput="updatePreview()">
             </div>
             <div>
               <label for="dateLabelInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Date Label</label>
-              <input type="text" id="dateLabelInput" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="Date of Execution" oninput="updatePreview()">
+              <input type="text" id="dateLabelInput" onfocus="this.select()" class="w-full px-3 py-1.5 text-xs rounded-md border border-slate-300 mb-1 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500" value="Date of Execution" oninput="updatePreview()">
               <input type="date" id="dateInput" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800" oninput="updatePreview()">
             </div>
           </div>
@@ -231,10 +247,10 @@
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <label for="propertyDescLabelInput" class="text-xs font-bold uppercase tracking-wider text-slate-400">3. Property Description</label>
-            <input type="text" id="propertyDescLabelInput" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-44 text-right" value="Property Description" oninput="updatePreview()">
+            <input type="text" id="propertyDescLabelInput" onfocus="this.select()" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-44 text-right" value="Property Description" oninput="updatePreview()">
           </div>
           <div>
-            <textarea id="propertyDescInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter property details" oninput="updatePreview()">PROPERTY ADDRESS</textarea>
+            <textarea id="propertyDescInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Property Description & Details..." oninput="updatePreview()"></textarea>
           </div>
         </div>
 
@@ -247,7 +263,7 @@
           <!-- First Party Group -->
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
-              <input type="text" id="firstPartyLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Seller / Vendor" oninput="updatePreview()">
+              <input type="text" id="firstPartyLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Seller / Vendor" oninput="updatePreview()">
               <button type="button" onclick="addSeller()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Name
               </button>
@@ -258,7 +274,7 @@
           <!-- Second Party Group -->
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
-              <input type="text" id="secondPartyLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Purchaser / Vendee" oninput="updatePreview()">
+              <input type="text" id="secondPartyLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Purchaser / Vendee" oninput="updatePreview()">
               <button type="button" onclick="addPurchaser()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Name
               </button>
@@ -273,7 +289,7 @@
 
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
-              <input type="text" id="partnersLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Partners Name(s)" oninput="updatePreview()">
+              <input type="text" id="partnersLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Partners Name(s)" oninput="updatePreview()">
               <button type="button" onclick="addPartner()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Partner
               </button>
@@ -283,7 +299,7 @@
 
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
-              <input type="text" id="signingAuthorityLabelInput" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Authorized Signing Partner / Authority" oninput="updatePreview()">
+              <input type="text" id="signingAuthorityLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Authorized Signing Partner / Authority" oninput="updatePreview()">
               <button type="button" onclick="addSignAuth()" class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800">
                 <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Authority
               </button>
@@ -298,9 +314,9 @@
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold uppercase tracking-wider text-slate-400">5. Remarks / Contact / Extra Notes</label>
-            <input type="text" id="remarksLabelInput" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-32 text-right" value="Remarks / Note" oninput="updatePreview()">
+            <input type="text" id="remarksLabelInput" onfocus="this.select()" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-32 text-right" value="Remarks / Note" oninput="updatePreview()">
           </div>
-          <textarea id="remarksInput" rows="2" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Phone: +91 98765 43210 | Email: contact@domain.com | Note: Stamp Duty Paid as per Gujarat Stamp Act" oninput="updatePreview()"></textarea>
+          <textarea id="remarksInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Phone: +91 98765 43210 | Email: info@example.com (optional)" oninput="updatePreview()"></textarea>
         </div>
 
         <div class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-900 flex items-start gap-2">
@@ -341,7 +357,7 @@
                   <img id="previewLogo" src="" alt="Firm Logo" class="max-h-20 max-w-20 object-contain hidden" />
                   <div id="defaultLogoSvg" class="w-16 h-16 rounded-full border-2 border-slate-800 flex items-center justify-center p-1 bg-slate-50">
                     <div class="w-full h-full rounded-full border border-slate-700 flex flex-col items-center justify-center text-center">
-                      <span class="font-cinzel text-[11px] font-bold text-slate-900 leading-none">VB</span>
+                      <span class="font-cinzel text-[11px] font-bold text-slate-900 leading-none">LOGO</span>
                       <span class="text-[7px] text-slate-600 uppercase tracking-widest mt-0.5">ESTD</span>
                     </div>
                   </div>
@@ -349,11 +365,11 @@
 
                 <!-- Firm Name & Address -->
                 <div class="flex-1 text-right">
-                  <h2 id="previewFirmName" class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 uppercase font-serif-title leading-snug">
-                    YOUR COMPANY NAME
+                  <h2 id="previewFirmName" class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 uppercase font-serif-title leading-snug min-h-[28px]">
+                    <!-- Blank or Dynamic Firm Name -->
                   </h2>
-                  <p id="previewFirmAddress" class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed font-normal max-w-md ml-auto whitespace-pre-line">
-                    YOUR OFFICE ADDRESS
+                  <p id="previewFirmAddress" class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed font-normal max-w-md ml-auto whitespace-pre-line min-h-[18px]">
+                    <!-- Blank or Dynamic Office Address -->
                   </p>
                 </div>
               </div>
@@ -368,14 +384,12 @@
               <!-- ROUNDED DESCRIPTION & DETAILS BOX -->
               <div class="rounded-desc-box bg-white shadow-xs">
                 
-                <!-- Document / Deed No. Row -->
+                <!-- Document / Deed No. Row (Blank if empty) -->
                 <div class="grid grid-cols-12 border-b border-slate-300 bg-slate-50/60">
                   <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-center" id="previewDeedNoLabel">
                     DOCUMENT NO.
                   </div>
-                  <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 tracking-wide" id="previewDeedNo">
-                    SD/2026/8941
-                  </div>
+                  <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 tracking-wide min-h-[46px]" id="previewDeedNo"></div>
                 </div>
 
                 <!-- Date Row -->
@@ -393,8 +407,8 @@
                   <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPropertyDescLabel">
                     Property Description
                   </div>
-                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900 leading-relaxed whitespace-pre-line" id="previewPropertyDesc">
-                    PROPERTY DESCRIPTION OF SALE
+                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900 leading-relaxed whitespace-pre-line min-h-[42px]" id="previewPropertyDesc">
+                    <!-- Blank or Dynamic Property Description -->
                   </div>
                 </div>
 
@@ -405,7 +419,7 @@
                     <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSellerHeaderLabel">
                       Seller / Vendor
                     </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1" id="previewSellerContainer"></div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1 min-h-[42px]" id="previewSellerContainer"></div>
                   </div>
 
                   <!-- Second Party Row -->
@@ -413,7 +427,7 @@
                     <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPurchaserHeaderLabel">
                       Purchaser / Vendee
                     </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1" id="previewPurchaserContainer"></div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1 min-h-[42px]" id="previewPurchaserContainer"></div>
                   </div>
                 </div>
 
@@ -424,7 +438,7 @@
                     <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPartnersHeaderLabel">
                       Partners Name(s)
                     </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1.5" id="previewPartnersContainer"></div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1.5 min-h-[42px]" id="previewPartnersContainer"></div>
                   </div>
 
                   <!-- Signing Authority Row -->
@@ -432,18 +446,16 @@
                     <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSignAuthHeaderLabel">
                       Authorized Signing Partner
                     </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1.5" id="previewSignAuthContainer"></div>
+                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1.5 min-h-[42px]" id="previewSignAuthContainer"></div>
                   </div>
                 </div>
 
                 <!-- Remarks / Notes / Contact Row (Conditionally shown if remarks exist) -->
-                <div class="grid grid-cols-12 border-t border-slate-300 bg-slate-50/50" id="previewRemarksRow">
+                <div class="grid grid-cols-12 border-t border-slate-300 bg-slate-50/50 hidden" id="previewRemarksRow">
                   <div class="col-span-4 p-3 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs uppercase tracking-wide text-slate-700 flex items-start" id="previewRemarksLabel">
                     Remarks / Note
                   </div>
-                  <div class="col-span-8 p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line leading-relaxed font-medium" id="previewRemarksText">
-                    <!-- Remarks inserted dynamically -->
-                  </div>
+                  <div class="col-span-8 p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line leading-relaxed font-medium" id="previewRemarksText"></div>
                 </div>
 
               </div>
@@ -490,7 +502,6 @@
       }
     };
 
-    // Dictionary of titles for auto-translation
     const titleTranslations = {
       "SALE DEED": "વેચાણ દસ્તાવેજ",
       "PARTNERSHIP DEED": "ભાગીદારી કરાર",
@@ -504,35 +515,113 @@
       "GIFT DEED": "બક્ષિસ દસ્તાવેજ"
     };
 
-    // Reverse lookup
     const reverseTitleTranslations = Object.fromEntries(
       Object.entries(titleTranslations).map(([k, v]) => [v, k])
     );
 
+    // Initial state without any hardcoded names or addresses
     let state = {
-      lang: "en", // 'en' | 'gu'
+      lang: "en",
       docPreset: "SALE DEED",
       docTitle: "SALE DEED",
-      firmName: "YOUR FIRM NAME",
-      firmAddress: "PROPERTY ADDRESS",
+      firmName: "",
+      firmAddress: "",
       deedNoLabel: "DOCUMENT NO.",
-      deedNo: " ",
+      deedNo: "",
       dateLabel: "Date of Execution",
       date: new Date().toISOString().split('T')[0],
       propertyDescLabel: "Property Description",
-      propertyDesc: "PROPERTY ADDRESS",
+      propertyDesc: "",
       firstPartyLabel: "Seller / Vendor",
       secondPartyLabel: "Purchaser / Vendee",
-      sellers: ["NAME OF SELLER"],
-      purchasers: ["NAME OF PURCHASER"],
+      sellers: [""],
+      purchasers: [""],
       partnersLabel: "Partners Name(s)",
       signingAuthorityLabel: "Authorized Signing Partner",
-      partners: ["PARTNER 1", "PARTNER 2"],
-      signingAuthorities: ["AUTHORIZED PERSON"],
+      partners: ["", ""],
+      signingAuthorities: [""],
       remarksLabel: "Remarks / Note",
       remarks: "",
       logoDataUrl: null
     };
+
+    // EXPORT TEMPLATE FUNCTION: Download current inputs as a JSON file
+    function exportData() {
+      // Collect latest values from inputs
+      syncInputsToState();
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const downloadAnchor = document.createElement('a');
+      const filename = (state.firmName ? state.firmName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'template') + 
+                       '_' + (state.docTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()) + '.json';
+      
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", filename);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    // IMPORT TEMPLATE FUNCTION: Read saved JSON and populate form
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          state = { ...state, ...imported };
+
+          // Restore Logo in UI if present in JSON
+          if (state.logoDataUrl) {
+            const previewLogo = document.getElementById('previewLogo');
+            const defaultLogo = document.getElementById('defaultLogoSvg');
+            const thumb = document.getElementById('logoThumb');
+            const thumbIcon = document.getElementById('logoPlaceholderIcon');
+
+            previewLogo.src = state.logoDataUrl;
+            previewLogo.classList.remove('hidden');
+            defaultLogo.classList.add('hidden');
+
+            thumb.src = state.logoDataUrl;
+            thumb.classList.remove('hidden');
+            thumbIcon.classList.add('hidden');
+          } else {
+            removeLogo();
+          }
+
+          // Populate input fields with imported data
+          initForm();
+          alert('Template successfully loaded!');
+        } catch (err) {
+          alert('Error parsing JSON file. Please ensure it is a valid template file.');
+        }
+      };
+      reader.readAsText(file);
+      // Reset input so same file can be imported again if needed
+      event.target.value = '';
+    }
+
+    // Sync input values to state
+    function syncInputsToState() {
+      state.docPreset = document.getElementById('docPresetSelect').value;
+      state.docTitle = document.getElementById('docTitleInput').value.trim();
+      state.firmName = document.getElementById('firmNameInput').value.trim();
+      state.firmAddress = document.getElementById('firmAddressInput').value.trim();
+      state.deedNoLabel = document.getElementById('deedNoLabelInput').value.trim();
+      state.deedNo = document.getElementById('deedNoInput').value.trim();
+      state.dateLabel = document.getElementById('dateLabelInput').value.trim();
+      state.date = document.getElementById('dateInput').value;
+      state.propertyDescLabel = document.getElementById('propertyDescLabelInput').value.trim();
+      state.propertyDesc = document.getElementById('propertyDescInput').value.trim();
+      state.firstPartyLabel = document.getElementById('firstPartyLabelInput').value.trim();
+      state.secondPartyLabel = document.getElementById('secondPartyLabelInput').value.trim();
+      state.partnersLabel = document.getElementById('partnersLabelInput').value.trim();
+      state.signingAuthorityLabel = document.getElementById('signingAuthorityLabelInput').value.trim();
+      state.remarksLabel = document.getElementById('remarksLabelInput').value.trim();
+      state.remarks = document.getElementById('remarksInput').value.trim();
+    }
 
     function setLanguage(lang) {
       state.lang = lang;
@@ -546,7 +635,6 @@
         btnEn.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
         indicator.textContent = i18n.gu.modeIndicator;
 
-        // Auto-translate labels to Gujarati
         document.getElementById('deedNoLabelInput').value = i18n.gu.deedNoLabel;
         document.getElementById('dateLabelInput').value = i18n.gu.dateLabel;
         document.getElementById('propertyDescLabelInput').value = i18n.gu.propertyDescLabel;
@@ -565,7 +653,6 @@
         btnGu.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
         indicator.textContent = i18n.en.modeIndicator;
 
-        // Auto-translate labels back to English
         document.getElementById('deedNoLabelInput').value = i18n.en.deedNoLabel;
         document.getElementById('dateLabelInput').value = i18n.en.dateLabel;
         document.getElementById('propertyDescLabelInput').value = i18n.en.propertyDescLabel;
@@ -593,7 +680,6 @@
         document.getElementById('docTitleInput').value = titleText;
       }
 
-      // Check if Partnership Deed mode is triggered
       toggleModeViews(val === "PARTNERSHIP DEED");
       updatePreview();
     }
@@ -618,7 +704,7 @@
     }
 
     function formatDateString(dateStr) {
-      if (!dateStr) return "—";
+      if (!dateStr) return "";
       try {
         const parts = dateStr.split('-');
         if (parts.length === 3) {
@@ -635,7 +721,6 @@
       }
     }
 
-    // Dynamic Lists Rendering
     function renderDynamicInputs() {
       renderSellerInputs();
       renderPurchaserInputs();
@@ -650,7 +735,7 @@
         const div = document.createElement('div');
         div.className = 'flex items-center gap-2';
         div.innerHTML = `
-          <input type="text" value="${seller.replace(/"/g, '&quot;')}" placeholder="Name ${index + 1}"
+          <input type="text" value="${seller.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Seller ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             oninput="state.sellers[${index}] = this.value; updatePreview()">
           ${state.sellers.length > 1 ? `
@@ -677,7 +762,7 @@
         const div = document.createElement('div');
         div.className = 'flex items-center gap-2';
         div.innerHTML = `
-          <input type="text" value="${purchaser.replace(/"/g, '&quot;')}" placeholder="Name ${index + 1}"
+          <input type="text" value="${purchaser.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Purchaser ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             oninput="state.purchasers[${index}] = this.value; updatePreview()">
           ${state.purchasers.length > 1 ? `
@@ -704,7 +789,7 @@
         const div = document.createElement('div');
         div.className = 'flex items-center gap-2';
         div.innerHTML = `
-          <input type="text" value="${partner.replace(/"/g, '&quot;')}" placeholder="Partner ${index + 1} Name"
+          <input type="text" value="${partner.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Partner ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             oninput="state.partners[${index}] = this.value; updatePreview()">
           ${state.partners.length > 1 ? `
@@ -731,7 +816,7 @@
         const div = document.createElement('div');
         div.className = 'flex items-center gap-2';
         div.innerHTML = `
-          <input type="text" value="${auth.replace(/"/g, '&quot;')}" placeholder="Signing Authority ${index + 1}"
+          <input type="text" value="${auth.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Signing Authority ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             oninput="state.signingAuthorities[${index}] = this.value; updatePreview()">
           ${state.signingAuthorities.length > 1 ? `
@@ -753,16 +838,16 @@
 
     // Update Live Preview
     function updatePreview() {
-      const docTitle = document.getElementById('docTitleInput').value.trim() || "DOCUMENT TITLE";
-      const firmName = document.getElementById('firmNameInput').value.trim() || "VIHAL BUILDCON";
-      const firmAddress = document.getElementById('firmAddressInput').value.trim() || "Office Address Line";
+      const docTitle = document.getElementById('docTitleInput').value.trim() || "";
+      const firmName = document.getElementById('firmNameInput').value.trim() || "";
+      const firmAddress = document.getElementById('firmAddressInput').value.trim() || "";
       const deedNoLabel = document.getElementById('deedNoLabelInput').value.trim() || "DOCUMENT NO.";
-      const deedNo = document.getElementById('deedNoInput').value.trim() || "—";
+      const deedNo = document.getElementById('deedNoInput').value.trim(); // Blank if not provided
       const dateLabel = document.getElementById('dateLabelInput').value.trim() || "Date";
       const rawDate = document.getElementById('dateInput').value;
       const formattedDate = formatDateString(rawDate);
       const propertyDescLabel = document.getElementById('propertyDescLabelInput').value.trim() || "Property Description";
-      const propertyDesc = document.getElementById('propertyDescInput').value.trim() || "—";
+      const propertyDesc = document.getElementById('propertyDescInput').value.trim() || "";
 
       // Render Header Details
       document.getElementById('previewDocTitle').textContent = docTitle;
@@ -780,7 +865,6 @@
       const isPartnership = state.docPreset === "PARTNERSHIP DEED";
 
       if (isPartnership) {
-        // Partnership Mode Render
         const partnersLabel = document.getElementById('partnersLabelInput').value.trim() || "Partners Name(s)";
         const signAuthLabel = document.getElementById('signingAuthorityLabelInput').value.trim() || "Authorized Signing Partner";
 
@@ -790,7 +874,7 @@
         const partnersList = state.partners.filter(p => p.trim() !== '');
         const partnersContainer = document.getElementById('previewPartnersContainer');
         if (partnersList.length === 0) {
-          partnersContainer.innerHTML = '<div>—</div>';
+          partnersContainer.innerHTML = '';
         } else {
           partnersContainer.innerHTML = partnersList.map((p, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${p}</div>`).join('');
         }
@@ -798,12 +882,11 @@
         const authList = state.signingAuthorities.filter(a => a.trim() !== '');
         const authContainer = document.getElementById('previewSignAuthContainer');
         if (authList.length === 0) {
-          authContainer.innerHTML = '<div>—</div>';
+          authContainer.innerHTML = '';
         } else {
           authContainer.innerHTML = authList.map((a, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">•</span>${a}</div>`).join('');
         }
       } else {
-        // Standard First / Second Party Render
         const firstPartyLabel = document.getElementById('firstPartyLabelInput').value.trim() || "Seller / Vendor";
         const secondPartyLabel = document.getElementById('secondPartyLabelInput').value.trim() || "Purchaser / Vendee";
 
@@ -813,7 +896,7 @@
         const sellerContainer = document.getElementById('previewSellerContainer');
         const filteredSellers = state.sellers.filter(s => s.trim() !== '');
         if (filteredSellers.length === 0) {
-          sellerContainer.innerHTML = '<div>—</div>';
+          sellerContainer.innerHTML = '';
         } else if (filteredSellers.length === 1) {
           sellerContainer.innerHTML = `<div>${filteredSellers[0]}</div>`;
         } else {
@@ -823,7 +906,7 @@
         const purchaserContainer = document.getElementById('previewPurchaserContainer');
         const filteredPurchasers = state.purchasers.filter(p => p.trim() !== '');
         if (filteredPurchasers.length === 0) {
-          purchaserContainer.innerHTML = '<div>—</div>';
+          purchaserContainer.innerHTML = '';
         } else if (filteredPurchasers.length === 1) {
           purchaserContainer.innerHTML = `<div>${filteredPurchasers[0]}</div>`;
         } else {
@@ -895,22 +978,22 @@
         lang: "en",
         docPreset: "SALE DEED",
         docTitle: "SALE DEED",
-        firmName: "YOUR COMPANY NAME",
-        firmAddress: "PROPERTY ADDRESS",
+        firmName: "",
+        firmAddress: "",
         deedNoLabel: "DOCUMENT NO.",
-        deedNo: "SERIAL NUMBER OF DOCUMENT",
+        deedNo: "",
         dateLabel: "Date of Execution",
         date: new Date().toISOString().split('T')[0],
         propertyDescLabel: "Property Description",
-        propertyDesc: "PROPERTY ADDRESS",
+        propertyDesc: "",
         firstPartyLabel: "Seller / Vendor",
         secondPartyLabel: "Purchaser / Vendee",
-        sellers: ["NAME OF SELLER"],
-        purchasers: ["NAME OF PURCHASER"],
+        sellers: [""],
+        purchasers: [""],
         partnersLabel: "Partners Name(s)",
         signingAuthorityLabel: "Authorized Signing Partner",
-        partners: ["PARTNER 1", "PARTNER 2"],
-        signingAuthorities: ["AUTHORIZED PARTNER"],
+        partners: ["", ""],
+        signingAuthorities: [""],
         remarksLabel: "Remarks / Note",
         remarks: "",
         logoDataUrl: null
