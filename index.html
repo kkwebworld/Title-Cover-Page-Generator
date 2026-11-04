@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Legal Document Cover Page Generator - Studio Pro</title>
+  <title>Document Cover Page Generator - Kk! Creations</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:wght@600;700&family=EB+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:wght@600;700&family=EB+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@400;600;700&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;0,700;0,800;1,400&family=DM+Serif+Display&family=Lato:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Marcellus&family=Open+Sans:wght@400;600;700&family=Oswald:wght@500;600;700&family=Philosopher:wght@700&family=Poppins:wght@400;500;600;700;800&family=Prata&family=Raleway:wght@400;600;700;800&family=Roboto:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=Noto+Serif+Gujarati:wght@400;600;700&family=Rasa:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -18,17 +20,41 @@
       --theme-accent: #0f172a;
       --theme-text: #0f172a;
       --theme-bg: #ffffff;
+      --page-width: 210mm;
+      --page-height: 297mm;
+      --doc-font: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif;
+      --doc-title-font: 'Cinzel', 'Noto Serif Gujarati', 'Noto Serif Devanagari', serif;
     }
 
     body { font-family: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif; }
     
+    /* Document Font Cascading - Applies selected Google Font cleanly across cover sheets */
+    #printArea {
+      font-family: var(--doc-font) !important;
+    }
+    #printArea .font-cinzel,
+    #printArea .doc-title-font,
+    #printArea .font-serif-title,
+    #printArea h1.doc-title,
+    #printArea h1 {
+      font-family: var(--doc-title-font, var(--doc-font)) !important;
+    }
+    #printArea h2.firm-title,
+    #printArea h2 {
+      font-family: var(--doc-title-font, var(--doc-font)) !important;
+    }
+    #printArea .font-mono,
+    #printArea .font-mono-num {
+      font-family: 'Roboto Mono', monospace !important;
+    }
+
     .font-inter { font-family: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif; }
-    .font-cinzel { font-family: 'Cinzel', 'Noto Sans Gujarati', serif; }
-    .font-playfair { font-family: 'Playfair Display', 'Noto Sans Gujarati', serif; }
-    .font-lora { font-family: 'Lora', 'Noto Sans Gujarati', serif; }
-    .font-merriweather { font-family: 'Merriweather', 'Noto Sans Gujarati', serif; }
-    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
-    .font-eb-garamond { font-family: 'EB Garamond', serif; }
+    .font-cinzel { font-family: 'Cinzel', 'Noto Serif Gujarati', serif; }
+    .font-playfair { font-family: 'Playfair Display', 'Noto Serif Gujarati', serif; }
+    .font-lora { font-family: 'Lora', 'Noto Serif Gujarati', serif; }
+    .font-merriweather { font-family: 'Merriweather', 'Noto Serif Gujarati', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', 'Noto Serif Gujarati', serif; }
+    .font-eb-garamond { font-family: 'EB Garamond', 'Noto Serif Gujarati', serif; }
     .font-outfit { font-family: 'Outfit', sans-serif; }
     .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-montserrat { font-family: 'Montserrat', sans-serif; }
@@ -40,35 +66,104 @@
     }
 
     @media print {
-      body * { visibility: hidden; }
-      #printArea, #printArea * { visibility: visible; }
-      #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 210mm !important;
-        height: 297mm !important;
-        max-height: 297mm !important;
+      html, body {
+        width: var(--page-width, 210mm) !important;
+        height: var(--page-height, 297mm) !important;
+        min-height: var(--page-height, 297mm) !important;
         margin: 0 !important;
         padding: 0 !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+        display: block !important;
+      }
+
+      /* Completely hide header, controls and non-printable elements */
+      header, .no-print, #previewToolbar {
+        display: none !important;
+      }
+
+      /* Strip layout geometry of all parent containers so they do not offset printArea */
+      main, section, #previewViewport, #previewScaleWrapper {
+        display: contents !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      #printArea, #printArea * {
+        visibility: visible !important;
+      }
+
+      /* Anchor #printArea directly to page box at (0, 0) with true sheet dimensions */
+      #printArea {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: var(--page-width, 210mm) !important;
+        height: var(--page-height, 297mm) !important;
+        max-height: var(--page-height, 297mm) !important;
+        margin: 0 !important;
+        padding: 1.5rem !important; /* Exact match with screen p-6 */
+        box-sizing: border-box !important;
+        transform: none !important;
         box-shadow: none !important;
         border: none !important;
-        background: white !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
-      .no-print { display: none !important; }
     }
 
-    .a4-sheet {
-      width: 210mm;
-      height: 297mm;
-      max-height: 297mm;
+    .a4-sheet, .page-sheet {
+      width: var(--page-width, 210mm);
+      height: var(--page-height, 297mm);
+      max-height: var(--page-height, 297mm);
       box-sizing: border-box;
       background: #ffffff;
       box-shadow: 0 14px 28px rgba(0,0,0,0.08), 0 10px 10px rgba(0,0,0,0.04);
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    #previewViewport {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      position: relative;
+    }
+
+    #previewScaleWrapper {
+      position: relative;
+      overflow: visible;
+      flex-shrink: 0;
+      margin: 0 auto;
+    }
+
+    #previewScaleWrapper #printArea {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
+      margin: 0;
     }
 
     .preview-placeholder {
@@ -186,28 +281,20 @@
       overflow: hidden;
     }
 
-    @media (max-width: 1024px) {
-      .a4-sheet {
-        width: 100%;
-        height: auto;
-        min-height: 297mm;
-        max-height: none;
-      }
-    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-inter">
 
   <!-- Top App Navigation -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between flex-wrap gap-2">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center space-x-3">
         <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">
           <i data-lucide="scale" class="w-5 h-5"></i>
         </div>
         <div>
-          <h1 class="text-base font-bold text-slate-900 leading-tight">Legal Document Cover Generator</h1>
-          <p class="text-[11px] text-slate-500">Universal Studio • 12 Formats • Clean Custom Colors</p>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">Document Cover Page Generator</h1>
+          <p class="text-[11px] text-slate-500">Kk!Creations • 12 Formats • Clean Custom Colors</p>
         </div>
       </div>
       
@@ -228,19 +315,20 @@
           <span>Reset</span>
         </button>
 
-        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150">
+        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150" title="Print document or save as PDF in selected page size">
           <i data-lucide="printer" class="w-4 h-4"></i>
           <span>Print / Save as PDF</span>
+          <span id="printBtnPageBadge" class="text-[11px] bg-indigo-700/90 px-1.5 py-0.5 rounded font-medium text-indigo-100">(A4)</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- Main Body Content -->
-  <main class="max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+  <main class="max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
     
     <!-- LEFT PANEL: CONTROLS & INPUTS -->
-    <section class="lg:col-span-5 flex flex-col gap-5 no-print">
+    <section class="lg:col-span-5 w-full min-w-0 flex flex-col gap-5 no-print relative z-20">
       
       <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-5">
         
@@ -253,7 +341,7 @@
               Document Theme
             </label>
             <select id="layoutThemeSelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handleLayoutChange(this.value)">
-              <option value="layout-original-diagonal">Classic Master</option>
+              <option value="layout-original-diagonal">Kk! Creations</option>
               <option value="layout-reference-scroll">Developer Scroll</option>
               <option value="layout-sidebar-navy">Executive Sidebar</option>
               <option value="layout-two-column-dossier">Two-Column Comparison</option>
@@ -287,23 +375,123 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1 flex items-center gap-1.5">
-              <i data-lucide="type" class="w-3.5 h-3.5 text-indigo-600"></i>
-              Typography Font
-            </label>
-            <select id="fontFamilySelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handleFontChange(this.value)">
-              <option value="font-inter">Inter</option>
-              <option value="font-cinzel">Cinzel</option>
-              <option value="font-playfair">Playfair Display</option>
-              <option value="font-lora">Lora</option>
-              <option value="font-merriweather">Merriweather</option>
-              <option value="font-cormorant">Cormorant Garamond</option>
-              <option value="font-eb-garamond">EB Garamond</option>
-              <option value="font-jakarta">Plus Jakarta Sans</option>
-              <option value="font-montserrat">Montserrat</option>
-              <option value="font-outfit">Outfit</option>
-              <option value="font-mono-num">Roboto Mono</option>
+            <div class="flex items-center justify-between mb-1">
+              <label for="fontFamilySelect" class="block text-xs font-bold uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
+                <i data-lucide="type" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Typography Font
+              </label>
+              <button type="button" onclick="toggleCustomFontBox()" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 hover:underline cursor-pointer" title="Load any font from Google Fonts catalog">
+                <i data-lucide="plus-circle" class="w-3 h-3"></i>
+                <span>+ Custom Font</span>
+              </button>
+            </div>
+            <select id="fontFamilySelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs cursor-pointer" onchange="handleFontChange(this.value)">
+              <optgroup label="👑 Formal &amp; Legal Serifs">
+                <option value="Cinzel" style="font-family: 'Cinzel', serif;">Cinzel (Classical Roman Legal)</option>
+                <option value="Playfair Display" style="font-family: 'Playfair Display', serif;">Playfair Display (High-Contrast Editorial)</option>
+                <option value="Libre Baskerville" style="font-family: 'Libre Baskerville', serif;">Libre Baskerville (Court &amp; Contract Standard)</option>
+                <option value="Merriweather" style="font-family: 'Merriweather', serif;">Merriweather (Sturdy Legal Serif)</option>
+                <option value="Lora" style="font-family: 'Lora', serif;">Lora (Contemporary Literary Serif)</option>
+                <option value="Cormorant Garamond" style="font-family: 'Cormorant Garamond', serif;">Cormorant Garamond (Prestige Heritage)</option>
+                <option value="EB Garamond" style="font-family: 'EB Garamond', serif;">EB Garamond (Classic Renaissance)</option>
+                <option value="Bodoni Moda" style="font-family: 'Bodoni Moda', serif;">Bodoni Moda (Luxury Headline Serif)</option>
+                <option value="Prata" style="font-family: 'Prata', serif;">Prata (Refined Elegant Serif)</option>
+                <option value="DM Serif Display" style="font-family: 'DM Serif Display', serif;">DM Serif Display (Sharp Legal Titling)</option>
+                <option value="Marcellus" style="font-family: 'Marcellus', serif;">Marcellus (Roman Inscription)</option>
+              </optgroup>
+              
+              <optgroup label="💼 Modern &amp; Corporate Sans">
+                <option value="Inter" selected style="font-family: 'Inter', sans-serif;">Inter (Ultra-Clean Corporate Sans)</option>
+                <option value="Plus Jakarta Sans" style="font-family: 'Plus Jakarta Sans', sans-serif;">Plus Jakarta Sans (Modern Geometric)</option>
+                <option value="Montserrat" style="font-family: 'Montserrat', sans-serif;">Montserrat (Architectural Geometric)</option>
+                <option value="Poppins" style="font-family: 'Poppins', sans-serif;">Poppins (Clean Indian &amp; Global Sans)</option>
+                <option value="Outfit" style="font-family: 'Outfit', sans-serif;">Outfit (Contemporary Rounded Sans)</option>
+                <option value="Roboto" style="font-family: 'Roboto', sans-serif;">Roboto (Crisp Google Standard)</option>
+                <option value="Lato" style="font-family: 'Lato', sans-serif;">Lato (Warm Corporate Sans)</option>
+                <option value="Open Sans" style="font-family: 'Open Sans', sans-serif;">Open Sans (Neutral Legible Sans)</option>
+                <option value="Raleway" style="font-family: 'Raleway', sans-serif;">Raleway (Refined Elegant Sans)</option>
+              </optgroup>
+              
+              <optgroup label="🏛️ Display &amp; Titling">
+                <option value="Cinzel Decorative" style="font-family: 'Cinzel Decorative', serif;">Cinzel Decorative (Ornate Engraved)</option>
+                <option value="Philosopher" style="font-family: 'Philosopher', sans-serif;">Philosopher (Artistic Classical)</option>
+                <option value="Oswald" style="font-family: 'Oswald', sans-serif;">Oswald (Bold Condensed Headline)</option>
+              </optgroup>
+              
+              <optgroup label="📜 Indic Regional (Gujarati &amp; Hindi)">
+                <option value="Noto Serif Gujarati" style="font-family: 'Noto Serif Gujarati', serif;">Noto Serif Gujarati (Traditional Legal)</option>
+                <option value="Noto Sans Gujarati" style="font-family: 'Noto Sans Gujarati', sans-serif;">Noto Sans Gujarati (Modern Clean)</option>
+                <option value="Noto Serif Devanagari" style="font-family: 'Noto Serif Devanagari', serif;">Noto Serif Devanagari (Hindi Legal Serif)</option>
+                <option value="Noto Sans Devanagari" style="font-family: 'Noto Sans Devanagari', sans-serif;">Noto Sans Devanagari (Hindi Clean Sans)</option>
+                <option value="Rasa" style="font-family: 'Rasa', serif;">Rasa (Fine Indic Serif)</option>
+                <option value="Rozha One" style="font-family: 'Rozha One', serif;">Rozha One (Bold Devanagari Heading)</option>
+              </optgroup>
+
+              <optgroup label="⚖️ Legal Combos (Title + Body)">
+                <option value="combo-cinzel-inter">Cinzel Title + Inter Body (Classic Legal)</option>
+                <option value="combo-playfair-jakarta">Playfair Display Title + Jakarta Body</option>
+                <option value="combo-baskerville-opensans">Libre Baskerville Title + Open Sans Body</option>
+                <option value="combo-bodoni-montserrat">Bodoni Moda Title + Montserrat Body</option>
+              </optgroup>
+              
+              <optgroup label="⌨️ Monospace &amp; Registry">
+                <option value="Roboto Mono" style="font-family: 'Roboto Mono', monospace;">Roboto Mono (Registry Precision)</option>
+                <option value="Space Mono" style="font-family: 'Space Mono', monospace;">Space Mono (Tech Registry)</option>
+              </optgroup>
+
+              <optgroup id="customFontOptGroup" label="✨ Custom Google Fonts" class="hidden">
+              </optgroup>
             </select>
+
+            <!-- Custom Font Input Panel -->
+            <div id="customFontBox" class="hidden mt-2 p-3 bg-indigo-50/70 border border-indigo-200 rounded-lg space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-indigo-950 flex items-center gap-1">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
+                  Load ANY Google Font
+                </span>
+                <a href="https://fonts.google.com" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 text-[10.5px] font-semibold hover:underline flex items-center gap-0.5">
+                  Browse Google Fonts <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                </a>
+              </div>
+              <p class="text-[10px] text-slate-500">Type any font name from Google Fonts (e.g. <em>Cardo</em>, <em>Spectral</em>, <em>Great Vibes</em>, <em>Yatra One</em>, <em>Alex Brush</em>, <em>Anek Gujarati</em>).</p>
+              <div class="flex items-center gap-1.5">
+                <input type="text" id="customFontInput" placeholder="Font name (e.g. Cardo)" class="flex-1 px-2.5 py-1.5 text-xs font-semibold rounded-md border border-indigo-300 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" onkeydown="if(event.key==='Enter'){event.preventDefault();applyCustomGoogleFont();}">
+                <button type="button" onclick="applyCustomGoogleFont()" class="px-3 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-md shadow-2xs transition">
+                  Apply Font
+                </button>
+              </div>
+              <div id="customFontFeedback" class="text-[10.5px] font-semibold text-emerald-700 hidden"></div>
+            </div>
+          </div>
+
+          <!-- Page Size & Orientation Controls -->
+          <div class="pt-2 border-t border-indigo-100">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Page Size &amp; Orientation
+              </label>
+              <span id="pageSizeDimensionsTag" class="text-[10px] font-mono text-indigo-700 bg-white border border-indigo-200 px-1.5 py-0.5 rounded font-bold shadow-2xs">210 × 297 mm</span>
+            </div>
+            <div class="grid grid-cols-12 gap-2">
+              <div class="col-span-8">
+                <select id="pageSizeSelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handlePageSizeChange(this.value)">
+                  <option value="a4" selected>A4 (210 × 297 mm - Standard)</option>
+                  <option value="legal">Legal / Court (8.5 × 14 in / 216 × 356 mm)</option>
+                  <option value="letter">Letter (8.5 × 11 in / 216 × 279 mm)</option>
+                  <option value="folio">Folio / Stamp Paper (8.5 × 13 in / 216 × 330 mm)</option>
+                  <option value="a3">A3 Large Format (297 × 420 mm)</option>
+                  <option value="executive">Executive (7.25 × 10.5 in / 184 × 267 mm)</option>
+                </select>
+              </div>
+              <div class="col-span-4">
+                <select id="pageOrientationSelect" class="w-full px-2 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs text-center" onchange="handlePageOrientationChange(this.value)">
+                  <option value="portrait" selected>Portrait 📄</option>
+                  <option value="landscape">Landscape 📑</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="pt-2 border-t border-indigo-100">
@@ -588,20 +776,42 @@
 
     </section>
 
-    <!-- RIGHT PANEL: ACCURATE A4 LIVE PREVIEW -->
-    <section class="lg:col-span-7 flex flex-col items-center">
+    <!-- RIGHT PANEL: ACCURATE LIVE PREVIEW -->
+    <section class="lg:col-span-7 w-full min-w-0 flex flex-col items-center relative z-10">
       
-      <div class="mb-2 text-xs font-medium text-slate-500 flex items-center justify-between w-full max-w-[210mm] no-print">
-        <div class="flex items-center gap-1.5">
-          <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-          <span id="previewLayoutBadge" class="font-semibold text-slate-800">Classic Master</span>
+      <!-- Preview Toolbar with Mode badges and Zoom controls -->
+      <div id="previewToolbar" class="mb-3 text-xs font-medium text-slate-500 flex items-center justify-between w-full no-print flex-wrap gap-2 bg-white/80 backdrop-blur-xs p-2.5 rounded-xl border border-slate-200/80 shadow-2xs">
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-1.5 text-slate-700 font-semibold">
+            <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
+            <span id="previewLayoutBadge" class="font-bold text-slate-800">Kk! Creations</span>
+          </div>
+          <span id="previewPageSizeBadge" class="text-[11px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded border border-slate-200">A4 • Portrait</span>
+          <span id="currentLangIndicator" class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded border border-indigo-100">Mode: English</span>
         </div>
-        <span id="currentLangIndicator" class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded">Mode: English</span>
+
+        <!-- Zoom Controls -->
+        <div class="flex items-center gap-1.5">
+          <span class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider hidden sm:inline">Zoom:</span>
+          <div class="inline-flex items-center bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+            <button type="button" id="zoomBtnFit" onclick="setPreviewZoom('fit')" title="Auto-fit page to preview window" class="px-2 py-0.5 text-[11px] font-bold rounded text-indigo-700 bg-white shadow-xs border border-indigo-200 transition-all">Fit</button>
+            <button type="button" id="zoomBtn100" onclick="setPreviewZoom(1.0)" title="Actual 100% size" class="px-1.5 py-0.5 text-[11px] font-medium text-slate-600 hover:text-slate-900 rounded transition-all">100%</button>
+            <button type="button" id="zoomBtn75" onclick="setPreviewZoom(0.75)" title="75% scale" class="px-1.5 py-0.5 text-[11px] font-medium text-slate-600 hover:text-slate-900 rounded transition-all">75%</button>
+            <button type="button" id="zoomBtn50" onclick="setPreviewZoom(0.5)" title="50% scale" class="px-1.5 py-0.5 text-[11px] font-medium text-slate-600 hover:text-slate-900 rounded transition-all">50%</button>
+          </div>
+          <span id="zoomPercentDisplay" class="text-[11px] font-mono text-slate-500 font-semibold w-9 text-right">100%</span>
+        </div>
       </div>
 
-      <!-- Printable A4 Document Sheet -->
-      <div id="printArea" class="a4-sheet">
-        <!-- Rendered dynamically by updatePreview() -->
+      <!-- Preview Viewport: Constrained container with internal scroll if needed -->
+      <div id="previewViewport" class="w-full max-w-full overflow-x-auto overflow-y-visible p-2 sm:p-4 rounded-2xl bg-slate-200/50 border border-slate-200 flex justify-center items-start min-h-[500px]">
+        <!-- Scaled wrapper that matches exact visual dimensions -->
+        <div id="previewScaleWrapper" class="relative flex-shrink-0 transition-all duration-150 ease-out" style="overflow: visible;">
+          <!-- Printable Document Sheet (A4 / Legal / Letter / etc.) -->
+          <div id="printArea" class="a4-sheet page-sheet">
+            <!-- Rendered dynamically by updatePreview() -->
+          </div>
+        </div>
       </div>
 
     </section>
@@ -800,7 +1010,7 @@
     };
 
     const layoutLabels = {
-      "layout-original-diagonal": "Classic Master",
+      "layout-original-diagonal": "Kk! Creations",
       "layout-reference-scroll": "Developer Scroll",
       "layout-sidebar-navy": "Executive Sidebar",
       "layout-two-column-dossier": "Two-Column Comparison",
@@ -815,6 +1025,208 @@
     };
 
     const fullBleedThemes = ['layout-sidebar-navy', 'layout-banded-modern', 'layout-reference-scroll'];
+
+    // =========================================================================
+    // PAGE SIZES (A4, Legal, Letter, Folio / Stamp Paper, A3, Executive)
+    // =========================================================================
+    const PAGE_SIZES = {
+      a4: {
+        name: "A4",
+        widthMm: 210,
+        heightMm: 297,
+        cssSize: "A4",
+        dimLabel: "210 × 297 mm (8.3 × 11.7 in)"
+      },
+      legal: {
+        name: "Legal",
+        widthMm: 215.9,
+        heightMm: 355.6,
+        cssSize: "legal",
+        dimLabel: "216 × 356 mm (8.5 × 14.0 in)"
+      },
+      letter: {
+        name: "Letter",
+        widthMm: 215.9,
+        heightMm: 279.4,
+        cssSize: "letter",
+        dimLabel: "216 × 279 mm (8.5 × 11.0 in)"
+      },
+      folio: {
+        name: "Folio",
+        widthMm: 215.9,
+        heightMm: 330.2,
+        cssSize: "215.9mm 330.2mm",
+        dimLabel: "216 × 330 mm (8.5 × 13.0 in)"
+      },
+      a3: {
+        name: "A3",
+        widthMm: 297,
+        heightMm: 420,
+        cssSize: "A3",
+        dimLabel: "297 × 420 mm (11.7 × 16.5 in)"
+      },
+      executive: {
+        name: "Executive",
+        widthMm: 184.1,
+        heightMm: 266.7,
+        cssSize: "184.1mm 266.7mm",
+        dimLabel: "184 × 267 mm (7.25 × 10.5 in)"
+      }
+    };
+
+    function handlePageSizeChange(val) {
+      state.pageSize = val;
+      applyPageDimensions();
+      updatePreview();
+    }
+
+    function handlePageOrientationChange(val) {
+      state.pageOrientation = val;
+      applyPageDimensions();
+      updatePreview();
+    }
+
+    function applyPageDimensions() {
+      const sizeKey = state.pageSize || 'a4';
+      const orientation = state.pageOrientation || 'portrait';
+      const config = PAGE_SIZES[sizeKey] || PAGE_SIZES.a4;
+
+      const isLandscape = orientation === 'landscape';
+      const widthVal = isLandscape ? `${config.heightMm}mm` : `${config.widthMm}mm`;
+      const heightVal = isLandscape ? `${config.widthMm}mm` : `${config.heightMm}mm`;
+
+      const cssPageRule = isLandscape ? 
+        (config.cssSize.includes('mm') ? `${config.heightMm}mm ${config.widthMm}mm` : `${config.cssSize} landscape`) :
+        (config.cssSize.includes('mm') ? `${config.widthMm}mm ${config.heightMm}mm` : `${config.cssSize} portrait`);
+
+      // Set CSS Custom Properties on document root
+      document.documentElement.style.setProperty('--page-width', widthVal);
+      document.documentElement.style.setProperty('--page-height', heightVal);
+
+      // Update dynamic style element for @page & print sheet
+      let styleEl = document.getElementById('dynamicPageSizeStyle');
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'dynamicPageSizeStyle';
+        document.head.appendChild(styleEl);
+      }
+
+      styleEl.innerHTML = `
+        @page {
+          size: ${cssPageRule};
+          margin: 0;
+        }
+        @media print {
+          html, body {
+            width: ${widthVal} !important;
+            height: ${heightVal} !important;
+            min-height: ${heightVal} !important;
+          }
+          #printArea {
+            width: ${widthVal} !important;
+            height: ${heightVal} !important;
+            max-height: ${heightVal} !important;
+          }
+        }
+        .a4-sheet, .page-sheet {
+          width: ${widthVal} !important;
+          height: ${heightVal} !important;
+          max-height: ${heightVal} !important;
+        }
+      `;
+
+      // Update dimensions tag in design controls
+      const tagEl = document.getElementById('pageSizeDimensionsTag');
+      if (tagEl) {
+        tagEl.textContent = isLandscape ? `${config.heightMm} × ${config.widthMm} mm` : `${config.widthMm} × ${config.heightMm} mm`;
+      }
+
+      // Update badge in live preview toolbar
+      const badgeEl = document.getElementById('previewPageSizeBadge');
+      if (badgeEl) {
+        badgeEl.textContent = `${config.name} • ${isLandscape ? 'Landscape' : 'Portrait'}`;
+      }
+
+      // Update print button text
+      const printBtnBadge = document.getElementById('printBtnPageBadge');
+      if (printBtnBadge) {
+        printBtnBadge.textContent = `(${config.name}${isLandscape ? ' Land.' : ''})`;
+      }
+
+      // Update preview scale & zoom
+      updatePreviewScale();
+    }
+
+    // Live preview zoom and responsive auto-fit scaling
+    let previewZoomMode = 'fit';
+
+    function setPreviewZoom(mode) {
+      previewZoomMode = mode;
+      ['Fit', '100', '75', '50'].forEach(m => {
+        const btn = document.getElementById('zoomBtn' + m);
+        if (!btn) return;
+        const isThis = (mode === 'fit' && m === 'Fit') ||
+                       (mode === 1.0 && m === '100') ||
+                       (mode === 0.75 && m === '75') ||
+                       (mode === 0.5 && m === '50');
+        if (isThis) {
+          btn.className = "px-2 py-0.5 text-[11px] font-bold rounded text-indigo-700 bg-white shadow-xs border border-indigo-200 transition-all";
+        } else {
+          btn.className = "px-1.5 py-0.5 text-[11px] font-medium text-slate-600 hover:text-slate-900 rounded transition-all";
+        }
+      });
+      updatePreviewScale();
+    }
+
+    function updatePreviewScale() {
+      const viewport = document.getElementById('previewViewport');
+      const wrapper = document.getElementById('previewScaleWrapper');
+      const printArea = document.getElementById('printArea');
+      if (!viewport || !wrapper || !printArea) return;
+
+      const sizeKey = state.pageSize || 'a4';
+      const orientation = state.pageOrientation || 'portrait';
+      const config = PAGE_SIZES[sizeKey] || PAGE_SIZES.a4;
+      const isLandscape = orientation === 'landscape';
+
+      const widthMm = isLandscape ? config.heightMm : config.widthMm;
+      const heightMm = isLandscape ? config.widthMm : config.heightMm;
+
+      const mmToPx = 96 / 25.4;
+      const sheetWidthPx = widthMm * mmToPx;
+      const sheetHeightPx = heightMm * mmToPx;
+
+      let zoom = 1.0;
+      if (previewZoomMode === 'fit') {
+        const availableWidth = viewport.clientWidth > 0 ? viewport.clientWidth - 32 : 720;
+        if (availableWidth > 0 && sheetWidthPx > 0) {
+          zoom = Math.min(1.0, availableWidth / sheetWidthPx);
+        }
+      } else if (typeof previewZoomMode === 'number') {
+        zoom = previewZoomMode;
+      }
+
+      const scaledWidth = sheetWidthPx * zoom;
+      const scaledHeight = sheetHeightPx * zoom;
+
+      wrapper.style.width = `${scaledWidth}px`;
+      wrapper.style.height = `${scaledHeight}px`;
+
+      printArea.style.transform = `scale(${zoom})`;
+      printArea.style.transformOrigin = 'top left';
+
+      const zoomPercentTag = document.getElementById('zoomPercentDisplay');
+      if (zoomPercentTag) {
+        zoomPercentTag.textContent = `${Math.round(zoom * 100)}%`;
+      }
+    }
+
+    // Auto update scale on window resize
+    window.addEventListener('resize', () => {
+      if (previewZoomMode === 'fit') {
+        updatePreviewScale();
+      }
+    });
 
     // =========================================================================
     // INDIC TRANSLITERATION & AUTO-TRANSLATE ENGINE
@@ -908,16 +1320,131 @@
       nagar: { gu: "નગર", hi: "नगर", mr: "नगर", bn: "নগর", pa: "ਨਗਰ", ta: "நகர்", te: "నగర్", kn: "ನಗರ" },
       complex: { gu: "કોમ્પ્લેક્સ", hi: "कॉम्प्लेक्स", mr: "कॉम्प्लेक्स", bn: "কমপ্লেক্স", pa: "ਕੰਪਲੈਕਸ", ta: "காம்ப்ளக்ஸ்", te: "కాంప్లెక్స్", kn: "ಕಾಂಪ್ಲೆಕ್ಸ್" },
       city: { gu: "શહેર", hi: "शहर", mr: "शहर", bn: "শহর", pa: "ਸ਼ਹਿਰ", ta: "நகரம்", te: "నగరం", kn: "ನಗರ" },
-      no: { gu: "નં.", hi: "नं.", mr: "क्र.", bn: "নং", pa: "ਨੰ.", ta: "எண்", te: "నం.", kn: "ಸಂ." }
+      no: { gu: "નં.", hi: "नं.", mr: "क्र.", bn: "নং", pa: "ਨੰ.", ta: "எண்", te: "నం.", kn: "ಸಂ." },
+      near: { gu: "પાસે", hi: "पास", mr: "जवळ", bn: "কাছে", pa: "ਨੇੜੇ", ta: "அருகில்", te: "సమీపంలో", kn: "ಹತ್ತಿರ" },
+      opp: { gu: "સામે", hi: "सामने", mr: "समोर", bn: "সামনে", pa: "ਸਾਹਮਣੇ", ta: "எதிரில்", te: "ఎదురుగా", kn: "ಎದುರು" },
+      block: { gu: "બ્લોક", hi: "ब्लॉक", mr: "ब्लॉक", bn: "ব্লক", pa: "ਬਲਾਕ", ta: "பிளாக்", te: "బ్లాక్", kn: "ಬ್ಲಾಕ್" },
+      residency: { gu: "રેસિડેન્સી", hi: "रेजीडेंसी", mr: "रेसिडेन्सी", bn: "রেসিডেন্সি", pa: "ਰੈਜੀਡੈਂਸੀ", ta: "ரெசிடென்சி", te: "రెసిడెన్సీ", kn: "ರೆಸಿಡೆನ್ಸಿ" },
+      arcade: { gu: "આર્કેડ", hi: "આર્કેડ", mr: "आर्केड", bn: "আর্কেড", pa: "ਆਰਕੇਡ", ta: "ஆர்கேட்", te: "ఆర్కేడ్", kn: "ಆರ್ಕೇಡ್" },
+      society: { gu: "સોસાયટી", hi: "સોસાયટી", mr: "सोसायटी", bn: "সোসাইটি", pa: "ਸੋਸਾਇਟੀ", ta: "சொசைட்டி", te: "సొసైటీ", kn: "ಸೊಸೈಟಿ" },
+      mumbai: { gu: "મુંબઈ", hi: "मुंबई", mr: "मुंबई", bn: "মুম্বই", pa: "ਮੁੰਬਈ", ta: "மும்பை", te: "ముంబై", kn: "ಮುಂಬೈ" },
+      delhi: { gu: "દિલ્હી", hi: "दिल्ली", mr: "दिल्ली", bn: "দিল্লি", pa: "ਦਿੱਲੀ", ta: "டெல்லி", te: "ఢిల్లీ", kn: "ದೆಹಲಿ" },
+      pune: { gu: "પુણે", hi: "पुणे", mr: "पुणे", bn: "পুনে", pa: "ਪੁਣੇ", ta: "புனே", te: "పూణే", kn: "ಪುಣೆ" }
     };
 
-    function instantTransliterateWord(word, targetLang) {
+    // Bidirectional dictionary for cross-language lookups (En <-> Gu <-> Hi <-> Mr <-> others)
+    const BIDIRECTIONAL_DICT = {};
+    (function initBidirectionalDict() {
+      Object.entries(INDIC_OFFLINE_NAMES).forEach(([enKey, langMap]) => {
+        const enCapitalized = enKey.charAt(0).toUpperCase() + enKey.slice(1);
+        const entry = { en: enCapitalized, ...langMap };
+        BIDIRECTIONAL_DICT[enKey.toLowerCase()] = entry;
+        Object.values(langMap).forEach(word => {
+          if (word) {
+            BIDIRECTIONAL_DICT[word.trim()] = entry;
+            BIDIRECTIONAL_DICT[word.trim().toLowerCase()] = entry;
+          }
+        });
+      });
+    })();
+
+    // 1-to-1 Unicode script transposition between Gujarati (0x0A80) and Devanagari (0x0900)
+    function gujaratiToDevanagari(text) {
+      if (!text) return "";
+      return text.replace(/[\u0A81-\u0AFD]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x0180));
+    }
+
+    function devanagariToGujarati(text) {
+      if (!text) return "";
+      return text.replace(/[\u0901-\u097D]/g, ch => String.fromCharCode(ch.charCodeAt(0) + 0x0180));
+    }
+
+    // Brahmic (Gujarati/Devanagari) to Latin alphabet phonetic converter
+    const BRAHMIC_TO_LATIN = {
+      0x15: "k", 0x16: "kh", 0x17: "g", 0x18: "gh", 0x19: "ng",
+      0x1A: "ch", 0x1B: "chh", 0x1C: "j", 0x1D: "jh", 0x1E: "ny",
+      0x1F: "t", 0x20: "th", 0x21: "d", 0x22: "dh", 0x23: "n",
+      0x24: "t", 0x25: "th", 0x26: "d", 0x27: "dh", 0x28: "n",
+      0x2A: "p", 0x2B: "f", 0x2C: "b", 0x2D: "bh", 0x2E: "m",
+      0x2F: "y", 0x30: "r", 0x32: "l", 0x33: "l", 0x35: "v",
+      0x36: "sh", 0x37: "sh", 0x38: "s", 0x39: "h",
+      // Independent vowels
+      0x05: "a", 0x06: "aa", 0x07: "i", 0x08: "ee", 0x09: "u", 0x0A: "oo",
+      0x0F: "e", 0x10: "ai", 0x13: "o", 0x14: "au",
+      // Matras
+      0x3E: "a", 0x3F: "i", 0x40: "ee", 0x41: "u", 0x42: "oo", 0x43: "ri",
+      0x47: "e", 0x48: "ai", 0x4B: "o", 0x4C: "au", 0x4D: "", 0x02: "n"
+    };
+
+    function indicToLatinWord(word) {
       if (!word) return "";
-      const lower = word.toLowerCase().trim();
-      if (INDIC_OFFLINE_NAMES[lower] && INDIC_OFFLINE_NAMES[lower][targetLang]) {
-        return INDIC_OFFLINE_NAMES[lower][targetLang];
+      let res = "";
+      const len = word.length;
+      for (let i = 0; i < len; i++) {
+        const code = word.charCodeAt(i);
+        const offset = code % 0x80;
+        const isConsonant = (offset >= 0x15 && offset <= 0x39);
+        const charStr = BRAHMIC_TO_LATIN[offset];
+        if (typeof charStr !== 'undefined') {
+          res += charStr;
+          if (isConsonant) {
+            if (i + 1 < len) {
+              const nextOffset = word.charCodeAt(i + 1) % 0x80;
+              const hasNextMatra = ((nextOffset >= 0x3E && nextOffset <= 0x4C) || nextOffset === 0x4D);
+              if (!hasNextMatra && (i + 1 < len - 1 || len <= 2)) {
+                res += "a";
+              }
+            }
+          }
+        } else {
+          res += word[i];
+        }
       }
-      return algorithmicPhoneticTransliterate(word, targetLang);
+      if (res.length > 0) {
+        return res.charAt(0).toUpperCase() + res.slice(1);
+      }
+      return res;
+    }
+
+    function convertWord(word, targetLang) {
+      if (!word || !word.trim()) return word;
+      const clean = word.trim();
+
+      // 1. Dictionary lookup (exact or case-insensitive)
+      const dictMatch = BIDIRECTIONAL_DICT[clean] || BIDIRECTIONAL_DICT[clean.toLowerCase()];
+      if (dictMatch) {
+        if (targetLang === 'en' && dictMatch.en) return dictMatch.en;
+        if (dictMatch[targetLang]) return dictMatch[targetLang];
+      }
+
+      const isLatin = /^[a-zA-Z]+$/.test(clean);
+      const isGujarati = /[\u0A80-\u0AFF]/.test(clean);
+      const isDevanagari = /[\u0900-\u097F]/.test(clean);
+
+      // 2. English to target language
+      if (isLatin) {
+        if (targetLang === 'en') return clean;
+        return algorithmicPhoneticTransliterate(clean, targetLang);
+      }
+
+      // 3. Gujarati <-> Devanagari (Hindi / Marathi)
+      if (isGujarati && (targetLang === 'hi' || targetLang === 'mr')) {
+        return gujaratiToDevanagari(clean);
+      }
+      if (isDevanagari && targetLang === 'gu') {
+        return devanagariToGujarati(clean);
+      }
+
+      // 4. Indic to English
+      if (targetLang === 'en') {
+        return indicToLatinWord(clean);
+      }
+
+      return clean;
+    }
+
+    function instantTransliterateWord(word, targetLang) {
+      return convertWord(word, targetLang);
     }
 
     function algorithmicPhoneticTransliterate(word, targetLang) {
@@ -1002,33 +1529,51 @@
       return res || word;
     }
 
-    function offlineTransliterate(text, targetLang) {
-      if (!text || targetLang === 'en') return text;
-      return text.replace(/[a-zA-Z]+/g, (match) => {
-        return instantTransliterateWord(match, targetLang);
-      });
-    }
-
     async function translateText(text, targetLang) {
-      if (!text || !text.trim() || targetLang === 'en') return text;
-      if (!/[a-zA-Z]/.test(text)) return text;
+      if (!text || !text.trim()) return text;
+      const trimmed = text.trim();
 
-      const cacheKey = targetLang + ':' + text.trim();
+      // Check cache
+      const cacheKey = targetLang + ':' + trimmed;
       if (translationCache[cacheKey]) {
         return translationCache[cacheKey];
       }
 
-      const singleWordKey = text.trim().toLowerCase();
-      if (INDIC_OFFLINE_NAMES[singleWordKey] && INDIC_OFFLINE_NAMES[singleWordKey][targetLang]) {
-        const res = INDIC_OFFLINE_NAMES[singleWordKey][targetLang];
+      // 1. Direct dictionary match
+      const dictMatch = BIDIRECTIONAL_DICT[trimmed] || BIDIRECTIONAL_DICT[trimmed.toLowerCase()];
+      if (dictMatch) {
+        const res = targetLang === 'en' ? dictMatch.en : dictMatch[targetLang];
+        if (res) {
+          translationCache[cacheKey] = res;
+          return res;
+        }
+      }
+
+      // 2. Direct script conversion for Gujarati <-> Devanagari (Hindi / Marathi)
+      if (/^[\u0A80-\u0AFF\s,.\-0-9]+$/.test(trimmed) && (targetLang === 'hi' || targetLang === 'mr')) {
+        const res = gujaratiToDevanagari(trimmed);
+        translationCache[cacheKey] = res;
+        return res;
+      }
+      if (/^[\u0900-\u097F\s,.\-0-9]+$/.test(trimmed) && targetLang === 'gu') {
+        const res = devanagariToGujarati(trimmed);
         translationCache[cacheKey] = res;
         return res;
       }
 
+      // Determine source script
+      let srcLang = 'auto';
+      if (/[\u0A80-\u0AFF]/.test(trimmed)) srcLang = 'gu';
+      else if (/[\u0900-\u097F]/.test(trimmed)) srcLang = 'hi';
+      else if (/[a-zA-Z]/.test(trimmed)) srcLang = 'en';
+
+      if (srcLang === targetLang) return text;
+
+      // 3. Online translation attempt
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2600);
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.trim())}`;
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${srcLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(trimmed)}`;
         const resp = await fetch(url, { signal: controller.signal });
         clearTimeout(timeoutId);
 
@@ -1046,11 +1591,16 @@
         // Fall back to offline
       }
 
-      const fallback = offlineTransliterate(text, targetLang);
-      if (fallback) {
-        translationCache[cacheKey] = fallback;
+      // 4. Offline word-by-word converter
+      const converted = trimmed.replace(/[\u0A80-\u0AFF\u0900-\u097Fa-zA-Z0-9'’-]+/g, (match) => {
+        return convertWord(match, targetLang);
+      });
+
+      if (converted) {
+        translationCache[cacheKey] = converted;
+        return converted;
       }
-      return fallback || text;
+      return text;
     }
 
     function handleTranslateKeyDown(event, inputEl, updateCallback) {
@@ -1108,20 +1658,32 @@
     }
 
     function handleTranslateBlur(inputEl, updateCallback) {
-      if (!state.autoTranslateInput || state.lang === 'en') return;
+      if (!state.autoTranslateInput) return;
       const val = inputEl.value.trim();
-      if (/[a-zA-Z]/.test(val)) {
+      if (!val) return;
+      let srcLang = 'auto';
+      if (/[\u0A80-\u0AFF]/.test(val)) srcLang = 'gu';
+      else if (/[\u0900-\u097F]/.test(val)) srcLang = 'hi';
+      else if (/[a-zA-Z]/.test(val)) srcLang = 'en';
+
+      if (srcLang !== state.lang && srcLang !== 'auto') {
         translateField(inputEl, updateCallback);
       }
     }
 
     function handleTranslateInput(event, inputEl, updateCallback) {
-      if (!state.autoTranslateInput || state.lang === 'en') return;
+      if (!state.autoTranslateInput) return;
 
       clearTimeout(translateDebounceTimer);
       translateDebounceTimer = setTimeout(() => {
         const val = inputEl.value;
-        if (/[a-zA-Z]/.test(val)) {
+        if (!val || !val.trim()) return;
+        let srcLang = 'auto';
+        if (/[\u0A80-\u0AFF]/.test(val)) srcLang = 'gu';
+        else if (/[\u0900-\u097F]/.test(val)) srcLang = 'hi';
+        else if (/[a-zA-Z]/.test(val)) srcLang = 'en';
+
+        if (srcLang !== state.lang && srcLang !== 'auto') {
           translateField(inputEl, updateCallback);
         }
       }, 750);
@@ -1131,8 +1693,6 @@
       if (!inputEl) return;
       const original = inputEl.value;
       if (!original || !original.trim()) return;
-      if (!/[a-zA-Z]/.test(original)) return;
-      if (state.lang === 'en') return;
 
       inputEl.classList.add('ring-2', 'ring-emerald-400');
       try {
@@ -1153,11 +1713,6 @@
     }
 
     async function translateAllUserInputs() {
-      if (state.lang === 'en') {
-        alert("Please select a non-English language (e.g. Gujarati or Hindi) to translate user inputs.");
-        return;
-      }
-
       const btn = document.getElementById('btnTranslateAll');
       const originalHtml = btn ? btn.innerHTML : '';
       if (btn) {
@@ -1168,7 +1723,7 @@
       try {
         // Purchasers
         for (let i = 0; i < state.purchasers.length; i++) {
-          if (/[a-zA-Z]/.test(state.purchasers[i])) {
+          if (state.purchasers[i] && state.purchasers[i].trim()) {
             state.purchasers[i] = await translateText(state.purchasers[i], state.lang);
           }
         }
@@ -1176,7 +1731,7 @@
 
         // Sellers
         for (let i = 0; i < state.sellers.length; i++) {
-          if (/[a-zA-Z]/.test(state.sellers[i])) {
+          if (state.sellers[i] && state.sellers[i].trim()) {
             state.sellers[i] = await translateText(state.sellers[i], state.lang);
           }
         }
@@ -1184,7 +1739,7 @@
 
         // Partners
         for (let i = 0; i < state.partners.length; i++) {
-          if (/[a-zA-Z]/.test(state.partners[i])) {
+          if (state.partners[i] && state.partners[i].trim()) {
             state.partners[i] = await translateText(state.partners[i], state.lang);
           }
         }
@@ -1192,7 +1747,7 @@
 
         // Signing Authorities
         for (let i = 0; i < state.signingAuthorities.length; i++) {
-          if (/[a-zA-Z]/.test(state.signingAuthorities[i])) {
+          if (state.signingAuthorities[i] && state.signingAuthorities[i].trim()) {
             state.signingAuthorities[i] = await translateText(state.signingAuthorities[i], state.lang);
           }
         }
@@ -1210,7 +1765,7 @@
 
         for (const item of staticInputs) {
           const el = document.getElementById(item.id);
-          if (el && /[a-zA-Z]/.test(el.value)) {
+          if (el && el.value && el.value.trim()) {
             const trans = await translateText(el.value, state.lang);
             el.value = trans;
             state[item.stateKey] = trans;
@@ -1235,7 +1790,7 @@
     function toggleAutoTranslateInput(checked) {
       state.autoTranslateInput = checked;
       updateTranslateHelperBanner();
-      if (checked && state.lang !== 'en') {
+      if (checked) {
         translateAllUserInputs();
       }
     }
@@ -1261,19 +1816,18 @@
       const btnAll = document.getElementById('btnTranslateAll');
       if (!banner || !textEl) return;
 
+      if (btnAll) btnAll.classList.remove('hidden');
+
       if (state.lang === 'en') {
-        textEl.innerHTML = `<span>English mode active (type in English).</span>`;
-        if (btnAll) btnAll.classList.add('hidden');
+        textEl.innerHTML = `<span>English Mode active. Click <strong>Translate All</strong> to convert Indic inputs to English.</span>`;
         banner.className = "flex items-center justify-between gap-2 text-[11px] bg-slate-100 border border-slate-200 text-slate-600 px-2.5 py-1.5 rounded-md transition-all";
       } else if (!state.autoTranslateInput) {
         textEl.innerHTML = `<span>Auto-translate input is <strong>OFF</strong>. Typing will remain in English.</span>`;
-        if (btnAll) btnAll.classList.remove('hidden');
         banner.className = "flex items-center justify-between gap-2 text-[11px] bg-amber-50 border border-amber-200 text-amber-900 px-2.5 py-1.5 rounded-md transition-all";
       } else {
         const langLabel = getCurrentLanguageName();
         const sampleWord = state.lang === 'gu' ? 'સુરેશ' : (state.lang === 'hi' ? 'सुरेश' : '...');
         textEl.innerHTML = `<span>⚡ Typing English (e.g. <strong>SURESH</strong> + Space/Enter) &rarr; converts to <strong>${sampleWord}</strong> in ${langLabel}.</span>`;
-        if (btnAll) btnAll.classList.remove('hidden');
         banner.className = "flex items-center justify-between gap-2 text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-950 px-2.5 py-1.5 rounded-md transition-all";
       }
     }
@@ -1282,9 +1836,11 @@
       lang: "en",
       autoTranslate: true,
       autoTranslateInput: true,
+      pageSize: "a4",
+      pageOrientation: "portrait",
       layoutTheme: "layout-original-diagonal",
       frameStyle: "frame-diagonal-2corner",
-      fontFamily: "font-inter",
+      fontFamily: "Inter",
       colorAccent: "#0f172a",
       colorText: "#0f172a",
       colorBg: "#ffffff",
@@ -1343,9 +1899,219 @@
       updatePreview();
     }
 
-    function handleFontChange(fontClass) {
-      state.fontFamily = fontClass;
+    const GOOGLE_FONTS_REGISTRY = {
+      // Formal & Legal Serifs
+      "Cinzel": { family: "'Cinzel', serif", type: "serif" },
+      "Playfair Display": { family: "'Playfair Display', serif", type: "serif" },
+      "Libre Baskerville": { family: "'Libre Baskerville', serif", type: "serif" },
+      "Merriweather": { family: "'Merriweather', serif", type: "serif" },
+      "Lora": { family: "'Lora', serif", type: "serif" },
+      "Cormorant Garamond": { family: "'Cormorant Garamond', serif", type: "serif" },
+      "EB Garamond": { family: "'EB Garamond', serif", type: "serif" },
+      "Bodoni Moda": { family: "'Bodoni Moda', serif", type: "serif" },
+      "Prata": { family: "'Prata', serif", type: "serif" },
+      "DM Serif Display": { family: "'DM Serif Display', serif", type: "serif" },
+      "Marcellus": { family: "'Marcellus', serif", type: "serif" },
+
+      // Modern & Corporate Sans
+      "Inter": { family: "'Inter', sans-serif", type: "sans" },
+      "Plus Jakarta Sans": { family: "'Plus Jakarta Sans', sans-serif", type: "sans" },
+      "Montserrat": { family: "'Montserrat', sans-serif", type: "sans" },
+      "Poppins": { family: "'Poppins', sans-serif", type: "sans" },
+      "Outfit": { family: "'Outfit', sans-serif", type: "sans" },
+      "Roboto": { family: "'Roboto', sans-serif", type: "sans" },
+      "Lato": { family: "'Lato', sans-serif", type: "sans" },
+      "Open Sans": { family: "'Open Sans', sans-serif", type: "sans" },
+      "Raleway": { family: "'Raleway', sans-serif", type: "sans" },
+
+      // Display & Titling
+      "Cinzel Decorative": { family: "'Cinzel Decorative', serif", type: "serif" },
+      "Philosopher": { family: "'Philosopher', sans-serif", type: "sans" },
+      "Oswald": { family: "'Oswald', sans-serif", type: "sans" },
+
+      // Indic Regional
+      "Noto Serif Gujarati": { family: "'Noto Serif Gujarati', 'Noto Serif Devanagari', serif", type: "serif" },
+      "Noto Sans Gujarati": { family: "'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif", type: "sans" },
+      "Noto Serif Devanagari": { family: "'Noto Serif Devanagari', serif", type: "serif" },
+      "Noto Sans Devanagari": { family: "'Noto Sans Devanagari', sans-serif", type: "sans" },
+      "Rasa": { family: "'Rasa', serif", type: "serif" },
+      "Rozha One": { family: "'Rozha One', serif", type: "serif" },
+
+      // Monospace
+      "Roboto Mono": { family: "'Roboto Mono', monospace", type: "mono" },
+      "Space Mono": { family: "'Space Mono', monospace", type: "mono" }
+    };
+
+    const LEGACY_FONT_MAP = {
+      'font-inter': 'Inter',
+      'font-cinzel': 'Cinzel',
+      'font-playfair': 'Playfair Display',
+      'font-lora': 'Lora',
+      'font-merriweather': 'Merriweather',
+      'font-cormorant': 'Cormorant Garamond',
+      'font-eb-garamond': 'EB Garamond',
+      'font-jakarta': 'Plus Jakarta Sans',
+      'font-montserrat': 'Montserrat',
+      'font-outfit': 'Outfit',
+      'font-mono-num': 'Roboto Mono'
+    };
+
+    function loadGoogleFont(fontName) {
+      if (!fontName) return;
+      const clean = fontName.trim();
+      const id = 'gf-' + clean.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      if (document.getElementById(id)) return;
+      
+      const link = document.createElement('link');
+      link.id = id;
+      link.rel = 'stylesheet';
+      const encoded = encodeURIComponent(clean).replace(/%20/g, '+');
+      link.href = `https://fonts.googleapis.com/css2?family=${encoded}:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&display=swap`;
+      document.head.appendChild(link);
+    }
+
+    function applyFont(fontKey) {
+      if (!fontKey) fontKey = 'Inter';
+      
+      // Handle legacy classes if any
+      if (LEGACY_FONT_MAP[fontKey]) {
+        fontKey = LEGACY_FONT_MAP[fontKey];
+      }
+
+      state.fontFamily = fontKey;
+
+      // Handle legal combos
+      if (fontKey === 'combo-cinzel-inter') {
+        const titleStack = "'Cinzel', 'Noto Serif Gujarati', serif";
+        const bodyStack = "'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif";
+        document.documentElement.style.setProperty('--doc-title-font', titleStack);
+        document.documentElement.style.setProperty('--doc-font', bodyStack);
+        const pa = document.getElementById('printArea');
+        if (pa) {
+          pa.style.setProperty('--doc-title-font', titleStack);
+          pa.style.setProperty('--doc-font', bodyStack);
+        }
+        return;
+      }
+      if (fontKey === 'combo-playfair-jakarta') {
+        const titleStack = "'Playfair Display', 'Noto Serif Gujarati', serif";
+        const bodyStack = "'Plus Jakarta Sans', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif";
+        document.documentElement.style.setProperty('--doc-title-font', titleStack);
+        document.documentElement.style.setProperty('--doc-font', bodyStack);
+        const pa = document.getElementById('printArea');
+        if (pa) {
+          pa.style.setProperty('--doc-title-font', titleStack);
+          pa.style.setProperty('--doc-font', bodyStack);
+        }
+        return;
+      }
+      if (fontKey === 'combo-baskerville-opensans') {
+        const titleStack = "'Libre Baskerville', 'Noto Serif Gujarati', serif";
+        const bodyStack = "'Open Sans', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif";
+        document.documentElement.style.setProperty('--doc-title-font', titleStack);
+        document.documentElement.style.setProperty('--doc-font', bodyStack);
+        const pa = document.getElementById('printArea');
+        if (pa) {
+          pa.style.setProperty('--doc-title-font', titleStack);
+          pa.style.setProperty('--doc-font', bodyStack);
+        }
+        return;
+      }
+      if (fontKey === 'combo-bodoni-montserrat') {
+        const titleStack = "'Bodoni Moda', 'Noto Serif Gujarati', serif";
+        const bodyStack = "'Montserrat', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif";
+        document.documentElement.style.setProperty('--doc-title-font', titleStack);
+        document.documentElement.style.setProperty('--doc-font', bodyStack);
+        const pa = document.getElementById('printArea');
+        if (pa) {
+          pa.style.setProperty('--doc-title-font', titleStack);
+          pa.style.setProperty('--doc-font', bodyStack);
+        }
+        return;
+      }
+
+      let fontObj = GOOGLE_FONTS_REGISTRY[fontKey];
+      if (!fontObj) {
+        loadGoogleFont(fontKey);
+        fontObj = {
+          family: `'${fontKey}', sans-serif`,
+          type: 'sans'
+        };
+      }
+
+      const indicFallback = fontObj.type === 'serif'
+        ? "'Noto Serif Gujarati', 'Noto Serif Devanagari', serif"
+        : (fontObj.type === 'mono' ? "monospace" : "'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif");
+      
+      const fullStack = `${fontObj.family}, ${indicFallback}`;
+      
+      document.documentElement.style.setProperty('--doc-font', fullStack);
+      document.documentElement.style.setProperty('--doc-title-font', fullStack);
+      
+      const pa = document.getElementById('printArea');
+      if (pa) {
+        pa.style.setProperty('--doc-font', fullStack);
+        pa.style.setProperty('--doc-title-font', fullStack);
+      }
+    }
+
+    function handleFontChange(fontVal) {
+      applyFont(fontVal);
       updatePreview();
+    }
+
+    function toggleCustomFontBox() {
+      const box = document.getElementById('customFontBox');
+      if (!box) return;
+      box.classList.toggle('hidden');
+      if (!box.classList.contains('hidden')) {
+        const input = document.getElementById('customFontInput');
+        if (input) input.focus();
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function applyCustomGoogleFont() {
+      const input = document.getElementById('customFontInput');
+      const feedback = document.getElementById('customFontFeedback');
+      if (!input) return;
+      const fontName = input.value.trim();
+      if (!fontName) {
+        alert('Please enter a valid Google Font name (e.g. Cardo, Spectral, Great Vibes).');
+        return;
+      }
+
+      loadGoogleFont(fontName);
+
+      const select = document.getElementById('fontFamilySelect');
+      const optGroup = document.getElementById('customFontOptGroup');
+      if (select && optGroup) {
+        optGroup.classList.remove('hidden');
+        let exists = false;
+        for (let opt of select.options) {
+          if (opt.value.toLowerCase() === fontName.toLowerCase()) {
+            opt.selected = true;
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          const newOpt = document.createElement('option');
+          newOpt.value = fontName;
+          newOpt.textContent = `✨ ${fontName} (Custom)`;
+          newOpt.style.fontFamily = `'${fontName}', sans-serif`;
+          newOpt.selected = true;
+          optGroup.appendChild(newOpt);
+        }
+      }
+
+      handleFontChange(fontName);
+
+      if (feedback) {
+        feedback.textContent = `✓ Font "${fontName}" loaded & applied to document!`;
+        feedback.classList.remove('hidden');
+        setTimeout(() => feedback.classList.add('hidden'), 4500);
+      }
     }
 
     function handleColorChange() {
@@ -1399,13 +2165,45 @@
 
           if (state.layoutTheme) document.getElementById('layoutThemeSelect').value = state.layoutTheme;
           if (state.frameStyle) document.getElementById('frameStyleSelect').value = state.frameStyle;
-          if (state.fontFamily) document.getElementById('fontFamilySelect').value = state.fontFamily;
+          if (state.fontFamily) {
+            const fontSelect = document.getElementById('fontFamilySelect');
+            if (LEGACY_FONT_MAP[state.fontFamily]) state.fontFamily = LEGACY_FONT_MAP[state.fontFamily];
+            let found = false;
+            for (let opt of fontSelect.options) {
+              if (opt.value === state.fontFamily) {
+                fontSelect.value = state.fontFamily;
+                found = true;
+                break;
+              }
+            }
+            if (!found && state.fontFamily) {
+              const optGroup = document.getElementById('customFontOptGroup');
+              if (optGroup) {
+                optGroup.classList.remove('hidden');
+                const newOpt = document.createElement('option');
+                newOpt.value = state.fontFamily;
+                newOpt.textContent = `✨ ${state.fontFamily} (Custom)`;
+                newOpt.style.fontFamily = `'${state.fontFamily}', sans-serif`;
+                newOpt.selected = true;
+                optGroup.appendChild(newOpt);
+              }
+              fontSelect.value = state.fontFamily;
+            }
+            applyFont(state.fontFamily);
+          }
           if (state.colorAccent) document.getElementById('colorAccentInput').value = state.colorAccent;
           if (state.colorText) document.getElementById('colorTextInput').value = state.colorText;
           if (state.colorBg) document.getElementById('colorBgInput').value = state.colorBg;
+          if (state.pageSize && document.getElementById('pageSizeSelect')) {
+            document.getElementById('pageSizeSelect').value = state.pageSize;
+          }
+          if (state.pageOrientation && document.getElementById('pageOrientationSelect')) {
+            document.getElementById('pageOrientationSelect').value = state.pageOrientation;
+          }
 
           handleColorChange();
           handleLayoutChange(state.layoutTheme);
+          applyPageDimensions();
           initForm();
           alert('Template successfully loaded!');
         } catch (err) {
@@ -1445,6 +2243,12 @@
       }
       if (document.getElementById('autoTranslateInputToggle')) {
         state.autoTranslateInput = document.getElementById('autoTranslateInputToggle').checked;
+      }
+      if (document.getElementById('pageSizeSelect')) {
+        state.pageSize = document.getElementById('pageSizeSelect').value;
+      }
+      if (document.getElementById('pageOrientationSelect')) {
+        state.pageOrientation = document.getElementById('pageOrientationSelect').value;
       }
     }
 
@@ -1497,7 +2301,7 @@
         }
       }
 
-      if (state.autoTranslateInput && lang !== 'en') {
+      if (state.autoTranslateInput) {
         translateAllUserInputs();
       }
       updateTranslateHelperBanner();
@@ -1733,7 +2537,7 @@
         autoTranslateInput: true,
         layoutTheme: "layout-original-diagonal",
         frameStyle: "frame-diagonal-2corner",
-        fontFamily: "font-inter",
+        fontFamily: "Inter",
         colorAccent: "#0f172a",
         colorText: "#0f172a",
         colorBg: "#ffffff",
@@ -1758,7 +2562,9 @@
         signingAuthorities: [""],
         remarksLabel: "Remarks / Note",
         remarks: "",
-        logoDataUrl: null
+        logoDataUrl: null,
+        pageSize: "a4",
+        pageOrientation: "portrait"
       };
 
       removeLogo();
@@ -1772,8 +2578,15 @@
       if (document.getElementById('autoTranslateInputToggle')) {
         document.getElementById('autoTranslateInputToggle').checked = true;
       }
+      if (document.getElementById('pageSizeSelect')) {
+        document.getElementById('pageSizeSelect').value = "a4";
+      }
+      if (document.getElementById('pageOrientationSelect')) {
+        document.getElementById('pageOrientationSelect').value = "portrait";
+      }
       handleColorChange();
       handleLayoutChange(state.layoutTheme);
+      applyPageDimensions();
       initForm();
     }
 
@@ -1795,6 +2608,18 @@
       document.getElementById('signingAuthorityLabelInput').value = state.signingAuthorityLabel;
       document.getElementById('remarksLabelInput').value = state.remarksLabel;
       document.getElementById('remarksInput').value = state.remarks;
+      if (document.getElementById('fontFamilySelect')) {
+        document.getElementById('fontFamilySelect').value = state.fontFamily || 'Inter';
+      }
+      applyFont(state.fontFamily || 'Inter');
+
+      if (document.getElementById('pageSizeSelect')) {
+        document.getElementById('pageSizeSelect').value = state.pageSize || 'a4';
+      }
+      if (document.getElementById('pageOrientationSelect')) {
+        document.getElementById('pageOrientationSelect').value = state.pageOrientation || 'portrait';
+      }
+      applyPageDimensions();
 
       if (document.getElementById('autoTranslateToggle')) {
         document.getElementById('autoTranslateToggle').checked = state.autoTranslate !== false;
@@ -1860,12 +2685,13 @@
         const target = document.getElementById('printArea');
         if (!target) return;
         
-        target.className = `a4-sheet p-6 flex flex-col ${state.fontFamily}`;
+        applyFont(state.fontFamily);
+        target.className = `a4-sheet p-6 flex flex-col`;
         target.style.color = state.colorText;
 
         const frameClass = state.frameStyle;
 
-        // 1. CLASSIC MASTER (Original 2-Corner, Restored Inner Table Box)
+        // 1. KK! CREATIONS (Original 2-Corner, Restored Inner Table Box)
         if (state.layoutTheme === 'layout-original-diagonal') {
           target.innerHTML = `
             <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
@@ -2028,7 +2854,7 @@
 
         // 3. EXECUTIVE SIDEBAR
         else if (state.layoutTheme === 'layout-sidebar-navy') {
-          target.className = `a4-sheet p-0 flex ${state.fontFamily}`;
+          target.className = `a4-sheet p-0 flex`;
           target.innerHTML = `
             <div class="w-64 p-7 flex flex-col justify-between shrink-0" style="background-color: ${state.colorAccent}; color: #ffffff;">
               <div>
@@ -2159,7 +2985,7 @@
 
         // 6. MODERN BANDED HORIZON
         else if (state.layoutTheme === 'layout-banded-modern') {
-          target.className = `a4-sheet p-0 flex flex-col justify-between bg-white ${state.fontFamily}`;
+          target.className = `a4-sheet p-0 flex flex-col justify-between bg-white`;
           target.innerHTML = `
             <div>
               <div class="text-white px-8 py-6 flex items-center justify-between" style="background-color: ${state.colorAccent};">
@@ -2258,22 +3084,24 @@
                         <p class="text-xs text-slate-600 max-w-sm">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
                       </div>
                     </div>
-                    <div class="rounded-lg px-3 py-1.5 text-right shrink-0 border" style="border-color: ${state.colorAccent};">
-                      <span class="text-[9px] font-bold uppercase block text-slate-500">${dateLabel}</span>
-                      <span class="text-xs font-bold">${formattedDate || '—'}</span>
-                    </div>
                   </div>
-                  <div class="rounded-xl p-4 shadow-sm mb-4 flex justify-between items-center text-white" style="background-color: ${state.colorAccent};">
+                  <div class="rounded-xl p-4 shadow-sm mb-4 flex justify-between items-center text-white gap-4" style="background-color: ${state.colorAccent};">
                     <div>
                       <span class="text-[9px] font-bold uppercase tracking-widest text-white/70">TITLE DOCUMENT</span>
                       <h1 class="text-xl font-black uppercase font-cinzel tracking-wider">${docTitle}</h1>
                     </div>
-                    ${deedNo ? `
+                    <div class="flex items-center gap-2.5 shrink-0">
+                      ${deedNo ? `
+                        <div class="border border-white/20 bg-white/10 px-3 py-1 rounded-lg text-right">
+                          <span class="text-[9px] uppercase tracking-wider text-white/70 block">${deedNoLabel}</span>
+                          <span class="text-sm font-bold">${deedNo}</span>
+                        </div>
+                      ` : ''}
                       <div class="border border-white/20 bg-white/10 px-3 py-1 rounded-lg text-right">
-                        <span class="text-[9px] uppercase tracking-wider text-white/70 block">${deedNoLabel}</span>
-                        <span class="text-sm font-bold">${deedNo}</span>
+                        <span class="text-[9px] uppercase tracking-wider text-white/70 block">${dateLabel}</span>
+                        <span class="text-sm font-bold">${formattedDate || '—'}</span>
                       </div>
-                    ` : ''}
+                    </div>
                   </div>
                   <div class="rounded-xl p-4 shadow-2xs border mb-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
                     <span class="text-xs font-bold uppercase block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
@@ -2464,6 +3292,7 @@
         }
 
         lucide.createIcons();
+        updatePreviewScale();
       } catch (err) {
         console.error("Preview render error:", err);
       }
@@ -2473,6 +3302,16 @@
       initForm();
       handleColorChange();
       handleLayoutChange(state.layoutTheme);
+      applyPageDimensions();
+      updatePreviewScale();
+      const vp = document.getElementById('previewViewport');
+      if (vp && typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(() => {
+          if (previewZoomMode === 'fit') {
+            updatePreviewScale();
+          }
+        }).observe(vp);
+      }
     };
   </script>
 </body>
