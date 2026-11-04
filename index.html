@@ -3,43 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Legal Document Cover Page Generator</title>
+  <title>Legal Document Cover Page Generator - Studio Pro</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:wght@600;700&family=EB+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Noto+Sans+Gurmukhi:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body {
-      font-family: 'Inter', 'Noto Sans Gujarati', sans-serif;
-    }
-    .font-cinzel {
-      font-family: 'Cinzel', 'Noto Sans Gujarati', serif;
-    }
-    .font-serif-title {
-      font-family: 'Playfair Display', 'Noto Sans Gujarati', serif;
-    }
-    .font-gujarati {
-      font-family: 'Noto Sans Gujarati', 'Inter', sans-serif;
+    :root {
+      --theme-accent: #0f172a;
+      --theme-text: #0f172a;
+      --theme-bg: #ffffff;
     }
 
-    /* Print & A4 Page Dimensions */
+    body { font-family: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif; }
+    
+    .font-inter { font-family: 'Inter', 'Noto Sans Gujarati', 'Noto Sans Devanagari', sans-serif; }
+    .font-cinzel { font-family: 'Cinzel', 'Noto Sans Gujarati', serif; }
+    .font-playfair { font-family: 'Playfair Display', 'Noto Sans Gujarati', serif; }
+    .font-lora { font-family: 'Lora', 'Noto Sans Gujarati', serif; }
+    .font-merriweather { font-family: 'Merriweather', 'Noto Sans Gujarati', serif; }
+    .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+    .font-eb-garamond { font-family: 'EB Garamond', serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
+    .font-mono-num { font-family: 'Roboto Mono', monospace; }
+
     @page {
       size: A4 portrait;
       margin: 0;
     }
 
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #printArea, #printArea * {
-        visibility: visible;
-      }
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
       #printArea {
         position: absolute;
         left: 0;
@@ -48,99 +50,185 @@
         height: 297mm !important;
         max-height: 297mm !important;
         margin: 0 !important;
-        padding: 18mm 16mm !important;
+        padding: 0 !important;
         box-shadow: none !important;
         border: none !important;
         background: white !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .no-print {
-        display: none !important;
-      }
+      .no-print { display: none !important; }
     }
 
-    /* Custom A4 Canvas Preview */
     .a4-sheet {
       width: 210mm;
-      min-height: 297mm;
+      height: 297mm;
       max-height: 297mm;
-      padding: 16mm 14mm;
       box-sizing: border-box;
       background: #ffffff;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.08), 0 10px 10px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Diagonal Two-Corner Rounded Border (Top-Right & Bottom-Left) */
-    .two-corner-outer {
-      border: 4px solid #0f172a;
+    .preview-placeholder {
+      color: #94a3b8 !important;
+      font-style: italic !important;
+      opacity: 0.85;
+      font-weight: 400 !important;
+    }
+
+    .logo-bounded-box {
+      max-width: 140px;
+      max-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .logo-bounded-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Outer Frames */
+    .frame-diagonal-2corner {
+      border: 4px solid var(--theme-accent);
       border-top-left-radius: 0px;
-      border-top-right-radius: 38px;
+      border-top-right-radius: 36px;
       border-bottom-right-radius: 0px;
-      border-bottom-left-radius: 38px;
+      border-bottom-left-radius: 36px;
+      padding: 6px;
     }
-
-    .two-corner-inner {
-      border: 1.5px solid #0f172a;
+    .frame-diagonal-2corner .frame-inner {
+      border: 1.5px solid var(--theme-accent);
       border-top-left-radius: 0px;
       border-top-right-radius: 28px;
       border-bottom-right-radius: 0px;
       border-bottom-left-radius: 28px;
     }
 
-    /* Rounded Description & Table Box */
-    .rounded-desc-box {
-      border-radius: 18px;
+    .frame-classic-double {
+      border: 5px solid var(--theme-accent);
+      padding: 4px;
+    }
+    .frame-classic-double .frame-inner {
+      border: 1.5px solid var(--theme-accent);
+    }
+
+    .frame-quad-rounded {
+      border: 3.5px solid var(--theme-accent);
+      border-radius: 28px;
+      padding: 6px;
+    }
+    .frame-quad-rounded .frame-inner {
+      border: 1.5px solid var(--theme-accent);
+      border-radius: 20px;
+    }
+
+    .frame-left-pillar {
+      border: 2px solid var(--theme-accent);
+      border-left: 9px solid var(--theme-accent);
+      padding: 6px;
+    }
+    .frame-left-pillar .frame-inner {
+      border: 1px solid #cbd5e1;
+    }
+
+    .frame-minimal-hairline {
+      border: 1.5px solid var(--theme-accent);
+      padding: 0px;
+    }
+    .frame-minimal-hairline .frame-inner {
+      border: none;
+    }
+
+    .frame-certificate-inset {
+      border: 3.5px solid var(--theme-accent);
+      padding: 5px;
+    }
+    .frame-certificate-inset .frame-inner {
+      border: 1.5px dashed var(--theme-accent);
+      padding: 3px;
+    }
+
+    .frame-reverse-diagonal {
+      border: 4px solid var(--theme-accent);
+      border-top-left-radius: 36px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 36px;
+      border-bottom-left-radius: 0px;
+      padding: 6px;
+    }
+    .frame-reverse-diagonal .frame-inner {
+      border: 1.5px solid var(--theme-accent);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 28px;
+      border-bottom-left-radius: 0px;
+    }
+
+    .frame-none {
+      border: none;
+      padding: 0;
+    }
+    .frame-none .frame-inner {
+      border: none;
+    }
+
+    .original-inner-box {
+      border: 2px solid var(--theme-accent);
+      border-radius: 16px;
       overflow: hidden;
-      border: 2px solid #0f172a;
     }
 
     @media (max-width: 1024px) {
       .a4-sheet {
         width: 100%;
-        min-height: auto;
+        height: auto;
+        min-height: 297mm;
         max-height: none;
-        padding: 1.25rem;
       }
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-inter">
 
   <!-- Top App Navigation -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between flex-wrap gap-2">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">
-          <i data-lucide="file-signature" class="w-6 h-6"></i>
+        <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md">
+          <i data-lucide="scale" class="w-5 h-5"></i>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Legal Document Cover Generator</h1>
-          <p class="text-xs text-slate-500">Gujarati & English Dual Mode • Backup / Export / Import Templates</p>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">Legal Document Cover Generator</h1>
+          <p class="text-[11px] text-slate-500">Universal Studio • 12 Formats • Clean Custom Colors</p>
         </div>
       </div>
+      
       <div class="flex items-center gap-2 flex-wrap">
-        <!-- Export / Save Template Button -->
-        <button onclick="exportData()" title="Save current form values to JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors">
+        <button type="button" onclick="exportData()" title="Save current form values to JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors">
           <i data-lucide="download" class="w-3.5 h-3.5"></i>
           <span>Export Template</span>
         </button>
 
-        <!-- Import Template Button -->
-        <label title="Load saved values from JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors cursor-pointer">
+        <label title="Load saved values from JSON file" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors cursor-pointer">
           <i data-lucide="upload" class="w-3.5 h-3.5"></i>
           <span>Import Template</span>
           <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
         </label>
 
-        <!-- Reset Button -->
-        <button onclick="resetDefaults()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+        <button type="button" onclick="resetDefaults()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
           <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
           <span>Reset</span>
         </button>
 
-        <!-- Print Button -->
-        <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150">
+        <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm transition-all duration-150">
           <i data-lucide="printer" class="w-4 h-4"></i>
           <span>Print / Save as PDF</span>
         </button>
@@ -154,18 +242,143 @@
     <!-- LEFT PANEL: CONTROLS & INPUTS -->
     <section class="lg:col-span-5 flex flex-col gap-5 no-print">
       
-      <!-- Input Card -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-5">
+      <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-5">
         
-        <!-- Language Switcher Bar -->
-        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center justify-between">
+        <!-- DESIGN CONTROLS -->
+        <div class="space-y-3 bg-gradient-to-br from-indigo-50/70 to-blue-50/50 p-4 rounded-xl border border-indigo-100">
+          
           <div>
-            <span class="block text-xs font-bold text-indigo-950 uppercase tracking-wide">Document Language / ભાષા</span>
-            <span class="text-[11px] text-indigo-700">Auto translates labels or write custom</span>
+            <label class="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1 flex items-center gap-1.5">
+              <i data-lucide="layout" class="w-4 h-4 text-indigo-600"></i>
+              Document Theme
+            </label>
+            <select id="layoutThemeSelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handleLayoutChange(this.value)">
+              <option value="layout-original-diagonal">Classic Master</option>
+              <option value="layout-reference-scroll">Developer Scroll</option>
+              <option value="layout-sidebar-navy">Executive Sidebar</option>
+              <option value="layout-two-column-dossier">Two-Column Comparison</option>
+              <option value="layout-monumental-centered">Monumental Centerpiece</option>
+              <option value="layout-banded-modern">Modern Banded Horizon</option>
+              <option value="layout-judicial-pediment">Judicial Pediment</option>
+              <option value="layout-card-mosaic">Structured Card Mosaic</option>
+              <option value="layout-corporate-masthead">Corporate Registry</option>
+              <option value="layout-notarial-ribbon">Notarial Certificate</option>
+              <option value="layout-minimalist-swiss">Swiss Minimalist</option>
+              <option value="layout-regal-emerald">Regal Heritage</option>
+            </select>
           </div>
-          <div class="inline-flex rounded-lg p-1 bg-white border border-indigo-200">
-            <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs">English</button>
-            <button type="button" id="btnLangGu" onclick="setLanguage('gu')" class="px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600">ગુજરાતી</button>
+
+          <div id="frameControlWrapper">
+            <label class="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1 flex items-center gap-1.5">
+              <i data-lucide="square" class="w-3.5 h-3.5 text-indigo-600"></i>
+              Outer Frame Style
+            </label>
+            <select id="frameStyleSelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handleFrameChange(this.value)">
+              <option value="frame-diagonal-2corner">Diagonal Two-Corner</option>
+              <option value="frame-classic-double">High Court Double</option>
+              <option value="frame-quad-rounded">Quad Rounded</option>
+              <option value="frame-left-pillar">Left Accent Pillar</option>
+              <option value="frame-certificate-inset">Certificate Inset</option>
+              <option value="frame-reverse-diagonal">Reverse Diagonal</option>
+              <option value="frame-minimal-hairline">Minimal Hairline</option>
+              <option value="frame-none">No Outer Frame</option>
+            </select>
+            <p id="frameDisabledNotice" class="text-[10px] text-amber-700 italic mt-1 hidden">Note: The selected theme features a full-bleed layout and manages its own borders.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-1 flex items-center gap-1.5">
+              <i data-lucide="type" class="w-3.5 h-3.5 text-indigo-600"></i>
+              Typography Font
+            </label>
+            <select id="fontFamilySelect" class="w-full px-3 py-2 text-xs font-semibold rounded-lg border border-indigo-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs" onchange="handleFontChange(this.value)">
+              <option value="font-inter">Inter</option>
+              <option value="font-cinzel">Cinzel</option>
+              <option value="font-playfair">Playfair Display</option>
+              <option value="font-lora">Lora</option>
+              <option value="font-merriweather">Merriweather</option>
+              <option value="font-cormorant">Cormorant Garamond</option>
+              <option value="font-eb-garamond">EB Garamond</option>
+              <option value="font-jakarta">Plus Jakarta Sans</option>
+              <option value="font-montserrat">Montserrat</option>
+              <option value="font-outfit">Outfit</option>
+              <option value="font-mono-num">Roboto Mono</option>
+            </select>
+          </div>
+
+          <div class="pt-2 border-t border-indigo-100">
+            <span class="block text-xs font-bold uppercase tracking-wider text-indigo-950 mb-2 flex items-center gap-1.5">
+              <i data-lucide="palette" class="w-3.5 h-3.5 text-indigo-600"></i>
+              Theme Colors
+            </span>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="bg-white p-2 rounded-lg border border-slate-200 text-center">
+                <label class="block text-[10px] font-semibold text-slate-600 mb-1">Accent / Border</label>
+                <input type="color" id="colorAccentInput" value="#0f172a" class="w-full h-7 rounded border border-slate-200 cursor-pointer" oninput="handleColorChange()">
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200 text-center">
+                <label class="block text-[10px] font-semibold text-slate-600 mb-1">Text Color</label>
+                <input type="color" id="colorTextInput" value="#0f172a" class="w-full h-7 rounded border border-slate-200 cursor-pointer" oninput="handleColorChange()">
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200 text-center">
+                <label class="block text-[10px] font-semibold text-slate-600 mb-1">Box Fill Color</label>
+                <input type="color" id="colorBgInput" value="#ffffff" class="w-full h-7 rounded border border-slate-200 cursor-pointer" oninput="handleColorChange()">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Language Selector Bar with Auto-Translate Switches -->
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+              <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-600"></i>
+              <span>Language / ભાષા</span>
+            </span>
+            
+            <div class="flex flex-wrap items-center gap-1.5">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-bold text-emerald-900 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-300 hover:bg-emerald-100/70 transition shadow-2xs" title="Automatically translate English user input (e.g. SURESH) to your selected language (સુરેશ) on Space/Enter/Blur">
+                <input type="checkbox" id="autoTranslateInputToggle" class="rounded text-emerald-600 focus:ring-emerald-500 h-3.5 w-3.5" checked onchange="toggleAutoTranslateInput(this.checked)">
+                <span class="flex items-center gap-1">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-emerald-600"></i>
+                  <span>Auto-Translate Input</span>
+                </span>
+              </label>
+
+              <label class="inline-flex items-center gap-1 cursor-pointer text-[11px] font-semibold text-slate-600 bg-white px-2 py-1 rounded-md border border-slate-200 hover:bg-slate-50 transition" title="Automatically translate section headings and labels on language switch">
+                <input type="checkbox" id="autoTranslateToggle" class="rounded text-indigo-600 focus:ring-indigo-500 h-3.5 w-3.5" checked onchange="state.autoTranslate = this.checked">
+                <span>Labels</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5 text-center">
+            <button type="button" id="btnLangEn" onclick="setLanguage('en')" class="py-1.5 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-2xs">English</button>
+            <button type="button" id="btnLangGu" onclick="setLanguage('gu')" class="py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:text-indigo-600">ગુજરાતી</button>
+            <button type="button" id="btnLangHi" onclick="setLanguage('hi')" class="py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:text-indigo-600">हिन्दी</button>
+            
+            <select id="otherLangSelect" class="py-1 text-xs font-semibold rounded-md border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-center" onchange="setLanguage(this.value)">
+              <option value="" disabled selected>More...</option>
+              <option value="mr">मराठी (Marathi)</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="kn">ಕನ್ನಡ (Kannada)</option>
+              <option value="bn">বাংলা (Bengali)</option>
+              <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Input Translation Helper & Quick Action Banner -->
+          <div id="translateHelperBanner" class="flex items-center justify-between gap-2 text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-950 px-2.5 py-1.5 rounded-md transition-all">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
+              <span id="translateHelperText" class="truncate">Type in English (e.g. <strong>SURESH</strong> + Space) &rarr; converts to <strong>સુરેશ</strong> automatically.</span>
+            </div>
+            <button type="button" id="btnTranslateAll" onclick="translateAllUserInputs()" class="shrink-0 inline-flex items-center gap-1 text-[10.5px] font-bold text-emerald-800 hover:text-emerald-950 bg-white px-2 py-0.5 rounded border border-emerald-300 shadow-2xs hover:bg-emerald-50 transition" title="Translate all entered text in the form to the selected language">
+              <i data-lucide="sparkles" class="w-3 h-3 text-emerald-600"></i>
+              <span>Translate All</span>
+            </button>
           </div>
         </div>
 
@@ -173,23 +386,45 @@
         <div class="space-y-3 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Document Type / Title</label>
           <select id="docPresetSelect" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="handlePresetChange(this.value)">
-            <option value="SALE DEED">SALE DEED (વેચાણ દસ્તાવેજ)</option>
-            <option value="PARTNERSHIP DEED">PARTNERSHIP DEED (ભાગીદારી કરાર)</option>
-            <option value="RENT AGREEMENT">RENT AGREEMENT (ભાડા કરાર)</option>
-            <option value="AGREEMENT TO SALE">AGREEMENT TO SALE (બાનાખત)</option>
-            <option value="POSSESSION LETTER">POSSESSION LETTER (કબજા પત્ર)</option>
-            <option value="KABJA PAVTI">KABJA PAVTI (કબજા પાવતી)</option>
-            <option value="SAMJUTI KARAR">SAMJUTI KARAR (સમજુતી કરાર)</option>
+            <option value="SALE DEED">SALE DEED (વેચાણ દસ્તાવેજ / बैनामा)</option>
+            <option value="PARTNERSHIP DEED">PARTNERSHIP DEED (ભાગીદારી કરાર / साझेदारी विलेख)</option>
+            <option value="RENT AGREEMENT">RENT AGREEMENT (ભાડા કરાર / किरायानामा)</option>
+            <option value="AGREEMENT TO SALE">AGREEMENT TO SALE (બાનાખત / इकरारनामा)</option>
+            <option value="POSSESSION LETTER">POSSESSION LETTER (કબજા પત્ર / कब्जा पत्र)</option>
+            <option value="KABJA PAVTI">KABJA PAVTI (કબજા પાવતી / कब्जा पावती)</option>
+            <option value="SAMJUTI KARAR">SAMJUTI KARAR (સમજુતી કરાર / समझौता विलेख)</option>
             <option value="MEMORANDUM OF UNDERSTANDING (MOU)">MEMORANDUM OF UNDERSTANDING (MOU)</option>
-            <option value="POWER OF ATTORNEY">POWER OF ATTORNEY (મુખત્યારનામું)</option>
-            <option value="GIFT DEED">GIFT DEED (બક્ષિસ દસ્તાવેજ)</option>
-            <option value="CUSTOM">-- Custom Title / અન્ય શીર્ષક --</option>
+            <option value="POWER OF ATTORNEY">POWER OF ATTORNEY (મુખત્યારનામું / मुख्तारनामा)</option>
+            <option value="GIFT DEED">GIFT DEED (બક્ષિસ દસ્તાવેજ / दानपत्र)</option>
+            <option value="CUSTOM">-- Custom Title --</option>
           </select>
 
           <div>
-            <label for="docTitleInput" class="block text-[11px] font-semibold text-slate-500 mb-1">Header Title (Editable)</label>
-            <input type="text" id="docTitleInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 font-bold text-slate-900 tracking-wide focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. SALE DEED" oninput="updatePreview()">
+            <div class="flex items-center justify-between mb-1">
+              <label for="docTitleInput" class="block text-[11px] font-semibold text-slate-500">Header Title (Editable)</label>
+              <button type="button" onclick="translateField(document.getElementById('docTitleInput'), (val) => { state.docTitle = val; updatePreview(); })" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1" title="Translate Title">
+                <i data-lucide="languages" class="w-3 h-3"></i> Translate
+              </button>
+            </div>
+            <input type="text" id="docTitleInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 font-bold text-slate-900 tracking-wide focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g. SALE DEED"
+              oninput="state.docTitle = this.value; handleTranslateInput(event, this, (val) => { state.docTitle = val; updatePreview(); }); updatePreview()"
+              onkeydown="handleTranslateKeyDown(event, this, (val) => { state.docTitle = val; updatePreview(); })"
+              onblur="handleTranslateBlur(this, (val) => { state.docTitle = val; updatePreview(); })">
           </div>
+        </div>
+
+        <!-- Theme 2 Dedicated Unit No. Control -->
+        <div id="unitNumberWrapper" class="space-y-2 bg-blue-50/70 p-3 rounded-lg border border-blue-200 hidden">
+          <div class="flex items-center justify-between">
+            <label for="unitNumberInput" class="block text-xs font-bold uppercase tracking-wider text-blue-900">Unit / Shop / Home No.</label>
+            <button type="button" onclick="translateField(document.getElementById('unitNumberInput'), (val) => { state.unitNumber = val; updatePreview(); })" class="text-[10.5px] font-semibold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1" title="Translate Unit Number">
+              <i data-lucide="languages" class="w-3 h-3"></i> Translate
+            </button>
+          </div>
+          <input type="text" id="unitNumberInput" onfocus="this.select()" class="w-full px-3 py-1.5 text-sm rounded-lg border border-blue-300 bg-white font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Shop No. 101 or Flat 402"
+            oninput="state.unitNumber = this.value; handleTranslateInput(event, this, (val) => { state.unitNumber = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.unitNumber = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.unitNumber = val; updatePreview(); })">
         </div>
 
         <!-- 1. Firm Details -->
@@ -211,13 +446,29 @@
           </div>
 
           <div>
-            <label for="firmNameInput" class="block text-xs font-semibold text-slate-700 mb-1">Firm Name</label>
-            <input type="text" id="firmNameInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Firm / Organization Name..." oninput="updatePreview()">
+            <div class="flex items-center justify-between mb-1">
+              <label for="firmNameInput" class="block text-xs font-semibold text-slate-700">Firm Name</label>
+              <button type="button" onclick="translateField(document.getElementById('firmNameInput'), (val) => { state.firmName = val; updatePreview(); })" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1" title="Translate Firm Name">
+                <i data-lucide="languages" class="w-3 h-3"></i> Translate
+              </button>
+            </div>
+            <input type="text" id="firmNameInput" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Firm / Organization Name..."
+              oninput="state.firmName = this.value; handleTranslateInput(event, this, (val) => { state.firmName = val; updatePreview(); }); updatePreview()"
+              onkeydown="handleTranslateKeyDown(event, this, (val) => { state.firmName = val; updatePreview(); })"
+              onblur="handleTranslateBlur(this, (val) => { state.firmName = val; updatePreview(); })">
           </div>
 
           <div>
-            <label for="firmAddressInput" class="block text-xs font-semibold text-slate-700 mb-1">Office Address</label>
-            <textarea id="firmAddressInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Office Address..." oninput="updatePreview()"></textarea>
+            <div class="flex items-center justify-between mb-1">
+              <label for="firmAddressInput" class="block text-xs font-semibold text-slate-700">Office Address</label>
+              <button type="button" onclick="translateField(document.getElementById('firmAddressInput'), (val) => { state.firmAddress = val; updatePreview(); })" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1" title="Translate Address">
+                <i data-lucide="languages" class="w-3 h-3"></i> Translate
+              </button>
+            </div>
+            <textarea id="firmAddressInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Office Address..."
+              oninput="state.firmAddress = this.value; handleTranslateInput(event, this, (val) => { state.firmAddress = val; updatePreview(); }); updatePreview()"
+              onkeydown="handleTranslateKeyDown(event, this, (val) => { state.firmAddress = val; updatePreview(); })"
+              onblur="handleTranslateBlur(this, (val) => { state.firmAddress = val; updatePreview(); })"></textarea>
           </div>
         </div>
 
@@ -246,11 +497,19 @@
         <!-- 3. Property Description -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <label for="propertyDescLabelInput" class="text-xs font-bold uppercase tracking-wider text-slate-400">3. Property Description</label>
+            <div class="flex items-center gap-2">
+              <label for="propertyDescLabelInput" class="text-xs font-bold uppercase tracking-wider text-slate-400">3. Property Description</label>
+              <button type="button" onclick="translateField(document.getElementById('propertyDescInput'), (val) => { state.propertyDesc = val; updatePreview(); })" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1" title="Translate Property Description">
+                <i data-lucide="languages" class="w-3 h-3"></i> Translate
+              </button>
+            </div>
             <input type="text" id="propertyDescLabelInput" onfocus="this.select()" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-44 text-right" value="Property Description" oninput="updatePreview()">
           </div>
           <div>
-            <textarea id="propertyDescInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Property Description & Details..." oninput="updatePreview()"></textarea>
+            <textarea id="propertyDescInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Enter Property Description & Details..."
+              oninput="state.propertyDesc = this.value; handleTranslateInput(event, this, (val) => { state.propertyDesc = val; updatePreview(); }); updatePreview()"
+              onkeydown="handleTranslateKeyDown(event, this, (val) => { state.propertyDesc = val; updatePreview(); })"
+              onblur="handleTranslateBlur(this, (val) => { state.propertyDesc = val; updatePreview(); })"></textarea>
           </div>
         </div>
 
@@ -260,7 +519,6 @@
         <div id="standardPartiesSection" class="space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">4. Parties Involved</h3>
 
-          <!-- First Party Group -->
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
               <input type="text" id="firstPartyLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Seller / Vendor" oninput="updatePreview()">
@@ -271,7 +529,6 @@
             <div id="sellersContainer" class="space-y-2 pt-1"></div>
           </div>
 
-          <!-- Second Party Group -->
           <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
             <div class="flex items-center justify-between gap-2">
               <input type="text" id="secondPartyLabelInput" onfocus="this.select()" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 w-2/3" value="Purchaser / Vendee" oninput="updatePreview()">
@@ -313,15 +570,18 @@
         <!-- 5. Remarks, Mobile, Email or Custom Notes -->
         <div class="space-y-2">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-bold uppercase tracking-wider text-slate-400">5. Remarks / Contact / Extra Notes</label>
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-400">5. Remarks / Contact / Extra Notes</label>
+              <button type="button" onclick="translateField(document.getElementById('remarksInput'), (val) => { state.remarks = val; updatePreview(); })" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1" title="Translate Remarks">
+                <i data-lucide="languages" class="w-3 h-3"></i> Translate
+              </button>
+            </div>
             <input type="text" id="remarksLabelInput" onfocus="this.select()" class="text-[11px] font-semibold text-slate-600 bg-white border border-slate-200 rounded px-2 py-0.5 w-32 text-right" value="Remarks / Note" oninput="updatePreview()">
           </div>
-          <textarea id="remarksInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Phone: +91 98765 43210 | Email: info@example.com (optional)" oninput="updatePreview()"></textarea>
-        </div>
-
-        <div class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-900 flex items-start gap-2">
-          <i data-lucide="info" class="w-4 h-4 text-indigo-600 shrink-0 mt-0.5"></i>
-          <span>Click <strong>"Print / Save as PDF"</strong> to export. In your printer options, choose <strong>"Save as PDF"</strong> with <strong>A4</strong> paper and zero margins.</span>
+          <textarea id="remarksInput" rows="2" onfocus="this.select()" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="e.g., Phone: +91 98765 43210 | Email: info@example.com (optional)"
+            oninput="state.remarks = this.value; handleTranslateInput(event, this, (val) => { state.remarks = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.remarks = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.remarks = val; updatePreview(); })"></textarea>
         </div>
 
       </div>
@@ -334,137 +594,14 @@
       <div class="mb-2 text-xs font-medium text-slate-500 flex items-center justify-between w-full max-w-[210mm] no-print">
         <div class="flex items-center gap-1.5">
           <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-          <span>A4 Cover Preview with 2-Corner Diagonal Round Borders</span>
+          <span id="previewLayoutBadge" class="font-semibold text-slate-800">Classic Master</span>
         </div>
         <span id="currentLangIndicator" class="text-[11px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded">Mode: English</span>
       </div>
 
       <!-- Printable A4 Document Sheet -->
-      <div id="printArea" class="a4-sheet rounded-md relative flex flex-col border border-slate-300 transition-all">
-        
-        <!-- Outer Frame: Two Rounded Corners (Top-Right & Bottom-Left) -->
-        <div class="two-corner-outer p-2.5 h-full flex flex-col">
-          
-          <!-- Inner Frame: Two Rounded Corners (Top-Right & Bottom-Left) -->
-          <div class="two-corner-inner p-6 sm:p-8 h-full flex flex-col justify-start bg-white">
-            
-            <!-- HEADER: FIRM INFO & LOGO -->
-            <div>
-              <div class="flex items-center justify-between border-b-2 border-slate-900 pb-5 mb-5 gap-4">
-                
-                <!-- Firm Logo Container -->
-                <div class="w-20 h-20 flex items-center justify-center shrink-0">
-                  <img id="previewLogo" src="" alt="Firm Logo" class="max-h-20 max-w-20 object-contain hidden" />
-                  <div id="defaultLogoSvg" class="w-16 h-16 rounded-full border-2 border-slate-800 flex items-center justify-center p-1 bg-slate-50">
-                    <div class="w-full h-full rounded-full border border-slate-700 flex flex-col items-center justify-center text-center">
-                      <span class="font-cinzel text-[11px] font-bold text-slate-900 leading-none">LOGO</span>
-                      <span class="text-[7px] text-slate-600 uppercase tracking-widest mt-0.5">ESTD</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Firm Name & Address -->
-                <div class="flex-1 text-right">
-                  <h2 id="previewFirmName" class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 uppercase font-serif-title leading-snug min-h-[28px]">
-                    <!-- Blank or Dynamic Firm Name -->
-                  </h2>
-                  <p id="previewFirmAddress" class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed font-normal max-w-md ml-auto whitespace-pre-line min-h-[18px]">
-                    <!-- Blank or Dynamic Office Address -->
-                  </p>
-                </div>
-              </div>
-
-              <!-- DYNAMIC DOCUMENT TITLE -->
-              <div class="text-center my-5">
-                <h1 id="previewDocTitle" class="font-cinzel text-2xl sm:text-3xl font-extrabold text-slate-900 uppercase tracking-widest pb-2 border-b-2 border-slate-900 inline-block min-w-[280px]">
-                  SALE DEED
-                </h1>
-              </div>
-
-              <!-- ROUNDED DESCRIPTION & DETAILS BOX -->
-              <div class="rounded-desc-box bg-white shadow-xs">
-                
-                <!-- Document / Deed No. Row (Blank if empty) -->
-                <div class="grid grid-cols-12 border-b border-slate-300 bg-slate-50/60">
-                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-center" id="previewDeedNoLabel">
-                    DOCUMENT NO.
-                  </div>
-                  <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 tracking-wide min-h-[46px]" id="previewDeedNo"></div>
-                </div>
-
-                <!-- Date Row -->
-                <div class="grid grid-cols-12 border-b border-slate-300">
-                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-center" id="previewDateLabel">
-                    Date of Execution
-                  </div>
-                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900" id="previewDate">
-                    November 1, 2026
-                  </div>
-                </div>
-
-                <!-- Property Description Row -->
-                <div class="grid grid-cols-12 border-b border-slate-300 bg-slate-50/60">
-                  <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPropertyDescLabel">
-                    Property Description
-                  </div>
-                  <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold text-slate-900 leading-relaxed whitespace-pre-line min-h-[42px]" id="previewPropertyDesc">
-                    <!-- Blank or Dynamic Property Description -->
-                  </div>
-                </div>
-
-                <!-- DYNAMIC PARTY SECTION: Standard (First/Second Party) vs Partnership Deed Mode -->
-                <div id="previewStandardParties">
-                  <!-- First Party Row -->
-                  <div class="grid grid-cols-12 border-b border-slate-300">
-                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSellerHeaderLabel">
-                      Seller / Vendor
-                    </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1 min-h-[42px]" id="previewSellerContainer"></div>
-                  </div>
-
-                  <!-- Second Party Row -->
-                  <div class="grid grid-cols-12" id="previewPurchaserRow">
-                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPurchaserHeaderLabel">
-                      Purchaser / Vendee
-                    </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1 min-h-[42px]" id="previewPurchaserContainer"></div>
-                  </div>
-                </div>
-
-                <!-- Partnership Mode Preview (Replaces First/Second Party) -->
-                <div id="previewPartnershipSection" class="hidden">
-                  <!-- Partners Name(s) Row -->
-                  <div class="grid grid-cols-12 border-b border-slate-300">
-                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewPartnersHeaderLabel">
-                      Partners Name(s)
-                    </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight space-y-1.5 min-h-[42px]" id="previewPartnersContainer"></div>
-                  </div>
-
-                  <!-- Signing Authority Row -->
-                  <div class="grid grid-cols-12" id="previewSigningAuthorityRow">
-                    <div class="col-span-4 p-3.5 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs sm:text-sm uppercase tracking-wide text-slate-800 flex items-start" id="previewSignAuthHeaderLabel">
-                      Authorized Signing Partner
-                    </div>
-                    <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold text-slate-900 uppercase tracking-tight text-indigo-950 space-y-1.5 min-h-[42px]" id="previewSignAuthContainer"></div>
-                  </div>
-                </div>
-
-                <!-- Remarks / Notes / Contact Row (Conditionally shown if remarks exist) -->
-                <div class="grid grid-cols-12 border-t border-slate-300 bg-slate-50/50 hidden" id="previewRemarksRow">
-                  <div class="col-span-4 p-3 bg-slate-100/90 border-r border-slate-300 font-semibold text-xs uppercase tracking-wide text-slate-700 flex items-start" id="previewRemarksLabel">
-                    Remarks / Note
-                  </div>
-                  <div class="col-span-8 p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line leading-relaxed font-medium" id="previewRemarksText"></div>
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
+      <div id="printArea" class="a4-sheet">
+        <!-- Rendered dynamically by updatePreview() -->
       </div>
 
     </section>
@@ -474,7 +611,7 @@
   <script>
     lucide.createIcons();
 
-    // Gujarati Dictionary & Preset Translations
+    // Multi-Language Dictionary
     const i18n = {
       en: {
         docTitle: "SALE DEED",
@@ -486,7 +623,14 @@
         partnersLabel: "Partners Name(s)",
         signingAuthorityLabel: "Authorized Signing Partner",
         remarksLabel: "Remarks / Note",
-        modeIndicator: "Mode: English"
+        modeIndicator: "Mode: English",
+        phFirmName: "[ FIRM / COMPANY NAME ]",
+        phFirmAddress: "[ OFFICE ADDRESS LINE, CITY, PINCODE ]",
+        phPropertyDesc: "[ PROPERTY DESCRIPTION & ADDRESS DETAILS ]",
+        phSeller: "[ SELLER / VENDOR NAME ]",
+        phPurchaser: "[ PURCHASER / VENDEE NAME ]",
+        phPartner: "[ PARTNER NAME ]",
+        phSignAuth: "[ AUTHORIZED SIGNING PERSON ]"
       },
       gu: {
         docTitle: "વેચાણ દસ્તાવેજ",
@@ -498,32 +642,655 @@
         partnersLabel: "ભાગીદારોના નામ",
         signingAuthorityLabel: "સહી કરવાની સત્તા ધરાવનાર ભાગીદાર",
         remarksLabel: "વિશેષ નોંધ / વિગત",
-        modeIndicator: "મોડ: ગુજરાતી"
+        modeIndicator: "મોડ: ગુજરાતી",
+        phFirmName: "[ પેઢી / કંપનીનું નામ ]",
+        phFirmAddress: "[ ઓફિસનું સરનામું, શહેર, પીનકોડ ]",
+        phPropertyDesc: "[ મિલકતનું સંપૂર્ણ વર્ણન તથા સરનામું ]",
+        phSeller: "[ લખી આપનાર / વેચનારનું નામ ]",
+        phPurchaser: "[ લખાવી લેનાર / ખરીદનારનું નામ ]",
+        phPartner: "[ ભાગીદારનું નામ ]",
+        phSignAuth: "[ સહી કરનાર અધિકૃત વ્યક્તિ ]"
+      },
+      hi: {
+        docTitle: "बैनामा (विक्रय विलेख)",
+        deedNoLabel: "दस्तावेज़ क्रमांक",
+        dateLabel: "निष्पादन तिथि",
+        propertyDescLabel: "सम्पत्ति का विवरण",
+        firstPartyLabel: "विक्रेता (प्रथम पक्ष)",
+        secondPartyLabel: "क्रेता (द्वितीय पक्ष)",
+        partnersLabel: "भागीदारों के नाम",
+        signingAuthorityLabel: "अधिकृत हस्ताक्षरकर्ता भागीदार",
+        remarksLabel: "विशेष विवरण / टिप्पणी",
+        modeIndicator: "मोड: हिन्दी",
+        phFirmName: "[ फर्म / संस्था का नाम ]",
+        phFirmAddress: "[ कार्यालय का पता, शहर, पिनकोड ]",
+        phPropertyDesc: "[ सम्पत्ति का संपूर्ण विवरण एवं पता ]",
+        phSeller: "[ विक्रेता का नाम ]",
+        phPurchaser: "[ क्रेता का नाम ]",
+        phPartner: "[ भागीदार का नाम ]",
+        phSignAuth: "[ अधिकृत हस्ताक्षरकर्ता ]"
+      },
+      mr: {
+        docTitle: "खरेदीखत (विक्रीपत्र)",
+        deedNoLabel: "दस्तऐवज क्रमांक",
+        dateLabel: "दस्त नोंदणी दिनांक",
+        propertyDescLabel: "मिळकतीचे वर्णन",
+        firstPartyLabel: "दस्त लिहून देणारे (विक्रेता)",
+        secondPartyLabel: "दस्त लिहून घेणारे (खरेदीदार)",
+        partnersLabel: "भागीदारांची नावे",
+        signingAuthorityLabel: "अधिकृत स्वाक्षरीकर्ता भागीदार",
+        remarksLabel: "विशेष नोंद / टीप",
+        modeIndicator: "मोड: मराठी",
+        phFirmName: "[ कंपनी / फर्मचे नाव ]",
+        phFirmAddress: "[ कार्यालयाचा पत्ता, शहर, पिनकोड ]",
+        phPropertyDesc: "[ मिळकतीचे संपूर्ण वर्णन व पत्ता ]",
+        phSeller: "[ लिहून देणाऱ्यांचे नाव ]",
+        phPurchaser: "[ लिहून घेणाऱ्यांचे नाव ]",
+        phPartner: "[ भागीदाराचे नाव ]",
+        phSignAuth: "[ अधिकृत स्वाक्षरीकर्ता ]"
+      },
+      ta: {
+        docTitle: "கிரயப் பத்திரம் (விற்பனை பத்திரம்)",
+        deedNoLabel: "ஆவண எண்",
+        dateLabel: "செயலாக்க தேதி",
+        propertyDescLabel: "சொத்து விவரம்",
+        firstPartyLabel: "விற்பனையாளர்",
+        secondPartyLabel: "வாங்குபவர்",
+        partnersLabel: "பங்குதாரர்கள் பெயர்",
+        signingAuthorityLabel: "அங்கீகரிக்கப்பட்ட பங்குதாரர்",
+        remarksLabel: "குறிப்புகள்",
+        modeIndicator: "மொழி: தமிழ்",
+        phFirmName: "[ நிறுவனத்தின் பெயர் ]",
+        phFirmAddress: "[ அலுவலக முகவரி ]",
+        phPropertyDesc: "[ சொத்து விளக்கம் ]",
+        phSeller: "[ விற்பனையாளர் பெயர் ]",
+        phPurchaser: "[ வாங்குபவர் பெயர் ]",
+        phPartner: "[ பங்குதாரர் பெயர் ]",
+        phSignAuth: "[ அங்கீகரிக்கப்பட்ட நபர் ]"
+      },
+      te: {
+        docTitle: "విక్రయ దస్తావేజు (సేల్ డీడ్)",
+        deedNoLabel: "దస్తావేజు నంబర్",
+        dateLabel: "తేదీ",
+        propertyDescLabel: "ఆస్తి వివరములు",
+        firstPartyLabel: "విక్రేత (మొదటి పక్షం)",
+        secondPartyLabel: "కొనుగోలుదారు (రెండవ పక్షం)",
+        partnersLabel: "భాగస్వాముల పేర్లు",
+        signingAuthorityLabel: "అధీకృత భాగస్వామి",
+        remarksLabel: "గమనిక / రిమార్క్స్",
+        modeIndicator: "మోడ్: తెలుగు",
+        phFirmName: "[ సంస్థ పేరు ]",
+        phFirmAddress: "[ కార్యాలయ చిరునామా ]",
+        phPropertyDesc: "[ ఆస్తి పూర్తి వివరణ ]",
+        phSeller: "[ విక్రేత పేరు ]",
+        phPurchaser: "[ కొనుగోలుదారు పేరు ]",
+        phPartner: "[ భాగస్వామి పేరు ]",
+        phSignAuth: "[ సంతకం అధికారం కలిగిన వ్యక్తి ]"
+      },
+      kn: {
+        docTitle: "ಕ್ರಯಪತ್ರ (ಮಾರಾಟ ಪತ್ರ)",
+        deedNoLabel: "ದಾಖಲೆ ಸಂಖ್ಯೆ",
+        dateLabel: "ದಿನಾಂಕ",
+        propertyDescLabel: "ಸ್ವತ್ತಿನ ವಿವರ",
+        firstPartyLabel: "ಮಾರಾಟಗಾರರು",
+        secondPartyLabel: "ಖರೀದಿದಾರರು",
+        partnersLabel: "ಪಾಲುದಾರರ ಹೆಸರುಗಳು",
+        signingAuthorityLabel: "ಅಧಿಕೃತ ಸಹಿದಾರ ಪಾಲುದಾರ",
+        remarksLabel: "ವಿಶೇಷ ಟಿಪ್ಪಣಿ",
+        modeIndicator: "ಮೋಡ್: ಕನ್ನಡ",
+        phFirmName: "[ ಸಂಸ್ಥೆಯ ಹೆಸರು ]",
+        phFirmAddress: "[ ಕಚೇರಿ ವಿಳಾಸ ]",
+        phPropertyDesc: "[ ಆಸ್ತಿಯ ಸಂಪೂರ್ಣ ವಿವರ ]",
+        phSeller: "[ ಮಾರಾಟಗಾರರ ಹೆಸರು ]",
+        phPurchaser: "[ ಖರೀದಿದಾರರ ಹೆಸರು ]",
+        phPartner: "[ ಪಾಲುದಾರರ ಹೆಸರು ]",
+        phSignAuth: "[ ಅಧಿಕೃತ ಸಹಿದಾರ ]"
+      },
+      bn: {
+        docTitle: "বিক্রয় কোবলা (দলিল)",
+        deedNoLabel: "দলিল নম্বর",
+        dateLabel: "তারিখ",
+        propertyDescLabel: "সম্পত্তির বিবরণ",
+        firstPartyLabel: "বিক্রেতা (প্রথম পক্ষ)",
+        secondPartyLabel: "ক্রেতা (দ্বিতীয় পক্ষ)",
+        partnersLabel: "অংশীদারদের নাম",
+        signingAuthorityLabel: "অনুমোদিত স্বাক্ষরকারী",
+        remarksLabel: "বিশেষ মন্তব্য",
+        modeIndicator: "মোড: বাংলা",
+        phFirmName: "[ প্রতিষ্ঠানের নাম ]",
+        phFirmAddress: "[ অফিসের ঠিকানা ]",
+        phPropertyDesc: "[ সম্পত্তির পূর্ণ বিবরণ ]",
+        phSeller: "[ বিক্রেতার নাম ]",
+        phPurchaser: "[ ক্রেতার নাম ]",
+        phPartner: "[ অংশীদারের নাম ]",
+        phSignAuth: "[ অনুমোদিত স্বাক্ষরকারী ]"
+      },
+      pa: {
+        docTitle: "ਬੈਨਾਮਾ (ਵਿਕਰੀ ਦਸਤਾਵੇਜ਼)",
+        deedNoLabel: "ਦਸਤਾਵੇਜ਼ ਨੰਬਰ",
+        dateLabel: "ਮਿਤੀ",
+        propertyDescLabel: "ਜਾਇਦਾਦ ਦਾ ਵੇਰਵਾ",
+        firstPartyLabel: "ਵੇਚਣ ਵਾਲਾ (ਪਹਿਲੀ ਧਿਰ)",
+        secondPartyLabel: "ਖਰੀਦਣ ਵਾਲਾ (ਦੂਜੀ ਧਿਰ)",
+        partnersLabel: "ਭਾਈਵਾਲਾਂ ਦੇ ਨਾਮ",
+        signingAuthorityLabel: "ਅਧਿਕਾਰਤ ਦਸਤਖਤਕਰਤਾ",
+        remarksLabel: "ਵਿਸ਼ੇਸ਼ ਨੋਟ",
+        modeIndicator: "ਮੋਡ: ਪੰਜਾਬੀ",
+        phFirmName: "[ ਫਰਮ / ਸੰਸਥਾ ਦਾ ਨਾਮ ]",
+        phFirmAddress: "[ ਦਫ਼ਤਰ ਦਾ ਪਤਾ ]",
+        phPropertyDesc: "[ ਜਾਇਦਾਦ ਦਾ ਪੂਰਾ ਵੇਰਵਾ ]",
+        phSeller: "[ ਵੇਚਣ ਵਾਲੇ ਦਾ ਨਾਮ ]",
+        phPurchaser: "[ ਖਰੀਦਦਾਰ ਦਾ ਨਾਮ ]",
+        phPartner: "[ ਭਾਈਵਾਲ ਦਾ ਨਾਮ ]",
+        phSignAuth: "[ ਅਧਿਕਾਰਤ ਵਿਅਕਤੀ ]"
       }
     };
 
     const titleTranslations = {
-      "SALE DEED": "વેચાણ દસ્તાવેજ",
-      "PARTNERSHIP DEED": "ભાગીદારી કરાર",
-      "RENT AGREEMENT": "ભાડા કરાર",
-      "AGREEMENT TO SALE": "બાનાખત (વેચાણ કરાર)",
-      "POSSESSION LETTER": "કબજા પત્ર",
-      "KABJA PAVTI": "કબજા પાવતી",
-      "SAMJUTI KARAR": "સમજુતી કરાર",
-      "MEMORANDUM OF UNDERSTANDING (MOU)": "સમજુતી કરાર (MOU)",
-      "POWER OF ATTORNEY": "પાવર ઓફ એટર્ની (મુખત્યારનામું)",
-      "GIFT DEED": "બક્ષિસ દસ્તાવેજ"
+      "SALE DEED": { gu: "વેચાણ દસ્તાવેજ", hi: "बैनामा (विक्रय विलेख)", mr: "खरेदीખત (विक्रीपत्र)", ta: "கிரயப் பத்திரம்", te: "విక్రయ దస్తావేజు", kn: "ಕ್ರಯಪತ್ರ", bn: "বিক্রয় কোবলা", pa: "ਬੈਨਾਮਾ" },
+      "PARTNERSHIP DEED": { gu: "ભાગીદારી કરાર", hi: "साझेदारी विलेख", mr: "भागीदारी करार", ta: "கூட்டாண்மை பத்திரம்", te: "భాగస్వామ్య ఒప్పందం", kn: "ಪಾಲುದಾರಿಕೆ ಪತ್ರ", bn: "অংশীদারি দলিল", pa: "ਭਾਈਵਾਲੀ ਦਸਤਾਵੇਜ਼" },
+      "RENT AGREEMENT": { gu: "ભાડા કરાર", hi: "किरायानामा विलेख", mr: "भाडेकरार दस्त", ta: "வாடகை ஒப்பந்தம்", te: "అద్దె ఒప్పందం", kn: "ಬಾಡಿಗೆ ಒಪ್ಪಂದ", bn: "ভাড়া চুক্তি", pa: "ਕਿਰਾਇਆਨਾਮਾ" },
+      "AGREEMENT TO SALE": { gu: "બાનાખત (વેચાણ કરાર)", hi: "इकरारनामा (विक्रय अनुबंध)", mr: "इसारपावती (विक्री करार)", ta: "விற்பனை ஒப்பந்தம்", te: "విక్రయ ఒప్పందం", kn: "ಮಾರಾಟ ಒಪ್ಪಂದ", bn: "বায়নাপত্র", pa: "ਇਕਰਾਰਨਾਮਾ" },
+      "POSSESSION LETTER": { gu: "કબજા પત્ર", hi: "कब्जा पत्र", mr: "ताबा पत्र", ta: "சுவாதீன கடிதம்", te: "స్వాధీన పత్రం", kn: "ಸ್ವಾಧೀನ ಪತ್ರ", bn: "দখলপত্র", pa: "ਕਬਜ਼ਾ ਪੱਤਰ" },
+      "KABJA PAVTI": { gu: "કબજા પાવતી", hi: "कब्जा पावती", mr: "ताबा पावती", ta: "சுவாதீன ரசீது", te: "స్వాధీన రసీదు", kn: "ಸ್ವಾಧೀನ ರಶೀದಿ", bn: "দখল রসিদ", pa: "ਕਬਜ਼ਾ ਰਸੀਦ" },
+      "SAMJUTI KARAR": { gu: "સમજુતી કરાર", hi: "समझौता विलेख", mr: "समजूत करार", ta: "சமரச ஒப்பந்தம்", te: "రాజీ ఒప్పందం", kn: "ರಾಜಿ ಒಪ್ಪಂದ", bn: "আপসনামা", pa: "ਸਮਝੌਤਾਨਾਮਾ" },
+      "MEMORANDUM OF UNDERSTANDING (MOU)": { gu: "સમજુતી કરાર (MOU)", hi: "सहमति पत्र (MOU)", mr: "सामंजस्य करार (MOU)", ta: "புரிந்துணர்வு ஒப்பந்தம்", te: "అవగాహన ఒప్పందం", kn: "ತಿಳುವಳಿಕೆ ಒಪ್ಪಂದ", bn: "সমঝোতা স্মারক", pa: "ਸਹਿਮਤੀ ਪੱਤਰ" },
+      "POWER OF ATTORNEY": { gu: "મુખત્યારનામું", hi: "मुख्तारनामा", mr: "कुलमुखत्यारपत्र", ta: "பொது அதிகார பத்திரம்", te: "పవర్ ఆఫ్ అటార్నీ", kn: "ಪವರ್ ಆಫ್ ಅಟಾರ್ನಿ", bn: "আমমোক্তারনামা", pa: "ਮੁਖ਼ਤਿਆਰਨਾਮਾ" },
+      "GIFT DEED": { gu: "બક્ષિસ દસ્તાવેજ", hi: "दानपत्र विलेख", mr: "बक्षीसपत्र दस्त", ta: "தான பத்திரம்", te: "దాన పత్రం", kn: "ದಾನಪತ್ರ", bn: "দানপত্র", pa: "ਦਾਨਨਾਮਾ" }
     };
 
-    const reverseTitleTranslations = Object.fromEntries(
-      Object.entries(titleTranslations).map(([k, v]) => [v, k])
-    );
+    const layoutLabels = {
+      "layout-original-diagonal": "Classic Master",
+      "layout-reference-scroll": "Developer Scroll",
+      "layout-sidebar-navy": "Executive Sidebar",
+      "layout-two-column-dossier": "Two-Column Comparison",
+      "layout-monumental-centered": "Monumental Centerpiece",
+      "layout-banded-modern": "Modern Banded Horizon",
+      "layout-judicial-pediment": "Judicial Pediment",
+      "layout-card-mosaic": "Structured Card Mosaic",
+      "layout-corporate-masthead": "Corporate Registry",
+      "layout-notarial-ribbon": "Notarial Certificate",
+      "layout-minimalist-swiss": "Swiss Minimalist",
+      "layout-regal-emerald": "Regal Heritage"
+    };
 
-    // Initial state without any hardcoded names or addresses
+    const fullBleedThemes = ['layout-sidebar-navy', 'layout-banded-modern', 'layout-reference-scroll'];
+
+    // =========================================================================
+    // INDIC TRANSLITERATION & AUTO-TRANSLATE ENGINE
+    // Supports on-space, on-blur, on-pause, and one-click full-form translation.
+    // Online: High-precision Google Translate / Indic Transliteration API
+    // Offline: Built-in Phonetic Dictionary & Soundex Transliteration Fallback
+    // =========================================================================
+
+    const translationCache = {};
+    let translateDebounceTimer = null;
+
+    const INDIC_OFFLINE_NAMES = {
+      // Common First Names
+      suresh: { gu: "સુરેશ", hi: "सुरेश", mr: "सुरेश", bn: "সুরেশ", pa: "ਸੁਰੇਸ਼", ta: "சுரேஷ்", te: "సురేష్", kn: "ಸುರೇಶ್" },
+      ramesh: { gu: "રમેશ", hi: "रमेश", mr: "रमेश", bn: "রমেশ", pa: "ਰਮੇਸ਼", ta: "ரமேஷ்", te: "రమేష్", kn: "ರಮೇಶ್" },
+      mahesh: { gu: "મહેશ", hi: "महेश", mr: "महेश", bn: "মহেশ", pa: "ਮਹੇਸ਼", ta: "மகேஷ்", te: "మహేష్", kn: "ಮಹೇಶ್" },
+      dinesh: { gu: "દિનેશ", hi: "दिनेश", mr: "दिनेश", bn: "দীনেশ", pa: "ਦਿਨੇਸ਼", ta: "தினேஷ்", te: "దినేష్", kn: "ದಿನೇಶ್" },
+      naresh: { gu: "નરેશ", hi: "नरेश", mr: "नरेश", bn: "নরেশ", pa: "ਨਰੇਸ਼", ta: "நரேஷ்", te: "నరేష్", kn: "ನರೇಶ್" },
+      rajesh: { gu: "રાજેશ", hi: "राजेश", mr: "राजेश", bn: "রাজেশ", pa: "ਰਾਜੇਸ਼", ta: "ராஜேஷ்", te: "రాజేష్", kn: "ರಾಜೇಶ್" },
+      mukesh: { gu: "મુકેશ", hi: "मुकेश", mr: "मुकेश", bn: "মুকেশ", pa: "ਮੁਕੇਸ਼", ta: "முகேஷ்", te: "ముకేష్", kn: "ಮುಕೇಶ್" },
+      hitesh: { gu: "હિતેશ", hi: "हितेश", mr: "हितेश", bn: "হিতেশ", pa: "ਹਿਤੇਸ਼", ta: "ஹிதேஷ்", te: "హితేష్", kn: "ಹಿತೇಶ್" },
+      kamlesh: { gu: "કમલેશ", hi: "कमलेश", mr: "कमलेश", bn: "কমলেশ", pa: "ਕਮਲੇਸ਼", ta: "கமலேஷ்", te: "కమలేష్", kn: "ಕಮಲೇಶ್" },
+      bhavesh: { gu: "ભાવેશ", hi: "भावेश", mr: "भावेश", bn: "ভাবেশ", pa: "ਭਾਵੇਸ਼", ta: "பாவேஷ்", te: "భావేష్", kn: "ಭಾವೇಶ್" },
+      jagdish: { gu: "જગદીશ", hi: "जगदीश", mr: "जगदीश", bn: "জগদীশ", pa: "ਜਗਦੀਸ਼", ta: "ஜகதீஷ்", te: "జగదీష్", kn: "ಜಗದೀಶ್" },
+      paresh: { gu: "પરેશ", hi: "परेश", mr: "परेश", bn: "পরেশ", pa: "ਪਰੇਸ਼", ta: "பரேஷ்", te: "పరేஷ்", kn: "ಪರೇಶ್" },
+      jignesh: { gu: "જીગ્નેશ", hi: "जिग्नेश", mr: "जिग्नेश", bn: "জিজ্ঞেশ", pa: "ਜਿਗਨੇਸ਼", ta: "ஜிக்னேஷ்", te: "జిగ్నేష్", kn: "ಜಿಗ್ನೇಶ್" },
+      ketan: { gu: "કેતન", hi: "केतन", mr: "केतन", bn: "কেতন", pa: "ਕੇਤਨ", ta: "கேதன்", te: "కేతన్", kn: "ಕೇತನ್" },
+      chetan: { gu: "ચેતન", hi: "चेतन", mr: "चेतन", bn: "চেতন", pa: "ਚੇਤਨ", ta: "சேத்தன்", te: "చేతన్", kn: "ಚೇತನ್" },
+      amit: { gu: "અમિત", hi: "अमित", mr: "अमित", bn: "অমিত", pa: "ਅਮਿਤ", ta: "அமித்", te: "అమిత్", kn: "ಅಮಿತ್" },
+      anil: { gu: "અનિલ", hi: "अनिल", mr: "अनिल", bn: "অনিল", pa: "ਅਨਿਲ", ta: "அனில்", te: "అనిల్", kn: "ಅನಿಲ್" },
+      sunil: { gu: "સુનિલ", hi: "सुनील", mr: "सुनील", bn: "সুনীল", pa: "ਸੁਨੀਲ", ta: "சுனில்", te: "సునీల్", kn: "ಸುನೀಲ್" },
+      sanjay: { gu: "સંજય", hi: "संजय", mr: "संजय", bn: "সঞ্জয়", pa: "ਸੰਜੇ", ta: "சஞ்சய்", te: "సంజయ్", kn: "ಸಂಜಯ್" },
+      vijay: { gu: "વિજય", hi: "विजय", mr: "विजय", bn: "বিজয়", pa: "ਵਿਜੇ", ta: "விஜய்", te: "విజయ్", kn: "ವಿಜಯ್" },
+      ajay: { gu: "અજય", hi: "अजय", mr: "अजय", bn: "অজয়", pa: "ਅਜੈ", ta: "அஜய்", te: "అజయ్", kn: "ಅಜಯ್" },
+      pankaj: { gu: "પંકજ", hi: "पंकज", mr: "पंकज", bn: "পঙ্কজ", pa: "ਪੰਕਜ", ta: "பங்கஜ்", te: "పంకజ్", kn: "ಪಂಕಜ್" },
+      piyush: { gu: "પિયુષ", hi: "पियुष", mr: "पियुष", bn: "পীযূষ", pa: "ਪਿਊਸ਼", ta: "பியூஷ்", te: "పియూష్", kn: "ಪಿಯೂಷ್" },
+      bharat: { gu: "ભરત", hi: "भरत", mr: "भरत", bn: "ভরত", pa: "ਭਰਤ", ta: "பரத்", te: "భరత్", kn: "ಭರತ್" },
+      pravin: { gu: "પ્રવીણ", hi: "प्रवीण", mr: "प्रवीण", bn: "প্রবীণ", pa: "ਪ੍ਰਵੀਨ", ta: "பிரவீன்", te: "ప్రవీణ్", kn: "ಪ್ರವೀಣ್" },
+      ashok: { gu: "અશોક", hi: "अशोक", mr: "अशोक", bn: "অশোক", pa: "ਅਸ਼ੋਕ", ta: "அசோக்", te: "అశోక్", kn: "ಅಶೋಕ್" },
+      kishore: { gu: "કિશોર", hi: "किशोर", mr: "किशोर", bn: "কিশোর", pa: "ਕਿਸ਼ੋਰ", ta: "கிஷோர்", te: "కిషోర్", kn: "ಕಿಶೋರ್" },
+      vinod: { gu: "વિનોદ", hi: "विनोद", mr: "विनोद", bn: "বিনোদ", pa: "ਵਿਨੋਦ", ta: "வினோத்", te: "వినోద్", kn: "ವಿನೋದ್" },
+      harish: { gu: "હરીશ", hi: "हरीश", mr: "हरीश", bn: "হরীশ", pa: "ਹਰੀਸ਼", ta: "ஹரீஷ்", te: "హరీష్", kn: "ಹರೀಶ್" },
+      girish: { gu: "ગિરીશ", hi: "गिरीश", mr: "गिरीश", bn: "গিরীশ", pa: "ਗਿਰੀਸ਼", ta: "கிரிஷ்", te: "గిరీష్", kn: "ಗಿರೀಶ್" },
+      hardik: { gu: "હાર્દિક", hi: "हार्दिक", mr: "हार्दिक", bn: "হার্দিক", pa: "ਹਾਰਦਿਕ", ta: "ஹார்திக்", te: "హార్దిక్", kn: "ಹಾರ್ದಿಕ್" },
+      chirag: { gu: "ચિરાગ", hi: "चिराग", mr: "चिराग", bn: "চিরাগ", pa: "ਚਿਰਾਗ", ta: "சிராக்", te: "చిరాగ్", kn: "ಚಿರಾಗ್" },
+      mehul: { gu: "મેહુલ", hi: "मेहुल", mr: "मेहुल", bn: "মেহুল", pa: "ਮੇਹੁਲ", ta: "மேஹுல்", te: "మెహుల్", kn: "ಮೆಹುಲ್" },
+      deepak: { gu: "દીપક", hi: "दीपक", mr: "दीपक", bn: "দীপক", pa: "ਦੀਪਕ", ta: "தீபக்", te: "దీపక్", kn: "ದೀಪಕ್" },
+      sandip: { gu: "સંદીપ", hi: "संदीप", mr: "संदीप", bn: "সন্দীপ", pa: "ਸੰਦੀਪ", ta: "சந்தீப்", te: "సందీప్", kn: "ಸಂದೀಪ್" },
+      sandeep: { gu: "સંદીપ", hi: "संदीप", mr: "संदीप", bn: "সন্দীপ", pa: "ਸੰਦੀਪ", ta: "சந்தீப்", te: "సందీప్", kn: "ಸಂದೀಪ್" },
+      dilip: { gu: "દિલીપ", hi: "दिलीप", mr: "दिलीप", bn: "দিলীপ", pa: "ਦਿਲੀਪ", ta: "திலீப்", te: "దిలీప్", kn: "ದಿಲೀಪ್" },
+      nitin: { gu: "નીતિન", hi: "नितिन", mr: "नितिन", bn: "নীতিন", pa: "ਨਿਤਿਨ", ta: "நிதின்", te: "నితిన్", kn: "ನಿತಿನ್" },
+      vipul: { gu: "વિપુલ", hi: "विपुल", mr: "विपुल", bn: "বিপূল", pa: "ਵਿਪੁਲ", ta: "விபுல்", te: "విపుల్", kn: "ವಿಪುಲ್" },
+      rahul: { gu: "રાહુલ", hi: "राहुल", mr: "राहुल", bn: "রাহুল", pa: "ਰਾਹੁਲ", ta: "ராகுல்", te: "రాహుల్", kn: "ರಾಹುಲ್" },
+      rohit: { gu: "રોહિત", hi: "रोहित", mr: "रोहित", bn: "রোহিত", pa: "ਰੋਹਿਤ", ta: "ரோஹித்", te: "రోహిత్", kn: "ರೋಹಿತ್" },
+      anand: { gu: "આનંદ", hi: "आनंद", mr: "आनंद", bn: "আনন্দ", pa: "ਆਨੰਦ", ta: "ஆனந்த்", te: "ఆనంద్", kn: "ಆನಂದ್" },
+      gopal: { gu: "ગોપાલ", hi: "गोपाल", mr: "गोपाल", bn: "গোপাল", pa: "ਗੋਪਾਲ", ta: "கோபால்", te: "గోపాల్", kn: "ಗೋಪಾಲ್" },
+      govind: { gu: "ગોવિંદ", hi: "गोविंद", mr: "गोविंद", bn: "গোবিন্দ", pa: "ਗੋਵਿੰਦ", ta: "கோவிந்த்", te: "గోవింద్", kn: "ಗೋವಿಂದ್" },
+      mohan: { gu: "મોહન", hi: "मोहन", mr: "मोहन", bn: "মোহন", pa: "ਮੋਹਨ", ta: "மோகன்", te: "మోహన్", kn: "ಮೋಹನ್" },
+      shantilal: { gu: "શાંતિલાલ", hi: "शांतिलाल", mr: "शांतीलाल", bn: "শান্তিলাল", pa: "ਸ਼ਾਂਤੀਲਾਲ", ta: "சாந்திலால்", te: "శాంతిలాల్", kn: "ಶಾಂತಿಲಾಲ್" },
+      kantilal: { gu: "કાંતિલાલ", hi: "कांतिलाल", mr: "कांतीलाल", bn: "কান্তি লাল", pa: "ਕਾਂਤੀਲਾਲ", ta: "காந்திலால்", te: "ಕಾంతిలాల్", kn: "ಕಾಂತಿಲಾಲ್" },
+
+      // Surnames & Titles
+      patel: { gu: "પટેલ", hi: "पटेल", mr: "पटेल", bn: "প্যাটেল", pa: "ਪਟੇਲ", ta: "படேல்", te: "పటేల్", kn: "ಪಟೇಲ್" },
+      shah: { gu: "શાહ", hi: "शाह", mr: "शाह", bn: "শাহ", pa: "ਸ਼ਾਹ", ta: "ஷா", te: "షా", kn: "ಶಾ" },
+      mehta: { gu: "મહેતા", hi: "मेहता", mr: "मेहता", bn: "মেহতা", pa: "ਮਹਿਤਾ", ta: "மேத்தா", te: "మెహతా", kn: "ಮೆಹ್ತಾ" },
+      joshi: { gu: "જોશી", hi: "जोशी", mr: "जोशी", bn: "যোশী", pa: "ਜੋਸ਼ੀ", ta: "ஜோஷி", te: "జోషి", kn: "ಜೋಶಿ" },
+      desai: { gu: "દેસાઈ", hi: "देसाई", mr: "देसाई", bn: "দেশাই", pa: "ਦੇਸਾਈ", ta: "தேசாய்", te: "దేశాయ్", kn: "ದೇಸಾಯಿ" },
+      parmar: { gu: "પરમાર", hi: "परमार", mr: "परमार", bn: "পরমার", pa: "ਪਰਮਾਰ", ta: "பர்மர்", te: "పర్మార్", kn: "ಪರ್ಮಾರ್" },
+      solanki: { gu: "સોલંકી", hi: "सोलंकी", mr: "सोलंकी", bn: "সোলাঙ্কি", pa: "ਸੋਲੰਕੀ", ta: "சோலங்கி", te: "సోలంకి", kn: "ಸೋಲಂಕಿ" },
+      rathod: { gu: "રાઠોડ", hi: "राठौड़", mr: "राठोड", bn: "রাঠোর", pa: "ਰਾਠੌੜ", ta: "ராத்தோட்", te: "రాథోడ్", kn: "ರಾಥೋಡ್" },
+      bhai: { gu: "ભાઈ", hi: "भाई", mr: "भाई", bn: "ভাই", pa: "ਭਾਈ", ta: "பாய்", te: "భాయ్", kn: "ಭಾಯ್" },
+      ben: { gu: "બેન", hi: "बेन", mr: "बेन", bn: "বেন", pa: "ਬੇਨ", ta: "பென்", te: "బెన్", kn: "ಬೆನ್" },
+      kumar: { gu: "કુમાર", hi: "कुमार", mr: "कुमार", bn: "কুমার", pa: "ਕੁਮਾਰ", ta: "குமார்", te: "కుమార్", kn: "ಕುಮಾರ್" },
+      lal: { gu: "લાલ", hi: "लाल", mr: "लाल", bn: "লাল", pa: "ਲਾਲ", ta: "லால்", te: "లాల్", kn: "ಲಾಲ್" },
+      chand: { gu: "ચંદ", hi: "चंद", mr: "चंद", bn: "চাঁদ", pa: "ਚੰਦ", ta: "சந்த்", te: "చంద్", kn: "ಚಂದ್" },
+      singh: { gu: "સિંહ", hi: "सिंह", mr: "सिंह", bn: "সিংহ", pa: "ਸਿੰਘ", ta: "சிங்", te: "సింగ్", kn: "ಸಿಂಗ್" },
+      sharma: { gu: "શર્મા", hi: "शर्मा", mr: "शर्मा", bn: "শর্মা", pa: "ਸ਼ਰਮਾ", ta: "சர்மா", te: "శర్మ", kn: "ಶರ್ಮಾ" },
+
+      // Cities & Real Estate Terms
+      ahmedabad: { gu: "અમદાવાદ", hi: "अहमदाबाद", mr: "अहमदाबाद", bn: "আহমেদাবাদ", pa: "ਅਹਿਮਦਾਬਾਦ", ta: "அகமதாபாத்", te: "అహ్మదాబాద్", kn: "ಅಹಮದಾಬಾದ್" },
+      surat: { gu: "સુરત", hi: "सूरत", mr: "सूरत", bn: "সুরাট", pa: "ਸੂਰਤ", ta: "சூரத்", te: "సూరత్", kn: "ಸೂರತ್" },
+      vadodara: { gu: "વડોદરા", hi: "वडोदरा", mr: "वडोदरा", bn: "ভাদোদরা", pa: "ਵਡੋਦਰਾ", ta: "வதோதரா", te: "వడోదర", kn: "ವಡೋದರಾ" },
+      rajkot: { gu: "રાજકોટ", hi: "राजकोट", mr: "राजकोट", bn: "রাজকোট", pa: "ਰਾਜਕੋਟ", ta: "ராஜ்கோட்", te: "రాజ్‌కోట్", kn: "ರಾಜಕೋಟ್" },
+      gandhinagar: { gu: "ગાંધીનગર", hi: "गांधीनगर", mr: "गांधीनगर", bn: "গান্ধীনগর", pa: "ਗਾਂਧੀਨਗਰ", ta: "காந்திநகர்", te: "గాంధీనగర్", kn: "ಗಾಂಧಿನಗರ" },
+      bhavnagar: { gu: "ભાવનગર", hi: "भावनगर", mr: "भावनगर", bn: "ভাবনগর", pa: "ਭਾਵਨਗਰ", ta: "பவநகர்", te: "భావ్‌నਗర్", kn: "ಭಾವನಗರ" },
+      plot: { gu: "પ્લોટ", hi: "प्लाट", mr: "प्लॉट", bn: "প্লট", pa: "ਪਲਾਟ", ta: "பிளாட்", te: "ప్లాట్", kn: "ಪ್ಲಾಟ್" },
+      flat: { gu: "ફ્લેટ", hi: "फ्लैट", mr: "फ्लॅट", bn: "ফ্ল্যাট", pa: "ਫਲੈਟ", ta: "பிளாட்", te: "ఫ్లాట్", kn: "ಫ್ಲಾಟ್" },
+      shop: { gu: "દુકાન", hi: "दुकान", mr: "दुकान", bn: "দোকান", pa: "ਦੁਕਾਨ", ta: "கடை", te: "దుకాణం", kn: "ಅಂಗಡಿ" },
+      survey: { gu: "સર્વે", hi: "सर्वे", mr: "सर्व्हे", bn: "সার্ভে", pa: "ਸਰਵੇ", ta: "சர்வே", te: "సర్వే", kn: "ಸರ್ವೆ" },
+      road: { gu: "રોડ", hi: "रोड", mr: "रोड", bn: "রোড", pa: "ਰੋਡ", ta: "ரோடு", te: "రోడ్డు", kn: "ರಸ್ತೆ" },
+      nagar: { gu: "નગર", hi: "नगर", mr: "नगर", bn: "নগর", pa: "ਨਗਰ", ta: "நகர்", te: "నగర్", kn: "ನಗರ" },
+      complex: { gu: "કોમ્પ્લેક્સ", hi: "कॉम्प्लेक्स", mr: "कॉम्प्लेक्स", bn: "কমপ্লেক্স", pa: "ਕੰਪਲੈਕਸ", ta: "காம்ப்ளக்ஸ்", te: "కాంప్లెక్స్", kn: "ಕಾಂಪ್ಲೆಕ್ಸ್" },
+      city: { gu: "શહેર", hi: "शहर", mr: "शहर", bn: "শহর", pa: "ਸ਼ਹਿਰ", ta: "நகரம்", te: "నగరం", kn: "ನಗರ" },
+      no: { gu: "નં.", hi: "नं.", mr: "क्र.", bn: "নং", pa: "ਨੰ.", ta: "எண்", te: "నం.", kn: "ಸಂ." }
+    };
+
+    function instantTransliterateWord(word, targetLang) {
+      if (!word) return "";
+      const lower = word.toLowerCase().trim();
+      if (INDIC_OFFLINE_NAMES[lower] && INDIC_OFFLINE_NAMES[lower][targetLang]) {
+        return INDIC_OFFLINE_NAMES[lower][targetLang];
+      }
+      return algorithmicPhoneticTransliterate(word, targetLang);
+    }
+
+    function algorithmicPhoneticTransliterate(word, targetLang) {
+      if (targetLang !== 'gu' && targetLang !== 'hi') {
+        return word;
+      }
+      const isGu = targetLang === 'gu';
+      const cMap = isGu ? {
+        kh: "ખ", gh: "ઘ", chh: "છ", ch: "ચ", jh: "ઝ", th: "થ", dh: "ધ", bh: "ભ", sh: "શ", shh: "ષ", ph: "ફ",
+        k: "ક", g: "ગ", j: "જ", t: "ત", d: "દ", n: "ન", p: "પ", f: "ફ", b: "બ", m: "મ", y: "ય", r: "ર",
+        l: "લ", v: "વ", w: "વ", s: "સ", h: "હ", z: "ઝ", x: "ક્ષ"
+      } : {
+        kh: "ख", gh: "घ", chh: "छ", ch: "च", jh: "झ", th: "थ", dh: "ध", bh: "भ", sh: "श", shh: "ष", ph: "फ",
+        k: "क", g: "ग", j: "ज", t: "त", d: "द", n: "न", p: "प", f: "फ़", b: "ब", m: "म", y: "य", r: "र",
+        l: "ल", v: "व", w: "व", s: "स", h: "ह", z: "ज़", x: "क्ष"
+      };
+
+      const vMap = isGu ? {
+        aa: "આ", ee: "ઈ", oo: "ઊ", ai: "ઐ", au: "ઔ", ou: "ઔ",
+        a: "અ", i: "ઇ", u: "ઉ", e: "એ", o: "ઓ"
+      } : {
+        aa: "आ", ee: "ई", oo: "ऊ", ai: "ऐ", au: "औ", ou: "औ",
+        a: "अ", i: "इ", u: "उ", e: "ए", o: "ओ"
+      };
+
+      const mMap = isGu ? {
+        aa: "ા", ee: "ી", oo: "ૂ", ai: "ૈ", au: "ૌ", ou: "ૌ",
+        a: "", i: "િ", u: "ુ", e: "ે", o: "ો"
+      } : {
+        aa: "ा", ee: "ी", oo: "ू", ai: "ै", au: "ौ", ou: "ौ",
+        a: "", i: "ि", u: "ु", e: "े", o: "ो"
+      };
+
+      const str = word.toLowerCase();
+      let res = "";
+      let i = 0;
+      let prevWasConsonant = false;
+
+      while (i < str.length) {
+        let matched = false;
+
+        // Try consonant match
+        for (const len of [3, 2, 1]) {
+          const sub = str.substr(i, len);
+          if (cMap[sub]) {
+            res += cMap[sub];
+            i += len;
+            prevWasConsonant = true;
+            matched = true;
+            break;
+          }
+        }
+        if (matched) continue;
+
+        // Try vowel match
+        for (const len of [2, 1]) {
+          const sub = str.substr(i, len);
+          if (prevWasConsonant) {
+            if (typeof mMap[sub] !== 'undefined') {
+              res += mMap[sub];
+              i += len;
+              prevWasConsonant = false;
+              matched = true;
+              break;
+            }
+          } else {
+            if (vMap[sub]) {
+              res += vMap[sub];
+              i += len;
+              prevWasConsonant = false;
+              matched = true;
+              break;
+            }
+          }
+        }
+        if (matched) continue;
+
+        res += str[i];
+        i++;
+        prevWasConsonant = false;
+      }
+      return res || word;
+    }
+
+    function offlineTransliterate(text, targetLang) {
+      if (!text || targetLang === 'en') return text;
+      return text.replace(/[a-zA-Z]+/g, (match) => {
+        return instantTransliterateWord(match, targetLang);
+      });
+    }
+
+    async function translateText(text, targetLang) {
+      if (!text || !text.trim() || targetLang === 'en') return text;
+      if (!/[a-zA-Z]/.test(text)) return text;
+
+      const cacheKey = targetLang + ':' + text.trim();
+      if (translationCache[cacheKey]) {
+        return translationCache[cacheKey];
+      }
+
+      const singleWordKey = text.trim().toLowerCase();
+      if (INDIC_OFFLINE_NAMES[singleWordKey] && INDIC_OFFLINE_NAMES[singleWordKey][targetLang]) {
+        const res = INDIC_OFFLINE_NAMES[singleWordKey][targetLang];
+        translationCache[cacheKey] = res;
+        return res;
+      }
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2600);
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.trim())}`;
+        const resp = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && Array.isArray(data[0])) {
+            const translated = data[0].map(item => item[0]).filter(Boolean).join('');
+            if (translated && translated.trim()) {
+              translationCache[cacheKey] = translated;
+              return translated;
+            }
+          }
+        }
+      } catch (err) {
+        // Fall back to offline
+      }
+
+      const fallback = offlineTransliterate(text, targetLang);
+      if (fallback) {
+        translationCache[cacheKey] = fallback;
+      }
+      return fallback || text;
+    }
+
+    function handleTranslateKeyDown(event, inputEl, updateCallback) {
+      if (!state.autoTranslateInput || state.lang === 'en') return;
+
+      if (event.key === 'Enter') {
+        if (inputEl.tagName === 'INPUT') {
+          event.preventDefault();
+        }
+        translateField(inputEl, updateCallback);
+        return;
+      }
+
+      if (event.key === ' ' || event.code === 'Space') {
+        const cursor = inputEl.selectionStart;
+        const textBefore = inputEl.value.slice(0, cursor);
+        const match = textBefore.match(/([a-zA-Z0-9'’-]+)$/);
+        if (match && /[a-zA-Z]/.test(match[1])) {
+          const word = match[1];
+          if (textBefore.includes('@') || /https?:\/\//.test(textBefore)) return;
+
+          event.preventDefault();
+          const wordStart = cursor - word.length;
+          const textAfter = inputEl.value.slice(cursor);
+
+          const instantConv = instantTransliterateWord(word, state.lang);
+          const newText = textBefore.slice(0, wordStart) + instantConv + ' ' + textAfter;
+          const newCursor = wordStart + instantConv.length + 1;
+
+          inputEl.value = newText;
+          inputEl.setSelectionRange(newCursor, newCursor);
+          if (typeof updateCallback === 'function') {
+            updateCallback(newText);
+          }
+
+          translateText(word, state.lang).then(finalWord => {
+            if (finalWord && finalWord !== instantConv && finalWord !== word) {
+              const currentVal = inputEl.value;
+              const replaced = currentVal.replace(instantConv, finalWord);
+              if (replaced !== currentVal) {
+                const diff = finalWord.length - instantConv.length;
+                const curPos = inputEl.selectionStart;
+                inputEl.value = replaced;
+                if (curPos >= newCursor) {
+                  inputEl.setSelectionRange(curPos + diff, curPos + diff);
+                }
+                if (typeof updateCallback === 'function') {
+                  updateCallback(replaced);
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+
+    function handleTranslateBlur(inputEl, updateCallback) {
+      if (!state.autoTranslateInput || state.lang === 'en') return;
+      const val = inputEl.value.trim();
+      if (/[a-zA-Z]/.test(val)) {
+        translateField(inputEl, updateCallback);
+      }
+    }
+
+    function handleTranslateInput(event, inputEl, updateCallback) {
+      if (!state.autoTranslateInput || state.lang === 'en') return;
+
+      clearTimeout(translateDebounceTimer);
+      translateDebounceTimer = setTimeout(() => {
+        const val = inputEl.value;
+        if (/[a-zA-Z]/.test(val)) {
+          translateField(inputEl, updateCallback);
+        }
+      }, 750);
+    }
+
+    async function translateField(inputEl, updateCallback) {
+      if (!inputEl) return;
+      const original = inputEl.value;
+      if (!original || !original.trim()) return;
+      if (!/[a-zA-Z]/.test(original)) return;
+      if (state.lang === 'en') return;
+
+      inputEl.classList.add('ring-2', 'ring-emerald-400');
+      try {
+        const translated = await translateText(original, state.lang);
+        if (translated && translated !== original) {
+          inputEl.value = translated;
+          if (typeof updateCallback === 'function') {
+            updateCallback(translated);
+          }
+        }
+      } catch (e) {
+        console.error("Field translate error:", e);
+      } finally {
+        setTimeout(() => {
+          inputEl.classList.remove('ring-2', 'ring-emerald-400');
+        }, 400);
+      }
+    }
+
+    async function translateAllUserInputs() {
+      if (state.lang === 'en') {
+        alert("Please select a non-English language (e.g. Gujarati or Hindi) to translate user inputs.");
+        return;
+      }
+
+      const btn = document.getElementById('btnTranslateAll');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i><span>Translating...</span>`;
+        lucide.createIcons();
+      }
+
+      try {
+        // Purchasers
+        for (let i = 0; i < state.purchasers.length; i++) {
+          if (/[a-zA-Z]/.test(state.purchasers[i])) {
+            state.purchasers[i] = await translateText(state.purchasers[i], state.lang);
+          }
+        }
+        renderPurchaserInputs();
+
+        // Sellers
+        for (let i = 0; i < state.sellers.length; i++) {
+          if (/[a-zA-Z]/.test(state.sellers[i])) {
+            state.sellers[i] = await translateText(state.sellers[i], state.lang);
+          }
+        }
+        renderSellerInputs();
+
+        // Partners
+        for (let i = 0; i < state.partners.length; i++) {
+          if (/[a-zA-Z]/.test(state.partners[i])) {
+            state.partners[i] = await translateText(state.partners[i], state.lang);
+          }
+        }
+        renderPartnerInputs();
+
+        // Signing Authorities
+        for (let i = 0; i < state.signingAuthorities.length; i++) {
+          if (/[a-zA-Z]/.test(state.signingAuthorities[i])) {
+            state.signingAuthorities[i] = await translateText(state.signingAuthorities[i], state.lang);
+          }
+        }
+        renderSignAuthInputs();
+
+        // Static inputs
+        const staticInputs = [
+          { id: 'firmNameInput', stateKey: 'firmName' },
+          { id: 'firmAddressInput', stateKey: 'firmAddress' },
+          { id: 'unitNumberInput', stateKey: 'unitNumber' },
+          { id: 'propertyDescInput', stateKey: 'propertyDesc' },
+          { id: 'remarksInput', stateKey: 'remarks' },
+          { id: 'docTitleInput', stateKey: 'docTitle' }
+        ];
+
+        for (const item of staticInputs) {
+          const el = document.getElementById(item.id);
+          if (el && /[a-zA-Z]/.test(el.value)) {
+            const trans = await translateText(el.value, state.lang);
+            el.value = trans;
+            state[item.stateKey] = trans;
+          }
+        }
+
+        updatePreview();
+      } catch (err) {
+        console.error("Error translating all inputs:", err);
+      } finally {
+        if (btn) {
+          btn.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-emerald-600"></i><span>Done!</span>`;
+          lucide.createIcons();
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            lucide.createIcons();
+          }, 1500);
+        }
+      }
+    }
+
+    function toggleAutoTranslateInput(checked) {
+      state.autoTranslateInput = checked;
+      updateTranslateHelperBanner();
+      if (checked && state.lang !== 'en') {
+        translateAllUserInputs();
+      }
+    }
+
+    function getCurrentLanguageName() {
+      const names = {
+        en: "English",
+        gu: "ગુજરાતી (Gujarati)",
+        hi: "हिन्दी (Hindi)",
+        mr: "मराठी (Marathi)",
+        ta: "தமிழ் (Tamil)",
+        te: "తెలుగు (Telugu)",
+        kn: "ಕನ್ನಡ (Kannada)",
+        bn: "বাংলা (Bengali)",
+        pa: "ਪੰਜਾਬੀ (Punjabi)"
+      };
+      return names[state.lang] || state.lang;
+    }
+
+    function updateTranslateHelperBanner() {
+      const banner = document.getElementById('translateHelperBanner');
+      const textEl = document.getElementById('translateHelperText');
+      const btnAll = document.getElementById('btnTranslateAll');
+      if (!banner || !textEl) return;
+
+      if (state.lang === 'en') {
+        textEl.innerHTML = `<span>English mode active (type in English).</span>`;
+        if (btnAll) btnAll.classList.add('hidden');
+        banner.className = "flex items-center justify-between gap-2 text-[11px] bg-slate-100 border border-slate-200 text-slate-600 px-2.5 py-1.5 rounded-md transition-all";
+      } else if (!state.autoTranslateInput) {
+        textEl.innerHTML = `<span>Auto-translate input is <strong>OFF</strong>. Typing will remain in English.</span>`;
+        if (btnAll) btnAll.classList.remove('hidden');
+        banner.className = "flex items-center justify-between gap-2 text-[11px] bg-amber-50 border border-amber-200 text-amber-900 px-2.5 py-1.5 rounded-md transition-all";
+      } else {
+        const langLabel = getCurrentLanguageName();
+        const sampleWord = state.lang === 'gu' ? 'સુરેશ' : (state.lang === 'hi' ? 'सुरेश' : '...');
+        textEl.innerHTML = `<span>⚡ Typing English (e.g. <strong>SURESH</strong> + Space/Enter) &rarr; converts to <strong>${sampleWord}</strong> in ${langLabel}.</span>`;
+        if (btnAll) btnAll.classList.remove('hidden');
+        banner.className = "flex items-center justify-between gap-2 text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-950 px-2.5 py-1.5 rounded-md transition-all";
+      }
+    }
+
     let state = {
       lang: "en",
+      autoTranslate: true,
+      autoTranslateInput: true,
+      layoutTheme: "layout-original-diagonal",
+      frameStyle: "frame-diagonal-2corner",
+      fontFamily: "font-inter",
+      colorAccent: "#0f172a",
+      colorText: "#0f172a",
+      colorBg: "#ffffff",
       docPreset: "SALE DEED",
       docTitle: "SALE DEED",
+      unitNumber: "",
       firmName: "",
       firmAddress: "",
       deedNoLabel: "DOCUMENT NO.",
@@ -545,11 +1312,56 @@
       logoDataUrl: null
     };
 
-    // EXPORT TEMPLATE FUNCTION: Download current inputs as a JSON file
-    function exportData() {
-      // Collect latest values from inputs
-      syncInputsToState();
+    function handleLayoutChange(themeName) {
+      state.layoutTheme = themeName;
+      document.getElementById('previewLayoutBadge').textContent = layoutLabels[themeName] || "Layout";
+      
+      const unitWrapper = document.getElementById('unitNumberWrapper');
+      if (themeName === 'layout-reference-scroll') {
+        unitWrapper.classList.remove('hidden');
+      } else {
+        unitWrapper.classList.add('hidden');
+      }
 
+      const frameSelect = document.getElementById('frameStyleSelect');
+      const frameNotice = document.getElementById('frameDisabledNotice');
+      if (fullBleedThemes.includes(themeName)) {
+        frameSelect.disabled = true;
+        frameSelect.classList.add('opacity-50', 'cursor-not-allowed');
+        frameNotice.classList.remove('hidden');
+      } else {
+        frameSelect.disabled = false;
+        frameSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+        frameNotice.classList.add('hidden');
+      }
+
+      updatePreview();
+    }
+
+    function handleFrameChange(frameClass) {
+      state.frameStyle = frameClass;
+      updatePreview();
+    }
+
+    function handleFontChange(fontClass) {
+      state.fontFamily = fontClass;
+      updatePreview();
+    }
+
+    function handleColorChange() {
+      state.colorAccent = document.getElementById('colorAccentInput').value;
+      state.colorText = document.getElementById('colorTextInput').value;
+      state.colorBg = document.getElementById('colorBgInput').value;
+      
+      document.documentElement.style.setProperty('--theme-accent', state.colorAccent);
+      document.documentElement.style.setProperty('--theme-text', state.colorText);
+      document.documentElement.style.setProperty('--theme-bg', state.colorBg);
+      
+      updatePreview();
+    }
+
+    function exportData() {
+      syncInputsToState();
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const downloadAnchor = document.createElement('a');
       const filename = (state.firmName ? state.firmName.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'template') + 
@@ -562,7 +1374,6 @@
       downloadAnchor.remove();
     }
 
-    // IMPORT TEMPLATE FUNCTION: Read saved JSON and populate form
     function importData(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -572,18 +1383,13 @@
         try {
           const imported = JSON.parse(e.target.result);
           state = { ...state, ...imported };
+          if (typeof state.autoTranslateInput !== 'undefined' && document.getElementById('autoTranslateInputToggle')) {
+            document.getElementById('autoTranslateInputToggle').checked = state.autoTranslateInput;
+          }
 
-          // Restore Logo in UI if present in JSON
           if (state.logoDataUrl) {
-            const previewLogo = document.getElementById('previewLogo');
-            const defaultLogo = document.getElementById('defaultLogoSvg');
             const thumb = document.getElementById('logoThumb');
             const thumbIcon = document.getElementById('logoPlaceholderIcon');
-
-            previewLogo.src = state.logoDataUrl;
-            previewLogo.classList.remove('hidden');
-            defaultLogo.classList.add('hidden');
-
             thumb.src = state.logoDataUrl;
             thumb.classList.remove('hidden');
             thumbIcon.classList.add('hidden');
@@ -591,22 +1397,35 @@
             removeLogo();
           }
 
-          // Populate input fields with imported data
+          if (state.layoutTheme) document.getElementById('layoutThemeSelect').value = state.layoutTheme;
+          if (state.frameStyle) document.getElementById('frameStyleSelect').value = state.frameStyle;
+          if (state.fontFamily) document.getElementById('fontFamilySelect').value = state.fontFamily;
+          if (state.colorAccent) document.getElementById('colorAccentInput').value = state.colorAccent;
+          if (state.colorText) document.getElementById('colorTextInput').value = state.colorText;
+          if (state.colorBg) document.getElementById('colorBgInput').value = state.colorBg;
+
+          handleColorChange();
+          handleLayoutChange(state.layoutTheme);
           initForm();
           alert('Template successfully loaded!');
         } catch (err) {
-          alert('Error parsing JSON file. Please ensure it is a valid template file.');
+          alert('Error parsing JSON template. Please upload a valid exported file.');
         }
       };
       reader.readAsText(file);
-      // Reset input so same file can be imported again if needed
       event.target.value = '';
     }
 
-    // Sync input values to state
     function syncInputsToState() {
+      state.layoutTheme = document.getElementById('layoutThemeSelect').value;
+      state.frameStyle = document.getElementById('frameStyleSelect').value;
+      state.fontFamily = document.getElementById('fontFamilySelect').value;
+      state.colorAccent = document.getElementById('colorAccentInput').value;
+      state.colorText = document.getElementById('colorTextInput').value;
+      state.colorBg = document.getElementById('colorBgInput').value;
       state.docPreset = document.getElementById('docPresetSelect').value;
       state.docTitle = document.getElementById('docTitleInput').value.trim();
+      state.unitNumber = document.getElementById('unitNumberInput').value.trim();
       state.firmName = document.getElementById('firmNameInput').value.trim();
       state.firmAddress = document.getElementById('firmAddressInput').value.trim();
       state.deedNoLabel = document.getElementById('deedNoLabelInput').value.trim();
@@ -621,63 +1440,79 @@
       state.signingAuthorityLabel = document.getElementById('signingAuthorityLabelInput').value.trim();
       state.remarksLabel = document.getElementById('remarksLabelInput').value.trim();
       state.remarks = document.getElementById('remarksInput').value.trim();
+      if (document.getElementById('autoTranslateToggle')) {
+        state.autoTranslate = document.getElementById('autoTranslateToggle').checked;
+      }
+      if (document.getElementById('autoTranslateInputToggle')) {
+        state.autoTranslateInput = document.getElementById('autoTranslateInputToggle').checked;
+      }
     }
 
     function setLanguage(lang) {
       state.lang = lang;
       
-      const btnEn = document.getElementById('btnLangEn');
-      const btnGu = document.getElementById('btnLangGu');
-      const indicator = document.getElementById('currentLangIndicator');
+      const buttons = {
+        en: document.getElementById('btnLangEn'),
+        gu: document.getElementById('btnLangGu'),
+        hi: document.getElementById('btnLangHi')
+      };
 
-      if (lang === 'gu') {
-        btnGu.className = "px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs";
-        btnEn.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
-        indicator.textContent = i18n.gu.modeIndicator;
-
-        document.getElementById('deedNoLabelInput').value = i18n.gu.deedNoLabel;
-        document.getElementById('dateLabelInput').value = i18n.gu.dateLabel;
-        document.getElementById('propertyDescLabelInput').value = i18n.gu.propertyDescLabel;
-        document.getElementById('firstPartyLabelInput').value = i18n.gu.firstPartyLabel;
-        document.getElementById('secondPartyLabelInput').value = i18n.gu.secondPartyLabel;
-        document.getElementById('partnersLabelInput').value = i18n.gu.partnersLabel;
-        document.getElementById('signingAuthorityLabelInput').value = i18n.gu.signingAuthorityLabel;
-        document.getElementById('remarksLabelInput').value = i18n.gu.remarksLabel;
-
-        const currentTitle = document.getElementById('docTitleInput').value.trim();
-        if (titleTranslations[currentTitle]) {
-          document.getElementById('docTitleInput').value = titleTranslations[currentTitle];
+      Object.keys(buttons).forEach(k => {
+        if (k === lang) {
+          buttons[k].className = "py-1.5 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-2xs";
+        } else {
+          buttons[k].className = "py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:text-indigo-600";
         }
+      });
+
+      const otherSelect = document.getElementById('otherLangSelect');
+      if (!['en', 'gu', 'hi'].includes(lang)) {
+        otherSelect.value = lang;
+        otherSelect.classList.add('bg-indigo-600', 'text-white', 'font-bold');
+        otherSelect.classList.remove('bg-white', 'text-slate-700');
       } else {
-        btnEn.className = "px-3 py-1 text-xs font-bold rounded-md bg-indigo-600 text-white shadow-xs";
-        btnGu.className = "px-3 py-1 text-xs font-semibold text-slate-700 hover:text-indigo-600";
-        indicator.textContent = i18n.en.modeIndicator;
+        otherSelect.value = "";
+        otherSelect.classList.remove('bg-indigo-600', 'text-white', 'font-bold');
+        otherSelect.classList.add('bg-white', 'text-slate-700');
+      }
 
-        document.getElementById('deedNoLabelInput').value = i18n.en.deedNoLabel;
-        document.getElementById('dateLabelInput').value = i18n.en.dateLabel;
-        document.getElementById('propertyDescLabelInput').value = i18n.en.propertyDescLabel;
-        document.getElementById('firstPartyLabelInput').value = i18n.en.firstPartyLabel;
-        document.getElementById('secondPartyLabelInput').value = i18n.en.secondPartyLabel;
-        document.getElementById('partnersLabelInput').value = i18n.en.partnersLabel;
-        document.getElementById('signingAuthorityLabelInput').value = i18n.en.signingAuthorityLabel;
-        document.getElementById('remarksLabelInput').value = i18n.en.remarksLabel;
+      const trans = i18n[lang] || i18n.en;
+      document.getElementById('currentLangIndicator').textContent = trans.modeIndicator;
 
-        const currentTitle = document.getElementById('docTitleInput').value.trim();
-        if (reverseTitleTranslations[currentTitle]) {
-          document.getElementById('docTitleInput').value = reverseTitleTranslations[currentTitle];
+      if (state.autoTranslate) {
+        document.getElementById('deedNoLabelInput').value = trans.deedNoLabel;
+        document.getElementById('dateLabelInput').value = trans.dateLabel;
+        document.getElementById('propertyDescLabelInput').value = trans.propertyDescLabel;
+        document.getElementById('firstPartyLabelInput').value = trans.firstPartyLabel;
+        document.getElementById('secondPartyLabelInput').value = trans.secondPartyLabel;
+        document.getElementById('partnersLabelInput').value = trans.partnersLabel;
+        document.getElementById('signingAuthorityLabelInput').value = trans.signingAuthorityLabel;
+        document.getElementById('remarksLabelInput').value = trans.remarksLabel;
+
+        const preset = document.getElementById('docPresetSelect').value;
+        if (preset !== "CUSTOM" && titleTranslations[preset] && titleTranslations[preset][lang]) {
+          document.getElementById('docTitleInput').value = titleTranslations[preset][lang];
+        } else if (lang === 'en' && preset !== "CUSTOM") {
+          document.getElementById('docTitleInput').value = preset;
         }
       }
 
+      if (state.autoTranslateInput && lang !== 'en') {
+        translateAllUserInputs();
+      }
+      updateTranslateHelperBanner();
+      renderDynamicInputs();
       updatePreview();
     }
 
     function handlePresetChange(val) {
       state.docPreset = val;
-      const isGujarati = state.lang === 'gu';
-
       if (val !== "CUSTOM") {
-        const titleText = isGujarati && titleTranslations[val] ? titleTranslations[val] : val;
-        document.getElementById('docTitleInput').value = titleText;
+        if (state.lang !== 'en' && titleTranslations[val] && titleTranslations[val][state.lang]) {
+          document.getElementById('docTitleInput').value = titleTranslations[val][state.lang];
+        } else {
+          document.getElementById('docTitleInput').value = val;
+        }
       }
 
       toggleModeViews(val === "PARTNERSHIP DEED");
@@ -687,19 +1522,13 @@
     function toggleModeViews(isPartnership) {
       const standardSection = document.getElementById('standardPartiesSection');
       const partnershipSection = document.getElementById('partnershipSection');
-      const previewStandard = document.getElementById('previewStandardParties');
-      const previewPartnership = document.getElementById('previewPartnershipSection');
 
       if (isPartnership) {
         standardSection.classList.add('hidden');
         partnershipSection.classList.remove('hidden');
-        previewStandard.classList.add('hidden');
-        previewPartnership.classList.remove('hidden');
       } else {
         standardSection.classList.remove('hidden');
         partnershipSection.classList.add('hidden');
-        previewStandard.classList.remove('hidden');
-        previewPartnership.classList.add('hidden');
       }
     }
 
@@ -709,7 +1538,16 @@
         const parts = dateStr.split('-');
         if (parts.length === 3) {
           const date = new Date(parts[0], parts[1] - 1, parts[2]);
-          return date.toLocaleDateString(state.lang === 'gu' ? 'gu-IN' : 'en-US', {
+          let locale = 'en-US';
+          if (state.lang === 'gu') locale = 'gu-IN';
+          if (state.lang === 'hi') locale = 'hi-IN';
+          if (state.lang === 'mr') locale = 'mr-IN';
+          if (state.lang === 'ta') locale = 'ta-IN';
+          if (state.lang === 'te') locale = 'te-IN';
+          if (state.lang === 'kn') locale = 'kn-IN';
+          if (state.lang === 'bn') locale = 'bn-IN';
+          if (state.lang === 'pa') locale = 'pa-IN';
+          return date.toLocaleDateString(locale, {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -731,15 +1569,21 @@
     function renderSellerInputs() {
       const container = document.getElementById('sellersContainer');
       container.innerHTML = '';
+      const langName = getCurrentLanguageName();
       state.sellers.forEach((seller, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-2';
+        div.className = 'flex items-center gap-1.5';
         div.innerHTML = `
-          <input type="text" value="${seller.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Seller ${index + 1} Name..."
+          <input type="text" id="sellerInput_${index}" value="${seller.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Seller ${index + 1} Name (e.g. Ramesh)..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            oninput="state.sellers[${index}] = this.value; updatePreview()">
+            oninput="state.sellers[${index}] = this.value; handleTranslateInput(event, this, (val) => { state.sellers[${index}] = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.sellers[${index}] = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.sellers[${index}] = val; updatePreview(); })">
+          <button type="button" onclick="translateField(document.getElementById('sellerInput_${index}'), (val) => { state.sellers[${index}] = val; updatePreview(); })" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition" title="Translate this name to ${langName}">
+            <i data-lucide="languages" class="w-4 h-4"></i>
+          </button>
           ${state.sellers.length > 1 ? `
-            <button type="button" onclick="state.sellers.splice(${index}, 1); renderSellerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+            <button type="button" onclick="state.sellers.splice(${index}, 1); renderSellerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition" title="Remove name">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           ` : ''}
@@ -758,15 +1602,21 @@
     function renderPurchaserInputs() {
       const container = document.getElementById('purchasersContainer');
       container.innerHTML = '';
+      const langName = getCurrentLanguageName();
       state.purchasers.forEach((purchaser, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-2';
+        div.className = 'flex items-center gap-1.5';
         div.innerHTML = `
-          <input type="text" value="${purchaser.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Purchaser ${index + 1} Name..."
+          <input type="text" id="purchaserInput_${index}" value="${purchaser.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Purchaser ${index + 1} Name (e.g. Suresh)..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            oninput="state.purchasers[${index}] = this.value; updatePreview()">
+            oninput="state.purchasers[${index}] = this.value; handleTranslateInput(event, this, (val) => { state.purchasers[${index}] = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.purchasers[${index}] = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.purchasers[${index}] = val; updatePreview(); })">
+          <button type="button" onclick="translateField(document.getElementById('purchaserInput_${index}'), (val) => { state.purchasers[${index}] = val; updatePreview(); })" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition" title="Translate this name to ${langName}">
+            <i data-lucide="languages" class="w-4 h-4"></i>
+          </button>
           ${state.purchasers.length > 1 ? `
-            <button type="button" onclick="state.purchasers.splice(${index}, 1); renderPurchaserInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+            <button type="button" onclick="state.purchasers.splice(${index}, 1); renderPurchaserInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition" title="Remove name">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           ` : ''}
@@ -785,15 +1635,21 @@
     function renderPartnerInputs() {
       const container = document.getElementById('partnersContainer');
       container.innerHTML = '';
+      const langName = getCurrentLanguageName();
       state.partners.forEach((partner, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-2';
+        div.className = 'flex items-center gap-1.5';
         div.innerHTML = `
-          <input type="text" value="${partner.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Partner ${index + 1} Name..."
+          <input type="text" id="partnerInput_${index}" value="${partner.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Partner ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            oninput="state.partners[${index}] = this.value; updatePreview()">
+            oninput="state.partners[${index}] = this.value; handleTranslateInput(event, this, (val) => { state.partners[${index}] = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.partners[${index}] = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.partners[${index}] = val; updatePreview(); })">
+          <button type="button" onclick="translateField(document.getElementById('partnerInput_${index}'), (val) => { state.partners[${index}] = val; updatePreview(); })" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition" title="Translate this name to ${langName}">
+            <i data-lucide="languages" class="w-4 h-4"></i>
+          </button>
           ${state.partners.length > 1 ? `
-            <button type="button" onclick="state.partners.splice(${index}, 1); renderPartnerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+            <button type="button" onclick="state.partners.splice(${index}, 1); renderPartnerInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition" title="Remove partner">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           ` : ''}
@@ -812,15 +1668,21 @@
     function renderSignAuthInputs() {
       const container = document.getElementById('signAuthContainer');
       container.innerHTML = '';
+      const langName = getCurrentLanguageName();
       state.signingAuthorities.forEach((auth, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-2';
+        div.className = 'flex items-center gap-1.5';
         div.innerHTML = `
-          <input type="text" value="${auth.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Signing Authority ${index + 1} Name..."
+          <input type="text" id="signAuthInput_${index}" value="${auth.replace(/"/g, '&quot;')}" onfocus="this.select()" placeholder="Enter Signing Authority ${index + 1} Name..."
             class="flex-1 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-            oninput="state.signingAuthorities[${index}] = this.value; updatePreview()">
+            oninput="state.signingAuthorities[${index}] = this.value; handleTranslateInput(event, this, (val) => { state.signingAuthorities[${index}] = val; updatePreview(); }); updatePreview()"
+            onkeydown="handleTranslateKeyDown(event, this, (val) => { state.signingAuthorities[${index}] = val; updatePreview(); })"
+            onblur="handleTranslateBlur(this, (val) => { state.signingAuthorities[${index}] = val; updatePreview(); })">
+          <button type="button" onclick="translateField(document.getElementById('signAuthInput_${index}'), (val) => { state.signingAuthorities[${index}] = val; updatePreview(); })" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition" title="Translate this authority to ${langName}">
+            <i data-lucide="languages" class="w-4 h-4"></i>
+          </button>
           ${state.signingAuthorities.length > 1 ? `
-            <button type="button" onclick="state.signingAuthorities.splice(${index}, 1); renderSignAuthInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1">
+            <button type="button" onclick="state.signingAuthorities.splice(${index}, 1); renderSignAuthInputs(); updatePreview()" class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition" title="Remove authority">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           ` : ''}
@@ -836,121 +1698,19 @@
       updatePreview();
     }
 
-    // Update Live Preview
-    function updatePreview() {
-      const docTitle = document.getElementById('docTitleInput').value.trim() || "";
-      const firmName = document.getElementById('firmNameInput').value.trim() || "";
-      const firmAddress = document.getElementById('firmAddressInput').value.trim() || "";
-      const deedNoLabel = document.getElementById('deedNoLabelInput').value.trim() || "DOCUMENT NO.";
-      const deedNo = document.getElementById('deedNoInput').value.trim(); // Blank if not provided
-      const dateLabel = document.getElementById('dateLabelInput').value.trim() || "Date";
-      const rawDate = document.getElementById('dateInput').value;
-      const formattedDate = formatDateString(rawDate);
-      const propertyDescLabel = document.getElementById('propertyDescLabelInput').value.trim() || "Property Description";
-      const propertyDesc = document.getElementById('propertyDescInput').value.trim() || "";
-
-      // Render Header Details
-      document.getElementById('previewDocTitle').textContent = docTitle;
-      document.getElementById('previewFirmName').textContent = firmName;
-      document.getElementById('previewFirmAddress').textContent = firmAddress;
-      
-      // Render Deed No, Date, Property Description
-      document.getElementById('previewDeedNoLabel').textContent = deedNoLabel;
-      document.getElementById('previewDeedNo').textContent = deedNo;
-      document.getElementById('previewDateLabel').textContent = dateLabel;
-      document.getElementById('previewDate').textContent = formattedDate;
-      document.getElementById('previewPropertyDescLabel').textContent = propertyDescLabel;
-      document.getElementById('previewPropertyDesc').textContent = propertyDesc;
-
-      const isPartnership = state.docPreset === "PARTNERSHIP DEED";
-
-      if (isPartnership) {
-        const partnersLabel = document.getElementById('partnersLabelInput').value.trim() || "Partners Name(s)";
-        const signAuthLabel = document.getElementById('signingAuthorityLabelInput').value.trim() || "Authorized Signing Partner";
-
-        document.getElementById('previewPartnersHeaderLabel').textContent = partnersLabel;
-        document.getElementById('previewSignAuthHeaderLabel').textContent = signAuthLabel;
-
-        const partnersList = state.partners.filter(p => p.trim() !== '');
-        const partnersContainer = document.getElementById('previewPartnersContainer');
-        if (partnersList.length === 0) {
-          partnersContainer.innerHTML = '';
-        } else {
-          partnersContainer.innerHTML = partnersList.map((p, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${p}</div>`).join('');
-        }
-
-        const authList = state.signingAuthorities.filter(a => a.trim() !== '');
-        const authContainer = document.getElementById('previewSignAuthContainer');
-        if (authList.length === 0) {
-          authContainer.innerHTML = '';
-        } else {
-          authContainer.innerHTML = authList.map((a, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">•</span>${a}</div>`).join('');
-        }
-      } else {
-        const firstPartyLabel = document.getElementById('firstPartyLabelInput').value.trim() || "Seller / Vendor";
-        const secondPartyLabel = document.getElementById('secondPartyLabelInput').value.trim() || "Purchaser / Vendee";
-
-        document.getElementById('previewSellerHeaderLabel').textContent = firstPartyLabel;
-        document.getElementById('previewPurchaserHeaderLabel').textContent = secondPartyLabel;
-
-        const sellerContainer = document.getElementById('previewSellerContainer');
-        const filteredSellers = state.sellers.filter(s => s.trim() !== '');
-        if (filteredSellers.length === 0) {
-          sellerContainer.innerHTML = '';
-        } else if (filteredSellers.length === 1) {
-          sellerContainer.innerHTML = `<div>${filteredSellers[0]}</div>`;
-        } else {
-          sellerContainer.innerHTML = filteredSellers.map((s, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${s}</div>`).join('');
-        }
-
-        const purchaserContainer = document.getElementById('previewPurchaserContainer');
-        const filteredPurchasers = state.purchasers.filter(p => p.trim() !== '');
-        if (filteredPurchasers.length === 0) {
-          purchaserContainer.innerHTML = '';
-        } else if (filteredPurchasers.length === 1) {
-          purchaserContainer.innerHTML = `<div>${filteredPurchasers[0]}</div>`;
-        } else {
-          purchaserContainer.innerHTML = filteredPurchasers.map((p, idx) => `<div><span class="text-xs font-semibold text-slate-500 mr-2">${idx + 1}.</span>${p}</div>`).join('');
-        }
-      }
-
-      // Remarks / Mobile / Extra Notes Render
-      const remarksText = document.getElementById('remarksInput').value.trim();
-      const remarksLabel = document.getElementById('remarksLabelInput').value.trim() || "Remarks";
-      const remarksRow = document.getElementById('previewRemarksRow');
-      const remarksDisplay = document.getElementById('previewRemarksText');
-      document.getElementById('previewRemarksLabel').textContent = remarksLabel;
-
-      if (remarksText) {
-        remarksRow.classList.remove('hidden');
-        remarksDisplay.textContent = remarksText;
-      } else {
-        remarksRow.classList.add('hidden');
-      }
-    }
-
-    // Logo Handling
     function handleLogoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        const resultUrl = e.target.result;
-        state.logoDataUrl = resultUrl;
-
-        const previewLogo = document.getElementById('previewLogo');
-        const defaultLogo = document.getElementById('defaultLogoSvg');
+        state.logoDataUrl = e.target.result;
         const thumb = document.getElementById('logoThumb');
         const thumbIcon = document.getElementById('logoPlaceholderIcon');
-
-        previewLogo.src = resultUrl;
-        previewLogo.classList.remove('hidden');
-        defaultLogo.classList.add('hidden');
-
-        thumb.src = resultUrl;
+        thumb.src = state.logoDataUrl;
         thumb.classList.remove('hidden');
         thumbIcon.classList.add('hidden');
+        updatePreview();
       };
       reader.readAsDataURL(file);
     }
@@ -958,26 +1718,28 @@
     function removeLogo() {
       state.logoDataUrl = null;
       document.getElementById('logoInput').value = '';
-      
-      const previewLogo = document.getElementById('previewLogo');
-      const defaultLogo = document.getElementById('defaultLogoSvg');
       const thumb = document.getElementById('logoThumb');
       const thumbIcon = document.getElementById('logoPlaceholderIcon');
-
-      previewLogo.src = '';
-      previewLogo.classList.add('hidden');
-      defaultLogo.classList.remove('hidden');
-
       thumb.src = '';
       thumb.classList.add('hidden');
       thumbIcon.classList.remove('hidden');
+      updatePreview();
     }
 
     function resetDefaults() {
       state = {
         lang: "en",
+        autoTranslate: true,
+        autoTranslateInput: true,
+        layoutTheme: "layout-original-diagonal",
+        frameStyle: "frame-diagonal-2corner",
+        fontFamily: "font-inter",
+        colorAccent: "#0f172a",
+        colorText: "#0f172a",
+        colorBg: "#ffffff",
         docPreset: "SALE DEED",
         docTitle: "SALE DEED",
+        unitNumber: "",
         firmName: "",
         firmAddress: "",
         deedNoLabel: "DOCUMENT NO.",
@@ -1000,12 +1762,25 @@
       };
 
       removeLogo();
+      document.getElementById('layoutThemeSelect').value = state.layoutTheme;
+      document.getElementById('frameStyleSelect').value = state.frameStyle;
+      document.getElementById('fontFamilySelect').value = state.fontFamily;
+      document.getElementById('colorAccentInput').value = state.colorAccent;
+      document.getElementById('colorTextInput').value = state.colorText;
+      document.getElementById('colorBgInput').value = state.colorBg;
+      document.getElementById('autoTranslateToggle').checked = true;
+      if (document.getElementById('autoTranslateInputToggle')) {
+        document.getElementById('autoTranslateInputToggle').checked = true;
+      }
+      handleColorChange();
+      handleLayoutChange(state.layoutTheme);
       initForm();
     }
 
     function initForm() {
       document.getElementById('docPresetSelect').value = state.docPreset;
       document.getElementById('docTitleInput').value = state.docTitle;
+      document.getElementById('unitNumberInput').value = state.unitNumber;
       document.getElementById('firmNameInput').value = state.firmName;
       document.getElementById('firmAddressInput').value = state.firmAddress;
       document.getElementById('deedNoLabelInput').value = state.deedNoLabel;
@@ -1021,13 +1796,683 @@
       document.getElementById('remarksLabelInput').value = state.remarksLabel;
       document.getElementById('remarksInput').value = state.remarks;
 
+      if (document.getElementById('autoTranslateToggle')) {
+        document.getElementById('autoTranslateToggle').checked = state.autoTranslate !== false;
+      }
+      if (document.getElementById('autoTranslateInputToggle')) {
+        document.getElementById('autoTranslateInputToggle').checked = state.autoTranslateInput !== false;
+      }
+      updateTranslateHelperBanner();
+
       renderDynamicInputs();
       toggleModeViews(state.docPreset === "PARTNERSHIP DEED");
       updatePreview();
     }
 
+    // =========================================================================
+    // MAIN LIVE PREVIEW GENERATOR
+    // =========================================================================
+
+    function updatePreview() {
+      try {
+        const ph = i18n[state.lang] || i18n.en;
+
+        const firmName = document.getElementById('firmNameInput') ? document.getElementById('firmNameInput').value.trim() : '';
+        const firmAddress = document.getElementById('firmAddressInput') ? document.getElementById('firmAddressInput').value.trim() : '';
+        const docTitle = (document.getElementById('docTitleInput') && document.getElementById('docTitleInput').value.trim()) ? document.getElementById('docTitleInput').value.trim() : ph.docTitle;
+        const unitNumber = document.getElementById('unitNumberInput') ? document.getElementById('unitNumberInput').value.trim() : '';
+        const deedNoLabel = (document.getElementById('deedNoLabelInput') && document.getElementById('deedNoLabelInput').value.trim()) ? document.getElementById('deedNoLabelInput').value.trim() : "DOCUMENT NO.";
+        const deedNo = document.getElementById('deedNoInput') ? document.getElementById('deedNoInput').value.trim() : '';
+        const dateLabel = (document.getElementById('dateLabelInput') && document.getElementById('dateLabelInput').value.trim()) ? document.getElementById('dateLabelInput').value.trim() : "Date";
+        const rawDate = document.getElementById('dateInput') ? document.getElementById('dateInput').value : '';
+        const formattedDate = formatDateString(rawDate);
+        const propLabel = (document.getElementById('propertyDescLabelInput') && document.getElementById('propertyDescLabelInput').value.trim()) ? document.getElementById('propertyDescLabelInput').value.trim() : "Property Description";
+        const propDesc = document.getElementById('propertyDescInput') ? document.getElementById('propertyDescInput').value.trim() : '';
+        const remarks = document.getElementById('remarksInput') ? document.getElementById('remarksInput').value.trim() : '';
+        const remarksLabel = (document.getElementById('remarksLabelInput') && document.getElementById('remarksLabelInput').value.trim()) ? document.getElementById('remarksLabelInput').value.trim() : "Remarks / Note";
+
+        const isPartnership = state.docPreset === "PARTNERSHIP DEED";
+        const firstPartyLabel = (document.getElementById('firstPartyLabelInput') && document.getElementById('firstPartyLabelInput').value.trim()) ? document.getElementById('firstPartyLabelInput').value.trim() : ph.firstPartyLabel;
+        const secondPartyLabel = (document.getElementById('secondPartyLabelInput') && document.getElementById('secondPartyLabelInput').value.trim()) ? document.getElementById('secondPartyLabelInput').value.trim() : ph.secondPartyLabel;
+        const partnersLabel = (document.getElementById('partnersLabelInput') && document.getElementById('partnersLabelInput').value.trim()) ? document.getElementById('partnersLabelInput').value.trim() : ph.partnersLabel;
+        const signAuthLabel = (document.getElementById('signingAuthorityLabelInput') && document.getElementById('signingAuthorityLabelInput').value.trim()) ? document.getElementById('signingAuthorityLabelInput').value.trim() : ph.signingAuthorityLabel;
+
+        const sellers = state.sellers.filter(s => s.trim() !== '');
+        const purchasers = state.purchasers.filter(p => p.trim() !== '');
+        const partners = state.partners.filter(p => p.trim() !== '');
+        const signAuths = state.signingAuthorities.filter(a => a.trim() !== '');
+
+        const logoHtml = state.logoDataUrl 
+          ? `<div class="logo-bounded-box"><img src="${state.logoDataUrl}" alt="Logo"></div>`
+          : `<div class="logo-bounded-box border-2 border-slate-700 rounded-full w-12 h-12 p-1 text-center"><span class="font-cinzel text-[9px] font-bold">LOGO</span></div>`;
+
+        function renderPartiesList(items, placeholderText) {
+          if (items.length === 0) return `<span class="preview-placeholder">${placeholderText}</span>`;
+          if (items.length === 1) return `<span>${items[0]}</span>`;
+          return items.map((it, idx) => `<div><span class="text-xs text-slate-400 mr-2 font-mono">${idx+1}.</span><strong>${it}</strong></div>`).join('');
+        }
+
+        const p1Html = isPartnership ? renderPartiesList(partners, ph.phPartner) : renderPartiesList(sellers, ph.phSeller);
+        const p2Html = isPartnership ? renderPartiesList(signAuths, ph.phSignAuth) : renderPartiesList(purchasers, ph.phPurchaser);
+        const p1Title = isPartnership ? partnersLabel : firstPartyLabel;
+        const p2Title = isPartnership ? signAuthLabel : secondPartyLabel;
+
+        const target = document.getElementById('printArea');
+        if (!target) return;
+        
+        target.className = `a4-sheet p-6 flex flex-col ${state.fontFamily}`;
+        target.style.color = state.colorText;
+
+        const frameClass = state.frameStyle;
+
+        // 1. CLASSIC MASTER (Original 2-Corner, Restored Inner Table Box)
+        if (state.layoutTheme === 'layout-original-diagonal') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-6 sm:p-7 h-full flex flex-col justify-start bg-white" style="border-color: ${state.colorAccent};">
+                <div>
+                  <div class="flex items-center justify-between border-b-2 pb-5 mb-5 gap-4" style="border-color: ${state.colorAccent};">
+                    <div class="w-24 h-16 flex items-center justify-center shrink-0 overflow-hidden">
+                      ${logoHtml}
+                    </div>
+                    <div class="flex-1 text-right">
+                      <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight uppercase font-serif-title leading-snug min-h-[28px]" style="color: ${state.colorText};">
+                        ${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}
+                      </h2>
+                      <p class="text-xs sm:text-sm mt-1 leading-relaxed font-normal max-w-md ml-auto whitespace-pre-line min-h-[18px]">
+                        ${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="text-center my-6">
+                    <h1 class="font-cinzel text-2xl sm:text-3xl font-extrabold uppercase tracking-widest pb-2 border-b-2 inline-block min-w-[280px]" style="border-color: ${state.colorAccent}; color: ${state.colorAccent};">
+                      ${docTitle}
+                    </h1>
+                  </div>
+
+                  <div class="original-inner-box shadow-xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <div class="grid grid-cols-12 border-b bg-slate-50/60" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 p-3.5 bg-slate-100/90 border-r font-semibold text-xs sm:text-sm uppercase tracking-wide flex items-center" style="border-color: ${state.colorAccent};">
+                        ${deedNoLabel}
+                      </div>
+                      <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold tracking-wide min-h-[46px]">
+                        ${deedNo}
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 border-b" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 p-3.5 bg-slate-100/90 border-r font-semibold text-xs sm:text-sm uppercase tracking-wide flex items-center" style="border-color: ${state.colorAccent};">
+                        ${dateLabel}
+                      </div>
+                      <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold">
+                        ${formattedDate || '—'}
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 border-b bg-slate-50/60" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 p-3.5 bg-slate-100/90 border-r font-semibold text-xs sm:text-sm uppercase tracking-wide flex items-start" style="border-color: ${state.colorAccent};">
+                        ${propLabel}
+                      </div>
+                      <div class="col-span-8 p-3.5 text-xs sm:text-sm font-semibold leading-relaxed whitespace-pre-line min-h-[42px]">
+                        ${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 border-b" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 p-3.5 bg-slate-100/90 border-r font-semibold text-xs sm:text-sm uppercase tracking-wide flex items-start" style="border-color: ${state.colorAccent};">
+                        ${p1Title}
+                      </div>
+                      <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold uppercase tracking-tight space-y-1 min-h-[42px]">
+                        ${p1Html}
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-12">
+                      <div class="col-span-4 p-3.5 bg-slate-100/90 border-r font-semibold text-xs sm:text-sm uppercase tracking-wide flex items-start" style="border-color: ${state.colorAccent};">
+                        ${p2Title}
+                      </div>
+                      <div class="col-span-8 p-3.5 text-sm sm:text-base font-bold uppercase tracking-tight space-y-1 min-h-[42px]">
+                        ${p2Html}
+                      </div>
+                    </div>
+
+                    ${remarks ? `
+                      <div class="grid grid-cols-12 border-t bg-slate-50/50" style="border-color: ${state.colorAccent};">
+                        <div class="col-span-4 p-3 bg-slate-100/90 border-r font-semibold text-xs uppercase tracking-wide flex items-start" style="border-color: ${state.colorAccent};">
+                          ${remarksLabel}
+                        </div>
+                        <div class="col-span-8 p-3 text-xs sm:text-sm whitespace-pre-line leading-relaxed font-medium">
+                          ${remarks}
+                        </div>
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 2. DEVELOPER SCROLL
+        else if (state.layoutTheme === 'layout-reference-scroll') {
+          target.innerHTML = `
+            <div class="h-full border-[3.5px] rounded-[28px] p-6 flex flex-col justify-between bg-white relative" style="border-color: ${state.colorAccent};">
+              <div>
+                <div class="flex items-start justify-between gap-4">
+                  <div class="w-16"></div>
+                  <div class="flex flex-col items-end gap-1.5 text-right shrink-0">
+                    <div class="border-2 rounded-xl px-4 py-1.5 min-w-[170px] text-center shadow-2xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <span class="text-[10px] font-bold tracking-wider" style="color: ${state.colorText};">UNIT NO.:-</span>
+                      <div class="font-bold text-sm min-h-[18px]" style="color: ${state.colorAccent};">${unitNumber || deedNo}</div>
+                    </div>
+                    <div class="border-2 rounded-xl px-3.5 py-1 min-w-[170px] text-left text-xs space-y-0.5" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <div class="flex justify-between font-bold text-[11px]"><span>${deedNoLabel}:</span> <span>${deedNo}</span></div>
+                      <div class="flex justify-between font-bold text-[11px]"><span>${dateLabel}:</span> <span>${formattedDate}</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 text-center flex flex-col items-center">
+                  <div class="w-full max-w-md border-2 rounded-xl p-3.5 shadow-sm bg-slate-50/50" style="border-color: ${state.colorAccent};">
+                    <div class="flex items-center justify-center gap-3">
+                      ${logoHtml}
+                      <div class="text-left overflow-hidden">
+                        <h2 class="text-xl font-black tracking-tight uppercase truncate" style="color: ${state.colorText};">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                        <p class="text-[11px] text-slate-600 line-clamp-2 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-5 border-2 rounded-xl px-8 py-1.5 inline-block shadow-xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <h1 class="text-xl font-black tracking-widest uppercase" style="color: ${state.colorAccent};">${docTitle}</h1>
+                  </div>
+                </div>
+              </div>
+
+              <div class="my-auto px-4 space-y-5">
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider underline">${propLabel}:</span>
+                  <div class="text-sm font-semibold mt-1 pb-1 border-b border-slate-400 min-h-[26px]">
+                    ${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider underline">${p1Title}:</span>
+                  <div class="text-sm font-semibold mt-1 pb-1 border-b border-slate-400 min-h-[26px] space-y-1">
+                    ${p1Html}
+                  </div>
+                </div>
+
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider underline">${p2Title}:</span>
+                  <div class="text-sm font-semibold mt-1 pb-1 border-b border-slate-400 min-h-[26px] space-y-1">
+                    ${p2Html}
+                  </div>
+                </div>
+
+                ${remarks ? `
+                  <div class="border rounded-lg p-2.5 text-xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="font-bold">${remarksLabel}:</span> ${remarks}
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="text-center pt-2">
+                <span class="text-xs uppercase tracking-widest font-bold" style="color: ${state.colorAccent};">${firmName || ''}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        // 3. EXECUTIVE SIDEBAR
+        else if (state.layoutTheme === 'layout-sidebar-navy') {
+          target.className = `a4-sheet p-0 flex ${state.fontFamily}`;
+          target.innerHTML = `
+            <div class="w-64 p-7 flex flex-col justify-between shrink-0" style="background-color: ${state.colorAccent}; color: #ffffff;">
+              <div>
+                <div class="w-full bg-white/10 rounded-2xl flex items-center justify-center p-3 mb-5 border border-white/20">
+                  ${logoHtml}
+                </div>
+                <h2 class="text-lg font-extrabold uppercase tracking-tight text-white leading-snug">${firmName || `<span class="text-slate-300 font-normal italic text-xs">${ph.phFirmName}</span>`}</h2>
+                <div class="w-10 h-1 bg-white/40 my-3"></div>
+                <p class="text-xs text-white/80 leading-relaxed">${firmAddress || `<span class="text-white/60 italic">${ph.phFirmAddress}</span>`}</p>
+              </div>
+              <div class="space-y-4 pt-6 border-t border-white/20 text-xs text-white/90">
+                <div><span class="text-[10px] uppercase tracking-widest text-white/70 block font-bold">${deedNoLabel}</span><span class="font-bold text-sm text-white">${deedNo || '—'}</span></div>
+                <div><span class="text-[10px] uppercase tracking-widest text-white/70 block font-bold">${dateLabel}</span><span class="font-bold text-sm text-white">${formattedDate || '—'}</span></div>
+              </div>
+            </div>
+            <div class="flex-1 p-8 flex flex-col justify-between bg-white overflow-hidden" style="color: ${state.colorText};">
+              <div>
+                <div class="border-b-2 pb-3 mb-6" style="border-color: ${state.colorAccent};">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-0.5">DOCUMENT COVER</span>
+                  <h1 class="text-2xl font-black uppercase font-cinzel tracking-wider" style="color: ${state.colorAccent};">${docTitle}</h1>
+                </div>
+                <div class="space-y-5">
+                  <div class="border rounded-xl p-3.5" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-[11px] font-bold uppercase tracking-wider block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold leading-relaxed">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="border-l-4 pl-3.5 py-1" style="border-color: ${state.colorAccent};">
+                    <span class="text-xs font-bold uppercase text-slate-500 block">${p1Title}</span>
+                    <div class="text-sm font-bold mt-1">${p1Html}</div>
+                  </div>
+                  <div class="border-l-4 pl-3.5 py-1" style="border-color: ${state.colorAccent};">
+                    <span class="text-xs font-bold uppercase text-slate-500 block">${p2Title}</span>
+                    <div class="text-sm font-bold mt-1">${p2Html}</div>
+                  </div>
+                </div>
+              </div>
+              ${remarks ? `<div class="p-3 border rounded-lg text-xs mt-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+              <div></div>
+            </div>
+          `;
+        }
+
+        // 4. TWO-COLUMN COMPARISON
+        else if (state.layoutTheme === 'layout-two-column-dossier') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-7 h-full flex flex-col justify-between bg-white" style="border-color: ${state.colorAccent};">
+                <div>
+                  <div class="flex items-center justify-between border-b-2 pb-4 mb-5" style="border-color: ${state.colorAccent};">
+                    <div class="flex items-center gap-3">
+                      ${logoHtml}
+                      <div>
+                        <h2 class="text-lg font-bold uppercase">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                        <p class="text-xs text-slate-600 max-w-sm">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                      </div>
+                    </div>
+                    <div class="text-right border-l-2 border-slate-300 pl-3 text-xs font-semibold">
+                      <div>${deedNoLabel}: <strong>${deedNo}</strong></div>
+                      <div>${dateLabel}: <strong>${formattedDate}</strong></div>
+                    </div>
+                  </div>
+                  <div class="text-center py-2.5 mb-6 rounded-sm text-white font-black uppercase font-cinzel tracking-widest text-xl" style="background-color: ${state.colorAccent};">
+                    ${docTitle}
+                  </div>
+                  <div class="mb-6 p-3.5 border rounded-sm" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-5">
+                    <div class="border p-3.5 rounded-sm" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <div class="text-xs font-bold uppercase p-1.5 -mx-3.5 -mt-3.5 mb-2.5 border-b" style="border-color: ${state.colorAccent}; background-color: rgba(0,0,0,0.05);">${p1Title}</div>
+                      <div class="text-sm font-bold space-y-1.5 min-h-[90px]">${p1Html}</div>
+                    </div>
+                    <div class="border p-3.5 rounded-sm" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <div class="text-xs font-bold uppercase p-1.5 -mx-3.5 -mt-3.5 mb-2.5 border-b" style="border-color: ${state.colorAccent}; background-color: rgba(0,0,0,0.05);">${p2Title}</div>
+                      <div class="text-sm font-bold space-y-1.5 min-h-[90px]">${p2Html}</div>
+                    </div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="p-2.5 border text-xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 5. MONUMENTAL CENTERPIECE
+        else if (state.layoutTheme === 'layout-monumental-centered') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-7 h-full flex flex-col justify-between text-center bg-white" style="border-color: ${state.colorAccent};">
+                <div class="flex flex-col items-center">
+                  <div class="mb-2">${logoHtml}</div>
+                  <h2 class="text-xl font-black uppercase tracking-wider font-serif-title" style="color: ${state.colorText};">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                  <p class="text-xs text-slate-600 max-w-md mt-0.5 pb-3 border-b border-slate-300">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                </div>
+                <div class="my-4">
+                  <div class="w-12 h-0.5 mx-auto mb-1.5" style="background-color: ${state.colorAccent};"></div>
+                  <h1 class="text-2xl font-extrabold uppercase font-cinzel tracking-widest" style="color: ${state.colorAccent};">${docTitle}</h1>
+                  <div class="w-12 h-0.5 mx-auto mt-1.5" style="background-color: ${state.colorAccent};"></div>
+                  <div class="mt-2 text-xs font-semibold text-slate-600">
+                    <span>${deedNoLabel}: <strong>${deedNo || '—'}</strong></span> • 
+                    <span>${dateLabel}: <strong>${formattedDate || '—'}</strong></span>
+                  </div>
+                </div>
+                <div class="w-full max-w-lg mx-auto border p-5 text-left space-y-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase text-slate-500 block">${propLabel}</span>
+                    <div class="text-sm font-bold mt-0.5">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <hr class="border-slate-200">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase text-slate-500 block">${p1Title}</span>
+                    <div class="text-sm font-bold mt-0.5">${p1Html}</div>
+                  </div>
+                  <hr class="border-slate-200">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase text-slate-500 block">${p2Title}</span>
+                    <div class="text-sm font-bold mt-0.5">${p2Html}</div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="text-xs text-slate-600 max-w-md mx-auto"><em>${remarksLabel}:</em> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 6. MODERN BANDED HORIZON
+        else if (state.layoutTheme === 'layout-banded-modern') {
+          target.className = `a4-sheet p-0 flex flex-col justify-between bg-white ${state.fontFamily}`;
+          target.innerHTML = `
+            <div>
+              <div class="text-white px-8 py-6 flex items-center justify-between" style="background-color: ${state.colorAccent};">
+                <div>
+                  <h2 class="text-xl font-black uppercase tracking-tight">${firmName || `<span class="text-slate-300 font-normal italic text-xs">${ph.phFirmName}</span>`}</h2>
+                  <p class="text-xs text-slate-200 mt-0.5 max-w-sm">${firmAddress || `<span class="text-slate-300 italic">${ph.phFirmAddress}</span>`}</p>
+                </div>
+                <div class="bg-white/10 rounded-xl p-1 border border-white/20">${logoHtml}</div>
+              </div>
+              <div class="px-8 py-2.5 flex justify-between items-center shadow-md bg-slate-900 text-white">
+                <h1 class="text-lg font-bold uppercase tracking-wider font-cinzel">${docTitle}</h1>
+                <div class="text-xs font-semibold tracking-wide">${deedNo ? `${deedNoLabel}: <span class="font-bold underline">${deedNo}</span>` : ''}</div>
+              </div>
+              <div class="p-8 space-y-5">
+                <div class="flex justify-between items-center py-1.5 border-b border-slate-200 text-xs">
+                  <span class="text-slate-500 font-semibold">${dateLabel}</span>
+                  <span class="font-bold">${formattedDate || '—'}</span>
+                </div>
+                <div class="border rounded-xl p-3.5" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                  <span class="text-xs font-bold uppercase block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
+                  <div class="text-sm font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="border rounded-xl p-3.5 shadow-2xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase text-slate-500 block mb-1">${p1Title}</span>
+                    <div class="text-sm font-bold">${p1Html}</div>
+                  </div>
+                  <div class="border rounded-xl p-3.5 shadow-2xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase text-slate-500 block mb-1">${p2Title}</span>
+                    <div class="text-sm font-bold">${p2Html}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="px-8 pb-6">
+              ${remarks ? `<div class="p-2.5 border rounded-lg text-xs mb-3 font-medium" style="border-color: ${state.colorAccent};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+            </div>
+          `;
+        }
+
+        // 7. JUDICIAL PEDIMENT
+        else if (state.layoutTheme === 'layout-judicial-pediment') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-6 h-full flex flex-col justify-between bg-white" style="border-color: ${state.colorAccent};">
+                <div class="text-center">
+                  <div class="text-[10px] uppercase tracking-[0.25em] font-bold mb-1" style="color: ${state.colorAccent};">• OFFICIAL DEED TITLE SHEET •</div>
+                  <div class="border-y-2 py-2.5 flex items-center justify-between gap-3" style="border-color: ${state.colorAccent};">
+                    <div class="shrink-0">${logoHtml}</div>
+                    <div class="flex-1 text-center">
+                      <h2 class="text-lg font-bold uppercase font-cinzel">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                      <p class="text-[10px] text-slate-600 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                    </div>
+                    <div class="w-12 shrink-0"></div>
+                  </div>
+                </div>
+                <div class="my-3 text-center">
+                  <h1 class="text-2xl font-extrabold uppercase font-cinzel tracking-widest" style="color: ${state.colorAccent};">${docTitle}</h1>
+                  <div class="text-xs font-bold text-slate-700 mt-1">
+                    <span>${deedNoLabel}: <strong>${deedNo || '—'}</strong></span> | 
+                    <span>${dateLabel}: <strong>${formattedDate || '—'}</strong></span>
+                  </div>
+                </div>
+                <div class="space-y-3.5 my-auto">
+                  <div class="border-2 p-3" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase tracking-wider block border-b pb-1 mb-1.5" style="border-color: ${state.colorAccent}; color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="border-2 p-3" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase tracking-wider block border-b pb-1 mb-1.5" style="border-color: ${state.colorAccent}; color: ${state.colorAccent};">${p1Title}</span>
+                    <div class="text-sm font-bold">${p1Html}</div>
+                  </div>
+                  <div class="border-2 p-3" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase tracking-wider block border-b pb-1 mb-1.5" style="border-color: ${state.colorAccent}; color: ${state.colorAccent};">${p2Title}</span>
+                    <div class="text-sm font-bold">${p2Html}</div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="text-xs border-t pt-1.5 font-medium" style="border-color: ${state.colorAccent};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 8. STRUCTURED CARD MOSAIC
+        else if (state.layoutTheme === 'layout-card-mosaic') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-6 h-full flex flex-col justify-between bg-slate-50/70" style="border-color: ${state.colorAccent};">
+                <div>
+                  <div class="rounded-xl p-4 shadow-2xs border flex items-center justify-between gap-3 mb-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <div class="flex items-center gap-3">
+                      ${logoHtml}
+                      <div>
+                        <h2 class="text-lg font-extrabold uppercase">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                        <p class="text-xs text-slate-600 max-w-sm">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                      </div>
+                    </div>
+                    <div class="rounded-lg px-3 py-1.5 text-right shrink-0 border" style="border-color: ${state.colorAccent};">
+                      <span class="text-[9px] font-bold uppercase block text-slate-500">${dateLabel}</span>
+                      <span class="text-xs font-bold">${formattedDate || '—'}</span>
+                    </div>
+                  </div>
+                  <div class="rounded-xl p-4 shadow-sm mb-4 flex justify-between items-center text-white" style="background-color: ${state.colorAccent};">
+                    <div>
+                      <span class="text-[9px] font-bold uppercase tracking-widest text-white/70">TITLE DOCUMENT</span>
+                      <h1 class="text-xl font-black uppercase font-cinzel tracking-wider">${docTitle}</h1>
+                    </div>
+                    ${deedNo ? `
+                      <div class="border border-white/20 bg-white/10 px-3 py-1 rounded-lg text-right">
+                        <span class="text-[9px] uppercase tracking-wider text-white/70 block">${deedNoLabel}</span>
+                        <span class="text-sm font-bold">${deedNo}</span>
+                      </div>
+                    ` : ''}
+                  </div>
+                  <div class="rounded-xl p-4 shadow-2xs border mb-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold leading-relaxed">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3.5">
+                    <div class="rounded-xl p-4 shadow-2xs border" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <span class="text-xs font-bold uppercase block mb-1.5 text-slate-500">${p1Title}</span>
+                      <div class="text-sm font-bold space-y-1">${p1Html}</div>
+                    </div>
+                    <div class="rounded-xl p-4 shadow-2xs border" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                      <span class="text-xs font-bold uppercase block mb-1.5 text-slate-500">${p2Title}</span>
+                      <div class="text-sm font-bold space-y-1">${p2Html}</div>
+                    </div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="rounded-lg p-2.5 shadow-2xs border text-xs" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 9. CORPORATE REGISTRY MASTHEAD
+        else if (state.layoutTheme === 'layout-corporate-masthead') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-7 h-full flex flex-col justify-between bg-white" style="border-color: ${state.colorAccent};">
+                <div>
+                  <div class="border-b-4 pb-3 mb-5 flex justify-between items-start" style="border-color: ${state.colorAccent};">
+                    <div>
+                      <h2 class="text-xl font-black uppercase tracking-tight">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                      <p class="text-xs text-slate-600 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                    </div>
+                    ${logoHtml}
+                  </div>
+                  <div class="flex justify-between items-baseline mb-5 border-b pb-2.5" style="border-color: ${state.colorAccent};">
+                    <h1 class="text-xl font-black uppercase tracking-wide font-cinzel" style="color: ${state.colorAccent};">${docTitle}</h1>
+                    <div class="text-xs font-mono font-bold text-slate-700">
+                      <span>${deedNoLabel}: <strong>${deedNo || '—'}</strong></span> | 
+                      <span>${dateLabel}: <strong>${formattedDate || '—'}</strong></span>
+                    </div>
+                  </div>
+                  <div class="border divide-y text-sm" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <div class="grid grid-cols-12 p-3 font-medium bg-slate-50/50">
+                      <div class="col-span-4 text-xs font-bold uppercase text-slate-600">${propLabel}</div>
+                      <div class="col-span-8 font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                    </div>
+                    <div class="grid grid-cols-12 p-3 font-medium">
+                      <div class="col-span-4 text-xs font-bold uppercase text-slate-600">${p1Title}</div>
+                      <div class="col-span-8 font-bold">${p1Html}</div>
+                    </div>
+                    <div class="grid grid-cols-12 p-3 font-medium bg-slate-50/50">
+                      <div class="col-span-4 text-xs font-bold uppercase text-slate-600">${p2Title}</div>
+                      <div class="col-span-8 font-bold">${p2Html}</div>
+                    </div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="p-2.5 border text-xs font-medium" style="border-color: ${state.colorAccent};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 10. NOTARIAL CERTIFICATE
+        else if (state.layoutTheme === 'layout-notarial-ribbon') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-6 h-full flex flex-col justify-between bg-white relative" style="border-color: ${state.colorAccent};">
+                <div class="text-center">
+                  <div class="mx-auto mb-1 flex items-center justify-center">${logoHtml}</div>
+                  <h2 class="text-lg font-bold uppercase tracking-wider font-serif-title" style="color: ${state.colorAccent};">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                  <p class="text-xs text-slate-600 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                  <div class="my-4">
+                    <span class="text-[9px] font-bold uppercase tracking-[0.2em] px-3 py-0.5 rounded-full border" style="border-color: ${state.colorAccent}; color: ${state.colorAccent};">OFFICIAL TITLE RECORD</span>
+                    <h1 class="text-2xl font-black uppercase tracking-widest font-cinzel mt-1.5" style="color: ${state.colorAccent};">${docTitle}</h1>
+                  </div>
+                  <div class="inline-flex gap-5 text-xs border-y py-1 px-5 font-semibold" style="border-color: ${state.colorAccent};">
+                    <span>${deedNoLabel}: <strong>${deedNo || '—'}</strong></span>
+                    <span>${dateLabel}: <strong>${formattedDate || '—'}</strong></span>
+                  </div>
+                </div>
+                <div class="space-y-3.5 my-auto px-2">
+                  <div class="border p-3 rounded-lg" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-[10px] font-bold uppercase block mb-0.5" style="color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="p-3 border-b" style="border-color: ${state.colorAccent};">
+                    <span class="text-[10px] font-bold uppercase text-slate-500 block mb-0.5">${p1Title}</span>
+                    <div class="text-sm font-bold">${p1Html}</div>
+                  </div>
+                  <div class="p-3">
+                    <span class="text-[10px] font-bold uppercase text-slate-500 block mb-0.5">${p2Title}</span>
+                    <div class="text-sm font-bold">${p2Html}</div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="p-2 rounded text-xs font-medium mx-2 border" style="border-color: ${state.colorAccent};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 11. SWISS MINIMALIST
+        else if (state.layoutTheme === 'layout-minimalist-swiss') {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-8 h-full flex flex-col justify-between bg-white" style="border-color: ${state.colorAccent};">
+                <div>
+                  <div class="flex justify-between items-start border-b-2 pb-5 mb-6" style="border-color: ${state.colorAccent};">
+                    <div>
+                      <h2 class="text-2xl font-black uppercase tracking-tighter leading-none">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                      <p class="text-xs text-slate-500 mt-1.5 max-w-sm leading-relaxed">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                    </div>
+                    ${logoHtml}
+                  </div>
+                  <div class="mb-7">
+                    <span class="text-[9px] font-mono tracking-widest text-slate-400 block mb-1">INDEX SHEET</span>
+                    <h1 class="text-3xl font-black uppercase tracking-tight" style="color: ${state.colorAccent};">${docTitle}</h1>
+                  </div>
+                  <div class="space-y-4 font-sans">
+                    <div class="grid grid-cols-12 border-t pt-2.5" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 text-xs font-mono uppercase text-slate-400">${deedNoLabel}</div>
+                      <div class="col-span-8 text-sm font-bold">${deedNo || '—'}</div>
+                    </div>
+                    <div class="grid grid-cols-12 border-t pt-2.5" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 text-xs font-mono uppercase text-slate-400">${dateLabel}</div>
+                      <div class="col-span-8 text-sm font-bold">${formattedDate || '—'}</div>
+                    </div>
+                    <div class="grid grid-cols-12 border-t pt-2.5" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 text-xs font-mono uppercase text-slate-400">${propLabel}</div>
+                      <div class="col-span-8 text-sm font-semibold leading-relaxed">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                    </div>
+                    <div class="grid grid-cols-12 border-t pt-2.5" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 text-xs font-mono uppercase text-slate-400">${p1Title}</div>
+                      <div class="col-span-8 text-sm font-bold">${p1Html}</div>
+                    </div>
+                    <div class="grid grid-cols-12 border-t pt-2.5 border-b pb-3" style="border-color: ${state.colorAccent};">
+                      <div class="col-span-4 text-xs font-mono uppercase text-slate-400">${p2Title}</div>
+                      <div class="col-span-8 text-sm font-bold">${p2Html}</div>
+                    </div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="p-2.5 border text-xs font-mono" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // 12. REGAL HERITAGE
+        else {
+          target.innerHTML = `
+            <div class="${frameClass} h-full flex flex-col" style="border-color: ${state.colorAccent};">
+              <div class="frame-inner p-6 h-full flex flex-col justify-between rounded-xl bg-white" style="border-color: ${state.colorAccent};">
+                <div class="text-center">
+                  <div class="mb-2 flex justify-center">${logoHtml}</div>
+                  <h2 class="text-xl font-black uppercase tracking-wide font-serif-title" style="color: ${state.colorAccent};">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
+                  <p class="text-xs text-slate-600 mt-0.5 pb-2 border-b max-w-sm mx-auto" style="border-color: ${state.colorAccent};">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
+                  <div class="my-4">
+                    <h1 class="text-2xl font-extrabold uppercase font-cinzel tracking-widest" style="color: ${state.colorAccent};">${docTitle}</h1>
+                    <div class="mt-1.5 text-xs font-semibold">
+                      <span>${deedNoLabel}: <strong>${deedNo || '—'}</strong></span> | 
+                      <span>${dateLabel}: <strong>${formattedDate || '—'}</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-3.5 my-auto">
+                  <div class="border p-3.5 rounded-lg" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase block mb-1" style="color: ${state.colorAccent};">${propLabel}</span>
+                    <div class="text-sm font-semibold">${propDesc || `<span class="preview-placeholder">${ph.phPropertyDesc}</span>`}</div>
+                  </div>
+                  <div class="border p-3.5 rounded-lg" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase block mb-1 text-slate-500">${p1Title}</span>
+                    <div class="text-sm font-bold">${p1Html}</div>
+                  </div>
+                  <div class="border p-3.5 rounded-lg" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
+                    <span class="text-xs font-bold uppercase block mb-1 text-slate-500">${p2Title}</span>
+                    <div class="text-sm font-bold">${p2Html}</div>
+                  </div>
+                </div>
+                ${remarks ? `<div class="p-2 text-xs rounded font-medium border" style="border-color: ${state.colorAccent};"><strong>${remarksLabel}:</strong> ${remarks}</div>` : ''}
+                <div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error("Preview render error:", err);
+      }
+    }
+
     window.onload = function() {
       initForm();
+      handleColorChange();
+      handleLayoutChange(state.layoutTheme);
     };
   </script>
 </body>
