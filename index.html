@@ -174,20 +174,53 @@
     }
 
     .logo-bounded-box {
-      max-width: 140px;
-      max-height: 70px;
-      display: flex;
+      max-width: 100%;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      overflow: visible; /* Prevent any cutting from outside */
       flex-shrink: 0;
+      transition: all 0.15s ease-in-out;
     }
 
     .logo-bounded-box img {
       max-width: 100%;
-      max-height: 100%;
+      max-height: inherit;
+      width: auto;
+      height: auto;
       object-fit: contain;
       display: block;
+      user-select: none;
+    }
+
+    .logo-shape-original {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .logo-shape-rounded {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 4px 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-shape-circle {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1.5px solid rgba(0, 0, 0, 0.16);
+      border-radius: 9999px;
+      padding: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo-shape-card {
+      background-color: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 10px;
+      padding: 6px 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
     }
 
     /* Outer Frames */
@@ -620,7 +653,10 @@
           <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Firm Header Information</h3>
           
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Firm Logo</label>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-semibold text-slate-700">Firm Logo</label>
+              <span class="text-[10.5px] text-slate-400 font-normal">Auto-fit & adjust</span>
+            </div>
             <div class="flex items-center gap-3">
               <div id="logoThumbnailWrapper" class="w-14 h-14 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
                 <img id="logoThumb" src="" alt="Firm Logo" class="w-full h-full object-contain hidden" />
@@ -628,7 +664,67 @@
               </div>
               <div class="flex-1 space-y-1">
                 <input type="file" id="logoInput" accept="image/*" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" onchange="handleLogoUpload(event)">
-                <button type="button" onclick="removeLogo()" class="text-[11px] text-red-600 hover:underline">Remove logo</button>
+                <div class="flex items-center justify-between">
+                  <button type="button" onclick="removeLogo()" class="text-[11px] text-red-600 hover:underline">Remove logo</button>
+                  <button type="button" onclick="toggleLogoControls()" id="logoAdjustToggleBtn" class="text-[11px] text-indigo-600 hover:underline hidden inline-flex items-center gap-1 font-medium">
+                    <i data-lucide="sliders" class="w-3 h-3"></i> Adjust Logo
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logo Adjustment Panel -->
+            <div id="logoControlsWrapper" class="mt-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200/90 space-y-2.5 hidden">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <i data-lucide="sliders" class="w-3.5 h-3.5 text-indigo-600"></i> Adjust Logo
+                </span>
+                <button type="button" onclick="autoAdjustLogo()" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-semibold hover:underline inline-flex items-center gap-1" title="Auto-detect aspect ratio & optimal fit">
+                  <i data-lucide="sparkles" class="w-3 h-3"></i> Auto Adjust
+                </button>
+              </div>
+
+              <!-- Size Range Slider -->
+              <div>
+                <div class="flex items-center justify-between text-[11px] text-slate-600 mb-1">
+                  <span class="font-medium">Logo Height / Scale</span>
+                  <span id="logoSizeVal" class="font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-mono text-[10.5px]">70px</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] text-slate-400 font-mono">30px</span>
+                  <input type="range" id="logoSizeRange" min="30" max="150" step="2" value="70" 
+                    class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg cursor-pointer"
+                    oninput="handleLogoSizeChange(this.value)">
+                  <span class="text-[10px] text-slate-400 font-mono">150px</span>
+                </div>
+              </div>
+
+              <!-- Quick Size Presets -->
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10.5px] text-slate-500 font-medium">Presets:</span>
+                <div class="flex items-center gap-1 flex-1">
+                  <button type="button" onclick="setLogoSize(45)" class="flex-1 py-0.5 text-[10px] rounded bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium transition text-center shadow-2xs">Compact</button>
+                  <button type="button" onclick="setLogoSize(70)" class="flex-1 py-0.5 text-[10px] rounded bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium transition text-center shadow-2xs">Default</button>
+                  <button type="button" onclick="setLogoSize(95)" class="flex-1 py-0.5 text-[10px] rounded bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium transition text-center shadow-2xs">Large</button>
+                  <button type="button" onclick="setLogoSize(125)" class="flex-1 py-0.5 text-[10px] rounded bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium transition text-center shadow-2xs">XL</button>
+                </div>
+              </div>
+
+              <!-- Frame / Shape Options -->
+              <div>
+                <span class="block text-[10.5px] font-medium text-slate-600 mb-1">Display Frame</span>
+                <div class="grid grid-cols-4 gap-1 text-[10.5px]">
+                  <button type="button" id="shapeBtn_original" onclick="setLogoShape('original')" class="py-1 px-1 text-center rounded border font-semibold transition bg-indigo-50 border-indigo-400 text-indigo-700 shadow-2xs" title="Natural transparent logo with zero crop">Natural</button>
+                  <button type="button" id="shapeBtn_rounded" onclick="setLogoShape('rounded')" class="py-1 px-1 text-center rounded border font-medium transition bg-white border-slate-200 text-slate-700 hover:bg-slate-100" title="Soft rounded border box">Rounded</button>
+                  <button type="button" id="shapeBtn_circle" onclick="setLogoShape('circle')" class="py-1 px-1 text-center rounded border font-medium transition bg-white border-slate-200 text-slate-700 hover:bg-slate-100" title="Circular badge frame">Circle</button>
+                  <button type="button" id="shapeBtn_card" onclick="setLogoShape('card')" class="py-1 px-1 text-center rounded border font-medium transition bg-white border-slate-200 text-slate-700 hover:bg-slate-100" title="White card background (ideal for colored or dark layouts)">Card</button>
+                </div>
+              </div>
+
+              <!-- Zero-Crop Guarantee Indicator -->
+              <div class="flex items-center gap-1.5 text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200/70 rounded-md px-2 py-1">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
+                <span class="leading-tight"><strong>Auto-Fit Guarantee:</strong> Never clipped from outside. Full logo is 100% visible.</span>
               </div>
             </div>
           </div>
@@ -1865,7 +1961,9 @@
       signingAuthorities: [""],
       remarksLabel: "Remarks / Note",
       remarks: "",
-      logoDataUrl: null
+      logoDataUrl: null,
+      logoSize: 70,
+      logoShape: "original"
     };
 
     function handleLayoutChange(themeName) {
@@ -2156,11 +2254,27 @@
           if (state.logoDataUrl) {
             const thumb = document.getElementById('logoThumb');
             const thumbIcon = document.getElementById('logoPlaceholderIcon');
-            thumb.src = state.logoDataUrl;
-            thumb.classList.remove('hidden');
-            thumbIcon.classList.add('hidden');
+            if (thumb) {
+              thumb.src = state.logoDataUrl;
+              thumb.classList.remove('hidden');
+            }
+            if (thumbIcon) thumbIcon.classList.add('hidden');
+            const controls = document.getElementById('logoControlsWrapper');
+            if (controls) controls.classList.remove('hidden');
+            const toggleBtn = document.getElementById('logoAdjustToggleBtn');
+            if (toggleBtn) toggleBtn.classList.remove('hidden');
           } else {
             removeLogo();
+          }
+
+          if (typeof state.logoSize !== 'undefined') {
+            const rangeEl = document.getElementById('logoSizeRange');
+            if (rangeEl) rangeEl.value = state.logoSize;
+            const valEl = document.getElementById('logoSizeVal');
+            if (valEl) valEl.textContent = state.logoSize + 'px';
+          }
+          if (state.logoShape) {
+            setLogoShape(state.logoShape);
           }
 
           if (state.layoutTheme) document.getElementById('layoutThemeSelect').value = state.layoutTheme;
@@ -2511,10 +2625,33 @@
         state.logoDataUrl = e.target.result;
         const thumb = document.getElementById('logoThumb');
         const thumbIcon = document.getElementById('logoPlaceholderIcon');
-        thumb.src = state.logoDataUrl;
-        thumb.classList.remove('hidden');
-        thumbIcon.classList.add('hidden');
-        updatePreview();
+        if (thumb) {
+          thumb.src = state.logoDataUrl;
+          thumb.classList.remove('hidden');
+        }
+        if (thumbIcon) thumbIcon.classList.add('hidden');
+        
+        const controls = document.getElementById('logoControlsWrapper');
+        if (controls) controls.classList.remove('hidden');
+        const toggleBtn = document.getElementById('logoAdjustToggleBtn');
+        if (toggleBtn) toggleBtn.classList.remove('hidden');
+
+        // Dynamically auto-adjust based on natural image aspect ratio so it is never cut off
+        const img = new Image();
+        img.onload = function() {
+          const ratio = img.naturalWidth / img.naturalHeight;
+          let optimalSize = 70;
+          if (ratio >= 2.5) {
+            optimalSize = 55; // Wide horizontal banner logo
+          } else if (ratio <= 0.8) {
+            optimalSize = 85; // Tall vertical emblem / crest
+          } else {
+            optimalSize = 70; // Standard square / balanced ratio
+          }
+          handleLogoSizeChange(optimalSize);
+          setLogoShape(state.logoShape || 'original');
+        };
+        img.src = state.logoDataUrl;
       };
       reader.readAsDataURL(file);
     }
@@ -2524,10 +2661,81 @@
       document.getElementById('logoInput').value = '';
       const thumb = document.getElementById('logoThumb');
       const thumbIcon = document.getElementById('logoPlaceholderIcon');
-      thumb.src = '';
-      thumb.classList.add('hidden');
-      thumbIcon.classList.remove('hidden');
+      if (thumb) {
+        thumb.src = '';
+        thumb.classList.add('hidden');
+      }
+      if (thumbIcon) thumbIcon.classList.remove('hidden');
+      
+      const controls = document.getElementById('logoControlsWrapper');
+      if (controls) controls.classList.add('hidden');
+      const toggleBtn = document.getElementById('logoAdjustToggleBtn');
+      if (toggleBtn) toggleBtn.classList.add('hidden');
+
       updatePreview();
+    }
+
+    function handleLogoSizeChange(val) {
+      val = parseInt(val, 10) || 70;
+      state.logoSize = val;
+      const valEl = document.getElementById('logoSizeVal');
+      if (valEl) valEl.textContent = val + 'px';
+      const rangeEl = document.getElementById('logoSizeRange');
+      if (rangeEl) rangeEl.value = val;
+      updatePreview();
+    }
+
+    function setLogoSize(val) {
+      handleLogoSizeChange(val);
+    }
+
+    function setLogoShape(shape) {
+      state.logoShape = shape;
+      const shapes = ['original', 'rounded', 'circle', 'card'];
+      shapes.forEach(s => {
+        const btn = document.getElementById('shapeBtn_' + s);
+        if (btn) {
+          if (s === shape) {
+            btn.className = 'py-1 px-1 text-center rounded border font-semibold transition bg-indigo-50 border-indigo-400 text-indigo-700 shadow-2xs';
+          } else {
+            btn.className = 'py-1 px-1 text-center rounded border font-medium transition bg-white border-slate-200 text-slate-700 hover:bg-slate-100';
+          }
+        }
+      });
+      updatePreview();
+    }
+
+    function toggleLogoControls() {
+      const controls = document.getElementById('logoControlsWrapper');
+      if (controls) {
+        controls.classList.toggle('hidden');
+        if (!controls.classList.contains('hidden') && typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function autoAdjustLogo() {
+      if (!state.logoDataUrl) {
+        handleLogoSizeChange(70);
+        setLogoShape('original');
+        return;
+      }
+      const img = new Image();
+      img.onload = function() {
+        const ratio = img.naturalWidth / img.naturalHeight;
+        let optimalSize = 70;
+        if (ratio >= 2.5) {
+          optimalSize = 55;
+        } else if (ratio <= 0.8) {
+          optimalSize = 85;
+        } else {
+          optimalSize = 70;
+        }
+        handleLogoSizeChange(optimalSize);
+        setLogoShape('original');
+      };
+      img.src = state.logoDataUrl;
     }
 
     function resetDefaults() {
@@ -2563,6 +2771,8 @@
         remarksLabel: "Remarks / Note",
         remarks: "",
         logoDataUrl: null,
+        logoSize: 70,
+        logoShape: "original",
         pageSize: "a4",
         pageOrientation: "portrait"
       };
@@ -2607,7 +2817,22 @@
       document.getElementById('partnersLabelInput').value = state.partnersLabel;
       document.getElementById('signingAuthorityLabelInput').value = state.signingAuthorityLabel;
       document.getElementById('remarksLabelInput').value = state.remarksLabel;
-      document.getElementById('remarksInput').value = state.remarks;
+      if (document.getElementById('remarksInput')) {
+        document.getElementById('remarksInput').value = state.remarks;
+      }
+      if (document.getElementById('logoSizeRange')) {
+        document.getElementById('logoSizeRange').value = state.logoSize || 70;
+      }
+      if (document.getElementById('logoSizeVal')) {
+        document.getElementById('logoSizeVal').textContent = (state.logoSize || 70) + 'px';
+      }
+      setLogoShape(state.logoShape || 'original');
+      if (state.logoDataUrl) {
+        const controls = document.getElementById('logoControlsWrapper');
+        if (controls) controls.classList.remove('hidden');
+        const toggleBtn = document.getElementById('logoAdjustToggleBtn');
+        if (toggleBtn) toggleBtn.classList.remove('hidden');
+      }
       if (document.getElementById('fontFamilySelect')) {
         document.getElementById('fontFamilySelect').value = state.fontFamily || 'Inter';
       }
@@ -2667,9 +2892,15 @@
         const partners = state.partners.filter(p => p.trim() !== '');
         const signAuths = state.signingAuthorities.filter(a => a.trim() !== '');
 
+        const logoSize = state.logoSize || 70;
+        const logoShapeClass = state.logoShape ? `logo-shape-${state.logoShape}` : 'logo-shape-original';
+        const logoMaxW = Math.max(160, Math.round(logoSize * 3.2));
+
         const logoHtml = state.logoDataUrl 
-          ? `<div class="logo-bounded-box"><img src="${state.logoDataUrl}" alt="Logo"></div>`
-          : `<div class="logo-bounded-box border-2 border-slate-700 rounded-full w-12 h-12 p-1 text-center"><span class="font-cinzel text-[9px] font-bold">LOGO</span></div>`;
+          ? `<div class="logo-bounded-box ${logoShapeClass}" style="--logo-max-h: ${logoSize}px; --logo-max-w: ${logoMaxW}px;">
+               <img src="${state.logoDataUrl}" alt="Firm Logo" style="max-height: ${logoSize}px; max-width: ${logoMaxW}px; width: auto; height: auto; object-fit: contain;">
+             </div>`
+          : `<div class="logo-bounded-box border-2 border-slate-700 rounded-full w-12 h-12 p-1 text-center shrink-0"><span class="font-cinzel text-[9px] font-bold">LOGO</span></div>`;
 
         function renderPartiesList(items, placeholderText) {
           if (items.length === 0) return `<span class="preview-placeholder">${placeholderText}</span>`;
@@ -2698,7 +2929,7 @@
               <div class="frame-inner p-6 sm:p-7 h-full flex flex-col justify-start bg-white" style="border-color: ${state.colorAccent};">
                 <div>
                   <div class="flex items-center justify-between border-b-2 pb-5 mb-5 gap-4" style="border-color: ${state.colorAccent};">
-                    <div class="w-24 h-16 flex items-center justify-center shrink-0 overflow-hidden">
+                    <div class="flex items-center justify-start shrink-0">
                       ${logoHtml}
                     </div>
                     <div class="flex-1 text-right">
@@ -2802,7 +3033,7 @@
                 <div class="mt-4 text-center flex flex-col items-center">
                   <div class="w-full max-w-md border-2 rounded-xl p-3.5 shadow-sm bg-slate-50/50" style="border-color: ${state.colorAccent};">
                     <div class="flex items-center justify-center gap-3">
-                      ${logoHtml}
+                      <div class="shrink-0">${logoHtml}</div>
                       <div class="text-left overflow-hidden">
                         <h2 class="text-xl font-black tracking-tight uppercase truncate" style="color: ${state.colorText};">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
                         <p class="text-[11px] text-slate-600 line-clamp-2 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
@@ -2905,7 +3136,7 @@
                 <div>
                   <div class="flex items-center justify-between border-b-2 pb-4 mb-5" style="border-color: ${state.colorAccent};">
                     <div class="flex items-center gap-3">
-                      ${logoHtml}
+                      <div class="shrink-0">${logoHtml}</div>
                       <div>
                         <h2 class="text-lg font-bold uppercase">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
                         <p class="text-xs text-slate-600 max-w-sm">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
@@ -2993,7 +3224,7 @@
                   <h2 class="text-xl font-black uppercase tracking-tight">${firmName || `<span class="text-slate-300 font-normal italic text-xs">${ph.phFirmName}</span>`}</h2>
                   <p class="text-xs text-slate-200 mt-0.5 max-w-sm">${firmAddress || `<span class="text-slate-300 italic">${ph.phFirmAddress}</span>`}</p>
                 </div>
-                <div class="bg-white/10 rounded-xl p-1 border border-white/20">${logoHtml}</div>
+                <div class="bg-white/10 rounded-xl p-1.5 border border-white/20 shrink-0">${logoHtml}</div>
               </div>
               <div class="px-8 py-2.5 flex justify-between items-center shadow-md bg-slate-900 text-white">
                 <h1 class="text-lg font-bold uppercase tracking-wider font-cinzel">${docTitle}</h1>
@@ -3078,7 +3309,7 @@
                 <div>
                   <div class="rounded-xl p-4 shadow-2xs border flex items-center justify-between gap-3 mb-4" style="border-color: ${state.colorAccent}; background-color: ${state.colorBg};">
                     <div class="flex items-center gap-3">
-                      ${logoHtml}
+                      <div class="shrink-0">${logoHtml}</div>
                       <div>
                         <h2 class="text-lg font-extrabold uppercase">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
                         <p class="text-xs text-slate-600 max-w-sm">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
@@ -3136,7 +3367,7 @@
                       <h2 class="text-xl font-black uppercase tracking-tight">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
                       <p class="text-xs text-slate-600 mt-0.5">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
                     </div>
-                    ${logoHtml}
+                    <div class="shrink-0">${logoHtml}</div>
                   </div>
                   <div class="flex justify-between items-baseline mb-5 border-b pb-2.5" style="border-color: ${state.colorAccent};">
                     <h1 class="text-xl font-black uppercase tracking-wide font-cinzel" style="color: ${state.colorAccent};">${docTitle}</h1>
@@ -3217,7 +3448,7 @@
                       <h2 class="text-2xl font-black uppercase tracking-tighter leading-none">${firmName || `<span class="preview-placeholder">${ph.phFirmName}</span>`}</h2>
                       <p class="text-xs text-slate-500 mt-1.5 max-w-sm leading-relaxed">${firmAddress || `<span class="preview-placeholder">${ph.phFirmAddress}</span>`}</p>
                     </div>
-                    ${logoHtml}
+                    <div class="shrink-0">${logoHtml}</div>
                   </div>
                   <div class="mb-7">
                     <span class="text-[9px] font-mono tracking-widest text-slate-400 block mb-1">INDEX SHEET</span>
